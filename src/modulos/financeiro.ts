@@ -1,3 +1,2 @@
-export default function teste(){
-    console.log("teste")
+export function calculaLucro(){
 }
