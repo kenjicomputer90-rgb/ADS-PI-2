@@ -1,0 +1,25 @@
+{
+  "name": "ads-pi-2",
+  "version": "1.0.0",
+  "description": "<h1>🚀 ADS PI2</h1> <br> <p align=\"center\"> Repository created to share and collaborate on the ADS PI2 source code. </p>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kenjicomputer90-rgb/ADS-PI-2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kenjicomputer90-rgb/ADS-PI-2/issues"
+  },
+  "homepage": "https://github.com/kenjicomputer90-rgb/ADS-PI-2#readme",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^6.0.2"
+  }
+}
