@@ -4,5 +4,18 @@ export function addUser(nome: string): string {
     throw new Error("Nome é obrigatório")
   }
 
+  /*
+  import { prisma } from '../prisma'
+
+export async function addUser(name: string) {
+  const user = await prisma.user.create({
+    data: { name }
+  })
+
+  return `Usuário ${user.name} adicionado`
+}
+  */
+
+
   return `Usuário ${nome} adicionado`
 }

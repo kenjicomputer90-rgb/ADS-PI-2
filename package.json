@@ -20,6 +20,10 @@
   "homepage": "https://github.com/kenjicomputer90-rgb/ADS-PI-2#readme",
   "devDependencies": {
     "@types/node": "^25.5.0",
+    "prisma": "^7.6.0",
     "typescript": "^6.0.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.6.0"
   }
 }
