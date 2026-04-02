@@ -4,6 +4,7 @@
   "description": "<h1>🚀 ADS PI2</h1> <br> <p align=\"center\"> Repository created to share and collaborate on the ADS PI2 source code. </p>",
   "main": "index.js",
   "scripts": {
+    "start-dev": "tsx watch src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,6 +25,11 @@
     "typescript": "^6.0.2"
   },
   "dependencies": {
-    "@prisma/client": "^7.6.0"
+    "@prisma/adapter-pg": "^7.6.0",
+    "@prisma/client": "^7.6.0",
+    "@types/express": "^5.0.6",
+    "express": "^5.2.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0"
   }
 }

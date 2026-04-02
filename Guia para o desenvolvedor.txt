@@ -1,0 +1,16 @@
+#puxar os dados do reposítorio e baixar as dependências do projeto
+git pull --rebase origin DEV #configura o pull
+git pull origin DEV #pega as atualizações do código no reposítorio
+npm i #baixa as dependências
+
+#enviar código para o  DEV
+git add .
+git commit -m "escreva aqui o que você fez no código"
+git push origin DEV
+
+#puxar novas mudanças do reposítorio para sua pasta local
+git pull origin DEV #pega as atualizações do código no reposítorio
+#se der erro rode antes: git pull --rebase origin DEV #configura o pull
+
+#inicalizar o servidor
+npm run start-dev
