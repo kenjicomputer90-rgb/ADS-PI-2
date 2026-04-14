@@ -9,6 +9,7 @@ git commit -m "escreva aqui o que você fez no código"
 git push origin DEV
 
 #puxar novas mudanças do reposítorio para sua pasta local
+#(recomenda-se executar este código toda vez que abrir o projeto)
 git pull origin DEV #pega as atualizações do código no reposítorio
 #se der erro rode antes: git pull --rebase origin DEV #configura o pull
 
@@ -20,3 +21,5 @@ http --json POST http://localhost:3000/cliente nome=Fulano cpf=209302930 rg=3894
 
 #converter para javascript e gerar o dist 
 npx tsc
+
+#veja "resumo do chatgpt.txt" para mais informações sobre o projeto

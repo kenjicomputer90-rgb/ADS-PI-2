@@ -5,6 +5,7 @@ export function addUser(nome: string): string {
   }
 
   /*
+  //teste de implementação do prisma
   import { prisma } from '../prisma'
 
 export async function addUser(name: string) {

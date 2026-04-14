@@ -1,0 +1,183 @@
+//resumo do projeto escrito pelo Chatgpt
+
+🧠 Visão geral da arquitetura
+
+Seu projeto segue um padrão bem comum:
+
+👉 Separação por módulos + camadas (Controller → Service → Router → DB)
+
+Ou seja:
+
+Cada “assunto” do sistema (cliente, teste, etc.) fica isolado
+Dentro de cada módulo, cada arquivo tem uma responsabilidade específica
+📁 Raiz: src/
+
+Aqui está todo o código principal da aplicação.
+
+⚙️ generated/prisma/
+
+Essa pasta é gerada automaticamente pelo Prisma (ORM).
+
+👉 Você NÃO escreve código aqui.
+
+Ela contém:
+
+client.ts → cliente do banco (o que você usa pra fazer queries)
+models.ts → tipos dos modelos
+enums.ts → enums do banco
+browser.ts, internal/ → funcionamento interno do Prisma
+
+💡 Resumindo:
+
+Isso aqui é a “ponte automática” entre seu código e o banco de dados.
+
+🧩 modulos/
+
+Essa é a parte mais importante do seu sistema.
+
+👉 Cada pasta aqui representa um domínio do sistema (uma feature).
+
+Exemplo:
+
+cliente → tudo relacionado a cliente
+teste → módulo de teste
+produtos, funcionario, etc.
+📦 Estrutura interna de um módulo (ex: cliente)
+cliente/
+├── clienteController.ts
+├── clienteRouter.ts
+└── clienteService.ts
+🔹 clienteController.ts
+
+👉 Camada de entrada (HTTP)
+
+Responsável por:
+
+Receber requisições (req)
+Chamar o service
+Retornar resposta (res)
+
+💡 É tipo o “garçom”:
+
+recebe o pedido e entrega o prato
+
+🔹 clienteService.ts
+
+👉 Regra de negócio
+
+Responsável por:
+
+Processar dados
+Aplicar lógica
+Acessar o banco (via Prisma)
+
+💡 É o “cozinheiro”:
+
+decide como preparar o pedido
+
+🔹 clienteRouter.ts
+
+👉 Define as rotas
+
+Exemplo:
+
+POST /cliente
+GET /cliente
+
+💡 É o “cardápio”:
+
+diz quais endpoints existem
+
+🧪 Módulo teste
+
+Tem um extra:
+
+testeInterface.ts
+
+👉 Define tipos/interfaces (TypeScript)
+
+💡 Serve para:
+
+Garantir tipagem
+Padronizar dados
+🗄️ database/
+database/
+├── databaseConfig.ts
+└── schema.prisma
+🔹 schema.prisma
+
+👉 Define o banco de dados
+
+Exemplo:
+
+tabelas
+relações
+tipos
+
+💡 É o “projeto do banco”
+
+🔹 databaseConfig.ts
+
+👉 Configuração da conexão
+
+🧰 utils/
+
+👉 Funções auxiliares reutilizáveis
+
+Exemplo:
+
+validações
+helpers
+formatação
+🌐 routes.ts
+
+👉 Arquivo central de rotas
+
+Responsável por:
+
+juntar todos os routers dos módulos
+
+Exemplo mental:
+
+app.use("/cliente", clienteRouter)
+app.use("/teste", testeRouter)
+
+💡 É o “hub” das rotas
+
+🚀 server.ts
+
+👉 Ponto de entrada da aplicação
+
+Responsável por:
+
+criar o servidor (Express)
+configurar middlewares
+importar routes.ts
+iniciar na porta (ex: 3000)
+
+💡 É o “coração rodando” da aplicação
+
+🔁 Fluxo completo de uma requisição
+
+Quando você faz:
+
+POST /cliente
+
+Acontece isso:
+
+server.ts recebe
+vai para routes.ts
+vai para clienteRouter.ts
+chama clienteController.ts
+chama clienteService.ts
+acessa o banco via Prisma
+volta tudo até responder
+🧠 Resumo final (bem direto)
+generated/ → código automático do Prisma
+modulos/ → funcionalidades separadas por domínio
+controller → recebe requisição
+service → lógica de negócio
+router → define rotas
+database/ → banco e configuração
+routes.ts → junta tudo
+server.ts → inicia o sistema
