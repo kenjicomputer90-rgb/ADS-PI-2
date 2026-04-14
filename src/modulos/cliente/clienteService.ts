@@ -1,5 +1,5 @@
-export function addCliente(nome:string, cpf:number, rg:number, data_nacimento:string){
-
+export function addCliente(nome:string, cpf:number, rg:number, data_nascimento:string){
+    return nome+cpf+rg+data_nascimento
 }
 export function removeCliente(id:number){
 
