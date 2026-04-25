@@ -12,3 +12,10 @@ export function returnCliente(id:number){
 
 }
 
+export function getClientPedidos(){
+
+}
+
+export function getClientProdutos(){
+    
+}
