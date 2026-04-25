@@ -21,7 +21,7 @@ export const removeClienteController = ( req: Request, res: Response) => {
   }
 }
 
-export const retornClienteController = ( req: Request, res: Response) => {
+export const returnClienteController = ( req: Request, res: Response) => {
   try {
     const { id } = req.body
     return res.status(201).json(returnCliente(id))

@@ -1,12 +1,12 @@
 
 import { Router } from "express"
-import {addClienteController, changeClienteController, removeClienteController, retornClienteController} from "./clienteController.js"
+import {addClienteController, changeClienteController, removeClienteController, returnClienteController} from "./clienteController.js"
 
 const clienteRouter = Router()
 
 clienteRouter.post("/cliente", addClienteController)
 
-clienteRouter.get("/cliente", retornClienteController)
+clienteRouter.get("/cliente", returnClienteController)
 
 clienteRouter.delete("/cliente", removeClienteController)
 
