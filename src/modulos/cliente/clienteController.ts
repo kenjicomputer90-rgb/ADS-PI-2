@@ -34,7 +34,7 @@ export const changeClienteController = ( req: Request, res: Response) => {
   try {
     const { id, nome, cpf, rg, data_nascimento } = req.body
     return res.status(201).json(changeCliente(id, nome, cpf,rg, data_nascimento))
-    return res.status(201).json(returnFuncionario)
+    return res.status(201).json(returnCliente)
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
   }
