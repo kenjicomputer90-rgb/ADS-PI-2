@@ -19,3 +19,10 @@ export function getClientPedidos(){
 export function getClientProdutos(){
     
 }
+
+export function consultaHistoricoLocacaoCliente(){
+
+}
+export function consultaPreferenciasCliente(){
+
+}

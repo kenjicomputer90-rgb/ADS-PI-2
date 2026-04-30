@@ -1,20 +1,20 @@
 import { Router } from "express"
-import {addProdutoController, changeProdutoController, getProdutoController, porcentagem_vendaController, precificaProdutoController, removeProdutoController, returnProdutoController} from "./produtoController.js"
+import {addProdutoController, changeProdutoController, listProdutoController, porcentagem_vendaController, precificaProdutoController, removeProdutoController, returnProdutoController} from "./produtoController.js"
 
 const produtoRouter = Router()
 
-produtoRouter.post("/produto", addProdutoController)
+produtoRouter.post("/", addProdutoController)
 
-produtoRouter.get("/produto", returnProdutoController)
+produtoRouter.get("/", returnProdutoController)
 
-produtoRouter.delete("/produto", removeProdutoController)
+produtoRouter.delete("/", removeProdutoController)
 
-produtoRouter.patch("/produto", changeProdutoController)
+produtoRouter.patch("/", changeProdutoController)
 
 produtoRouter.get("/precificacao", precificaProdutoController)
 
 produtoRouter.get("/porcentagem_venda", porcentagem_vendaController)
 
-produtoRouter.get("/getproduto", getProdutoController)
+produtoRouter.get("/listaProduto", listProdutoController)
 
 export default produtoRouter

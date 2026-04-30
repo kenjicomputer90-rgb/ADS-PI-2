@@ -4,12 +4,12 @@ import {addAdministradorController, changeAdministradorController, removeAdminis
 
 const administradorRouter = Router()
 
-administradorRouter.post("/administrador", addAdministradorController)
+administradorRouter.post("/", addAdministradorController)
 
-administradorRouter.get("/administrador", returnAdministradorController)
+administradorRouter.get("/", returnAdministradorController)
 
-administradorRouter.delete("/administrador", removeAdministradorController)
+administradorRouter.delete("/", removeAdministradorController)
 
-administradorRouter.patch("/administrador", changeAdministradorController)
+administradorRouter.patch("/", changeAdministradorController)
 
 export default administradorRouter

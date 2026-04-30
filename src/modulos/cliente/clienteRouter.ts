@@ -4,12 +4,12 @@ import {addClienteController, changeClienteController, removeClienteController, 
 
 const clienteRouter = Router()
 
-clienteRouter.post("/cliente", addClienteController)
+clienteRouter.post("/", addClienteController)
 
-clienteRouter.get("/cliente", returnClienteController)
+clienteRouter.get("/", returnClienteController)
 
-clienteRouter.delete("/cliente", removeClienteController)
+clienteRouter.delete("/", removeClienteController)
 
-clienteRouter.patch("/cliente", changeClienteController)
+clienteRouter.patch("/", changeClienteController)
 
 export default clienteRouter

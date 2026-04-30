@@ -4,12 +4,12 @@ import {addFuncionarioController, changeFuncionarioController, removeFuncionario
 
 const funcionarioRouter = Router()
 
-funcionarioRouter.post("/funcionario", addFuncionarioController)
+funcionarioRouter.post("/", addFuncionarioController)
 
-funcionarioRouter.get("/funcionario", returnFuncionarioController  )
+funcionarioRouter.get("/", returnFuncionarioController  )
 
-funcionarioRouter.delete("/funcionario", removeFuncionarioController)
+funcionarioRouter.delete("/", removeFuncionarioController)
 
-funcionarioRouter.patch("/funcionario", changeFuncionarioController)
+funcionarioRouter.patch("/", changeFuncionarioController)
 
 export default funcionarioRouter

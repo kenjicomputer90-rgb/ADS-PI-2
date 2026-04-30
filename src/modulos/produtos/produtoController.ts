@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { addProduto, changeProduto, precificaProduto, removeProduto, returnProduto, porcentagem_venda, getProduto } from "./produtosService.js"
+import { addProduto, changeProduto, precificaProduto, removeProduto, returnProduto, porcentagem_venda, listProduto} from "./produtosService.js"
 
 export const addProdutoController = ( req: Request, res: Response) => {
   try {
@@ -9,7 +9,6 @@ export const addProdutoController = ( req: Request, res: Response) => {
     return res.status(400).json({ erro: error.message })
   }
 }
-
 
 export const removeProdutoController = ( req: Request, res: Response) => {
   try {
@@ -53,10 +52,9 @@ export const porcentagem_vendaController = ( req: Request, res: Response) => {
     return res.status(400).json({ erro: error.message })
   }
 }
-export const getProdutoController = ( req: Request, res: Response) => {
+export const listProdutoController = ( req: Request, res: Response) => {
   try {
-    const { id } = req.body
-    return res.status(201).json(getProduto(id))
+    return res.status(201).json(listProduto())
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
   }
