@@ -1,13 +1,32 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
+ 
+}
+
+model Cliente {
+  id               Int    @id @default(autoincrement())
+  nome             String
+  cpf              String
+  rg               String
+  data_nascimento  String
+}
+
+model Funcionario {
+  id                 Int    @id @default(autoincrement())
+  nome               String
+  cpf                String
+  rg                 String
+  email              String
+  telefone           String
+  cpts               String
+  dependentes        Int
+  sexo               String
+  salario            Float
+  data_de_nascimento String
+  estado_civil       String
 }
