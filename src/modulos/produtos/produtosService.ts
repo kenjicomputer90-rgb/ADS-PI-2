@@ -1,16 +1,17 @@
- import { PrismaClient } from '../../generated/prisma/client.js'
- const prisma = new PrismaClient()
-export function addProduto(nome:string, material:string, descricao:string, preco:number, status:"alugado"|"disponível"|"à venda"|"em manutenção", tamanho:number , cor:string, foto?:string){
-     
+import { prisma } from "../database/prisma";
 
-export async function addUser(name: string) {
-  const user = await prisma.user.create({
-    data: { name }
-  })
-
-  return `Usuário ${user.name} adicionado`
+export async function criarCliente() {
+ 
 }
-  */
+
+//export const prisma = new PrismaClient();
+export async function addProduto(nome:string, material:string, descricao:string, preco:number, status:"alugado"|"disponível"|"à venda"|"em manutenção", tamanho:number , cor:string, foto?:string){
+    return await prisma.cliente.create({
+    data: {
+      nome: "Eduardo",
+      cpf: "123",
+    },
+  });
 }
 export function removeProduto(id:number){}
 export function listProduto(){}
