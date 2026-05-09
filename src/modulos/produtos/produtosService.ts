@@ -1,4 +1,4 @@
-import { prisma } from "../database/prisma";
+/*import { prisma } from "../database/prisma";
 
 export async function criarCliente() {
  
@@ -12,6 +12,10 @@ export async function addProduto(nome:string, material:string, descricao:string,
       cpf: "123",
     },
   });
+}
+  */
+ export async function addProduto(nome:string, material:string, descricao:string, preco:number, status:"alugado"|"disponível"|"à venda"|"em manutenção", tamanho:number , cor:string, foto?:string){
+   
 }
 export function removeProduto(id:number){}
 export function listProduto(){}
