@@ -6,10 +6,12 @@ export async function criarCliente() {
 
 //export const prisma = new PrismaClient();
 export async function addProduto(nome:string, material:string, descricao:string, preco:number, status:"alugado"|"disponível"|"à venda"|"em manutenção", tamanho:number , cor:string, foto?:string){
-    return await prisma.cliente.create({
+    return await prisma.peca.create({
     data: {
-      nome: "Eduardo",
-      cpf: "123",
+      codigo_unico: "",
+      descricao: "",
+      tamanho: "",
+      cor: ""
     },
   });
 }
