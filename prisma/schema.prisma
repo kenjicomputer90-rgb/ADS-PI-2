@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ajuste {
+  id_ajuste    Int          @id @default(autoincrement())
+  id_item      Int
+  descricao    String       @db.VarChar(150)
+  item_locacao item_locacao @relation(fields: [id_item], references: [id_item], onDelete: Cascade, onUpdate: NoAction, map: "ajuste_ibfk_1")
+
+  @@index([id_item], map: "id_item")
+}
+
+model cliente {
+  id_cliente      Int       @id @default(autoincrement())
+  id_usuario      Int?      @unique(map: "id_usuario")
+  nome            String    @db.VarChar(60)
+  cpf             String    @unique(map: "cpf") @db.VarChar(14)
+  telefone        String    @db.VarChar(15)
+  endereco        String    @db.VarChar(100)
+  rg              String?   @db.VarChar(15)
+  medidas         String?   @db.Text
+  data_nascimento DateTime? @db.Date
+  usuario         usuario?  @relation(fields: [id_usuario], references: [id_usuario], onUpdate: NoAction, map: "cliente_ibfk_1")
+  locacao         locacao[]
+}
+
+model funcionario {
+  id_funcionario  Int       @id @default(autoincrement())
+  id_usuario      Int       @unique(map: "id_usuario")
+  nome            String    @db.VarChar(60)
+  cpf             String    @unique(map: "cpf") @db.VarChar(14)
+  rg              String?   @db.VarChar(15)
+  telefone        String?   @db.VarChar(15)
+  ctps            String?   @db.VarChar(20)
+  dependente      Int?      @default(0)
+  sexo            String?   @db.Char(1)
+  salario         Decimal?  @db.Decimal(10, 2)
+  data_nascimento DateTime? @db.Date
+  estado_civil    String?   @db.VarChar(20)
+  usuario         usuario   @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade, onUpdate: NoAction, map: "funcionario_ibfk_1")
+  locacao         locacao[]
+}
+
+model historico_peca {
+  id_historico Int          @id @default(autoincrement())
+  id_peca      Int
+  id_status    Int
+  data_inicio  DateTime     @db.Date
+  data_fim     DateTime?    @db.Date
+  peca_produto peca_produto @relation(fields: [id_peca], references: [id_peca], onDelete: Cascade, onUpdate: NoAction, map: "historico_peca_ibfk_1")
+  status_peca  status_peca  @relation(fields: [id_status], references: [id_status], onDelete: NoAction, onUpdate: NoAction, map: "historico_peca_ibfk_2")
+
+  @@index([id_peca], map: "id_peca")
+  @@index([id_status], map: "id_status")
+}
+
+model item_locacao {
+  id_item      Int          @id @default(autoincrement())
+  id_locacao   Int
+  id_peca      Int
+  ajuste       ajuste[]
+  locacao      locacao      @relation(fields: [id_locacao], references: [id_locacao], onDelete: Cascade, onUpdate: NoAction, map: "item_locacao_ibfk_1")
+  peca_produto peca_produto @relation(fields: [id_peca], references: [id_peca], onDelete: NoAction, onUpdate: NoAction, map: "item_locacao_ibfk_2")
+
+  @@index([id_locacao], map: "id_locacao")
+  @@index([id_peca], map: "id_peca")
+}
+
+model locacao {
+  id_locacao     Int            @id @default(autoincrement())
+  id_cliente     Int
+  id_usuario     Int
+  id_funcionario Int
+  data_evento    DateTime       @db.Date
+  data_devolucao DateTime?      @db.Date
+  item_locacao   item_locacao[]
+  cliente        cliente        @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction, onUpdate: NoAction, map: "locacao_ibfk_1")
+  usuario        usuario        @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "locacao_ibfk_2")
+  funcionario    funcionario    @relation(fields: [id_funcionario], references: [id_funcionario], onDelete: NoAction, onUpdate: NoAction, map: "locacao_ibfk_3")
+  pagamento      pagamento[]
+
+  @@index([id_cliente], map: "id_cliente")
+  @@index([id_funcionario], map: "id_funcionario")
+  @@index([id_usuario], map: "id_usuario")
+}
+
+model manutencao {
+  id_manutencao   Int          @id @default(autoincrement())
+  id_peca         Int
+  descricao       String       @db.VarChar(150)
+  data_manutencao DateTime     @db.Date
+  peca_produto    peca_produto @relation(fields: [id_peca], references: [id_peca], onDelete: Cascade, onUpdate: NoAction, map: "manutencao_ibfk_1")
+
+  @@index([id_peca], map: "id_peca")
+}
+
+model pagamento {
+  id_pagamento Int     @id @default(autoincrement())
+  id_locacao   Int
+  valor        Decimal @db.Decimal(10, 2)
+  locacao      locacao @relation(fields: [id_locacao], references: [id_locacao], onDelete: Cascade, onUpdate: NoAction, map: "pagamento_ibfk_1")
+
+  @@index([id_locacao], map: "id_locacao")
+}
+
+model peca_produto {
+  id_peca        Int              @id @default(autoincrement())
+  codigo_unico   String           @unique(map: "codigo_unico") @db.VarChar(40)
+  descricao      String           @db.VarChar(100)
+  tamanho        String           @db.VarChar(10)
+  cor            String           @db.VarChar(30)
+  material       String?          @db.VarChar(40)
+  preco          Decimal          @db.Decimal(10, 2)
+  historico_peca historico_peca[]
+  item_locacao   item_locacao[]
+  manutencao     manutencao[]
+}
+
+model status_peca {
+  id_status      Int              @id @default(autoincrement())
+  descricao      String           @db.VarChar(40)
+  historico_peca historico_peca[]
+}
+
+model usuario {
+  id_usuario    Int          @id @default(autoincrement())
+  nome          String       @db.VarChar(60)
+  email         String       @unique(map: "email") @db.VarChar(40)
+  senha         String       @db.VarChar(20)
+  perfil_acesso String       @db.VarChar(40)
+  cliente       cliente?
+  funcionario   funcionario?
+  locacao       locacao[]
+}
