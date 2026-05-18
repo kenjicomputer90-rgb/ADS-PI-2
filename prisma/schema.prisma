@@ -3,47 +3,47 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model ajuste {
   id_ajuste    Int          @id @default(autoincrement())
   id_item      Int
-  descricao    String       @db.VarChar(150)
-  item_locacao item_locacao @relation(fields: [id_item], references: [id_item], onDelete: Cascade, onUpdate: NoAction, map: "ajuste_ibfk_1")
+  descricao    String
+  item_locacao item_locacao @relation(fields: [id_item], references: [id_item], onDelete: Cascade)
 
-  @@index([id_item], map: "id_item")
+  @@index([id_item])
 }
 
 model cliente {
   id_cliente      Int       @id @default(autoincrement())
-  id_usuario      Int?      @unique(map: "id_usuario")
-  nome            String    @db.VarChar(60)
-  cpf             String    @unique(map: "cpf") @db.VarChar(14)
-  telefone        String    @db.VarChar(15)
-  endereco        String    @db.VarChar(100)
-  rg              String?   @db.VarChar(15)
-  medidas         String?   @db.Text
-  data_nascimento DateTime? @db.Date
-  usuario         usuario?  @relation(fields: [id_usuario], references: [id_usuario], onUpdate: NoAction, map: "cliente_ibfk_1")
+  id_usuario      Int?      @unique
+  nome            String
+  cpf             String    @unique
+  telefone        String
+  endereco        String
+  rg              String?
+  medidas         String?
+  data_nascimento DateTime?
+  usuario         usuario?  @relation(fields: [id_usuario], references: [id_usuario])
   locacao         locacao[]
 }
 
 model funcionario {
   id_funcionario  Int       @id @default(autoincrement())
-  id_usuario      Int       @unique(map: "id_usuario")
-  nome            String    @db.VarChar(60)
-  cpf             String    @unique(map: "cpf") @db.VarChar(14)
-  rg              String?   @db.VarChar(15)
-  telefone        String?   @db.VarChar(15)
-  ctps            String?   @db.VarChar(20)
+  id_usuario      Int       @unique
+  nome            String
+  cpf             String    @unique
+  rg              String?
+  telefone        String?
+  ctps            String?
   dependente      Int?      @default(0)
-  sexo            String?   @db.Char(1)
-  salario         Decimal?  @db.Decimal(10, 2)
-  data_nascimento DateTime? @db.Date
-  estado_civil    String?   @db.VarChar(20)
-  usuario         usuario   @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade, onUpdate: NoAction, map: "funcionario_ibfk_1")
+  sexo            String?
+  salario         Decimal?
+  data_nascimento DateTime?
+  estado_civil    String?
+  usuario         usuario   @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
   locacao         locacao[]
 }
 
@@ -51,13 +51,13 @@ model historico_peca {
   id_historico Int          @id @default(autoincrement())
   id_peca      Int
   id_status    Int
-  data_inicio  DateTime     @db.Date
-  data_fim     DateTime?    @db.Date
-  peca_produto peca_produto @relation(fields: [id_peca], references: [id_peca], onDelete: Cascade, onUpdate: NoAction, map: "historico_peca_ibfk_1")
-  status_peca  status_peca  @relation(fields: [id_status], references: [id_status], onDelete: NoAction, onUpdate: NoAction, map: "historico_peca_ibfk_2")
+  data_inicio  DateTime
+  data_fim     DateTime?
+  peca_produto peca_produto @relation(fields: [id_peca], references: [id_peca], onDelete: Cascade)
+  status_peca  status_peca  @relation(fields: [id_status], references: [id_status])
 
-  @@index([id_peca], map: "id_peca")
-  @@index([id_status], map: "id_status")
+  @@index([id_peca])
+  @@index([id_status])
 }
 
 model item_locacao {
@@ -65,11 +65,11 @@ model item_locacao {
   id_locacao   Int
   id_peca      Int
   ajuste       ajuste[]
-  locacao      locacao      @relation(fields: [id_locacao], references: [id_locacao], onDelete: Cascade, onUpdate: NoAction, map: "item_locacao_ibfk_1")
-  peca_produto peca_produto @relation(fields: [id_peca], references: [id_peca], onDelete: NoAction, onUpdate: NoAction, map: "item_locacao_ibfk_2")
+  locacao      locacao      @relation(fields: [id_locacao], references: [id_locacao], onDelete: Cascade)
+  peca_produto peca_produto @relation(fields: [id_peca], references: [id_peca])
 
-  @@index([id_locacao], map: "id_locacao")
-  @@index([id_peca], map: "id_peca")
+  @@index([id_locacao])
+  @@index([id_peca])
 }
 
 model locacao {
@@ -77,46 +77,46 @@ model locacao {
   id_cliente     Int
   id_usuario     Int
   id_funcionario Int
-  data_evento    DateTime       @db.Date
-  data_devolucao DateTime?      @db.Date
+  data_evento    DateTime
+  data_devolucao DateTime?
   item_locacao   item_locacao[]
-  cliente        cliente        @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction, onUpdate: NoAction, map: "locacao_ibfk_1")
-  usuario        usuario        @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "locacao_ibfk_2")
-  funcionario    funcionario    @relation(fields: [id_funcionario], references: [id_funcionario], onDelete: NoAction, onUpdate: NoAction, map: "locacao_ibfk_3")
+  cliente        cliente        @relation(fields: [id_cliente], references: [id_cliente])
+  usuario        usuario        @relation(fields: [id_usuario], references: [id_usuario])
+  funcionario    funcionario    @relation(fields: [id_funcionario], references: [id_funcionario])
   pagamento      pagamento[]
 
-  @@index([id_cliente], map: "id_cliente")
-  @@index([id_funcionario], map: "id_funcionario")
-  @@index([id_usuario], map: "id_usuario")
+  @@index([id_cliente])
+  @@index([id_funcionario])
+  @@index([id_usuario])
 }
 
 model manutencao {
   id_manutencao   Int          @id @default(autoincrement())
   id_peca         Int
-  descricao       String       @db.VarChar(150)
-  data_manutencao DateTime     @db.Date
-  peca_produto    peca_produto @relation(fields: [id_peca], references: [id_peca], onDelete: Cascade, onUpdate: NoAction, map: "manutencao_ibfk_1")
+  descricao       String
+  data_manutencao DateTime
+  peca_produto    peca_produto @relation(fields: [id_peca], references: [id_peca], onDelete: Cascade)
 
-  @@index([id_peca], map: "id_peca")
+  @@index([id_peca])
 }
 
 model pagamento {
   id_pagamento Int     @id @default(autoincrement())
   id_locacao   Int
-  valor        Decimal @db.Decimal(10, 2)
-  locacao      locacao @relation(fields: [id_locacao], references: [id_locacao], onDelete: Cascade, onUpdate: NoAction, map: "pagamento_ibfk_1")
+  valor        Decimal
+  locacao      locacao @relation(fields: [id_locacao], references: [id_locacao], onDelete: Cascade)
 
-  @@index([id_locacao], map: "id_locacao")
+  @@index([id_locacao])
 }
 
 model peca_produto {
   id_peca        Int              @id @default(autoincrement())
-  codigo_unico   String           @unique(map: "codigo_unico") @db.VarChar(40)
-  descricao      String           @db.VarChar(100)
-  tamanho        String           @db.VarChar(10)
-  cor            String           @db.VarChar(30)
-  material       String?          @db.VarChar(40)
-  preco          Decimal          @db.Decimal(10, 2)
+  codigo_unico   String           @unique
+  descricao      String
+  tamanho        String
+  cor            String
+  material       String?
+  preco          Decimal
   historico_peca historico_peca[]
   item_locacao   item_locacao[]
   manutencao     manutencao[]
@@ -124,16 +124,16 @@ model peca_produto {
 
 model status_peca {
   id_status      Int              @id @default(autoincrement())
-  descricao      String           @db.VarChar(40)
+  descricao      String
   historico_peca historico_peca[]
 }
 
 model usuario {
   id_usuario    Int          @id @default(autoincrement())
-  nome          String       @db.VarChar(60)
-  email         String       @unique(map: "email") @db.VarChar(40)
-  senha         String       @db.VarChar(20)
-  perfil_acesso String       @db.VarChar(40)
+  nome          String
+  email         String       @unique
+  senha         String
+  perfil_acesso String
   cliente       cliente?
   funcionario   funcionario?
   locacao       locacao[]
