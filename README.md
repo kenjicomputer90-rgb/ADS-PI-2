@@ -1,6 +1,6 @@
 <h1>🚀 ADS PI2</h1>
 <br>
-<p align="center"> Repository created to share and collaborate on the ADS PI2 source code. </p>
+<p> Repositorio criado para compartilhar e colaborar no código fonte do projeto ADS PI2. </p>
 <cria banco de dados>
 <cria prisma-orm para mapear o banco locacao_trajes>
 
