@@ -23,8 +23,11 @@ git pull origin DEV #pega as atualizações do código no reposítorio
 #inicalizar o servidor
 npm run start-dev
 
-#estrutura do GET para teste:
+#estrutura para teste:
 http --json POST http://localhost:3000/cliente nome=Fulano cpf=209302930 rg=38948298492 data_nacimento=10/10/10 --body
+
+#estrutura para POST do produto
+http --json POST http://localhost:3000/produtos nome=teste material=teste descricao=teste preco=10 status=1 tamanho=10 cor=teste  --body
 
 #converter para javascript e gerar o dist 
 npx tsc
