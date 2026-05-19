@@ -1,0 +1,139 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model ajuste {
+  id_ajuste    Int          @id @default(autoincrement())
+  id_item      Int
+  descricao    String
+  item_locacao item_locacao @relation(fields: [id_item], references: [id_item], onDelete: Cascade)
+
+  @@index([id_item])
+}
+
+model cliente {
+  id_cliente      Int       @id @default(autoincrement())
+  id_usuario      Int?      @unique
+  nome            String
+  cpf             String    @unique
+  telefone        String
+  endereco        String
+  rg              String?
+  medidas         String?
+  data_nascimento DateTime?
+  usuario         usuario?  @relation(fields: [id_usuario], references: [id_usuario])
+  locacao         locacao[]
+}
+
+model funcionario {
+  id_funcionario  Int       @id @default(autoincrement())
+  id_usuario      Int       @unique
+  nome            String
+  cpf             String    @unique
+  rg              String?
+  telefone        String?
+  ctps            String?
+  dependente      Int?      @default(0)
+  sexo            String?
+  salario         Decimal?
+  data_nascimento DateTime?
+  estado_civil    String?
+  usuario         usuario   @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+  locacao         locacao[]
+}
+
+model historico_peca {
+  id_historico Int          @id @default(autoincrement())
+  id_peca      Int
+  id_status    Int
+  data_inicio  DateTime
+  data_fim     DateTime?
+  status_peca  status_peca  @relation(fields: [id_status], references: [id_status])
+  peca_produto peca_produto @relation(fields: [id_peca], references: [id_peca], onDelete: Cascade)
+
+  @@index([id_peca])
+  @@index([id_status])
+}
+
+model item_locacao {
+  id_item      Int          @id @default(autoincrement())
+  id_locacao   Int
+  id_peca      Int
+  ajuste       ajuste[]
+  peca_produto peca_produto @relation(fields: [id_peca], references: [id_peca])
+  locacao      locacao      @relation(fields: [id_locacao], references: [id_locacao], onDelete: Cascade)
+
+  @@index([id_locacao])
+  @@index([id_peca])
+}
+
+model locacao {
+  id_locacao     Int            @id @default(autoincrement())
+  id_cliente     Int
+  id_usuario     Int
+  id_funcionario Int
+  data_evento    DateTime
+  data_devolucao DateTime?
+  item_locacao   item_locacao[]
+  funcionario    funcionario    @relation(fields: [id_funcionario], references: [id_funcionario])
+  usuario        usuario        @relation(fields: [id_usuario], references: [id_usuario])
+  cliente        cliente        @relation(fields: [id_cliente], references: [id_cliente])
+  pagamento      pagamento[]
+
+  @@index([id_cliente])
+  @@index([id_funcionario])
+  @@index([id_usuario])
+}
+
+model manutencao {
+  id_manutencao   Int          @id @default(autoincrement())
+  id_peca         Int
+  descricao       String
+  data_manutencao DateTime
+  peca_produto    peca_produto @relation(fields: [id_peca], references: [id_peca], onDelete: Cascade)
+
+  @@index([id_peca])
+}
+
+model pagamento {
+  id_pagamento Int     @id @default(autoincrement())
+  id_locacao   Int
+  valor        Decimal
+  locacao      locacao @relation(fields: [id_locacao], references: [id_locacao], onDelete: Cascade)
+
+  @@index([id_locacao])
+}
+
+model peca_produto {
+  id_peca        Int              @id @default(autoincrement())
+  codigo_unico   String           @unique
+  descricao      String
+  tamanho        String
+  cor            String
+  material       String?
+  preco          Decimal
+  historico_peca historico_peca[]
+  item_locacao   item_locacao[]
+  manutencao     manutencao[]
+}
+
+model status_peca {
+  id_status      Int              @id @default(autoincrement())
+  descricao      String
+  historico_peca historico_peca[]
+}
+
+model usuario {
+  id_usuario    Int          @id @default(autoincrement())
+  nome          String
+  email         String       @unique
+  senha         String
+  perfil_acesso String
+  cliente       cliente?
+  funcionario   funcionario?
+  locacao       locacao[]
+}
