@@ -31,7 +31,7 @@ export const returnProdutoController = ( req: Request, res: Response) => {
 export const changeProdutoController = ( req: Request, res: Response) => {
   try {
     const { id, nome, material, descricao, preco, status } = req.body
-    return res.status(201).json(changeProduto(id, nome, material, descricao, preco, status))
+    return res.status(201).json(changeProduto(id, {nome, material, descricao, preco, status}))
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
   }
