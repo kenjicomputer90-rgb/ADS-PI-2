@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 
 const adapter = new PrismaBetterSqlite3({
@@ -48,16 +48,54 @@ export async function addProduto(nome:string, material:string, descricao:string,
           historico_peca: true
       }
   });
-
+  return newProduto
 }
-export function removeProduto(id:number){}
-export function listProduto(){}
-export function precificaProduto(id:number){}
-export function porcentagem_venda(tipo:string){
+export async function removeProduto(id:number){
+  const newProduto = await prisma.peca_produto.delete({
+      where: {
+    id_peca: id
+      }
+  })
 }
-export function returnProduto(id:number){}
-export function changeProduto(id:number, nome?:string, material?:string, descricao?:string, preco?:number, status?:string){}
-export function reservar(){}
-export function devolucao(){}
-export function venda(){}
-export function troca(){}
+export async function listProduto(){
+  const newProduto = await prisma.peca_produto.findMany()
+}
+export async function precificaProduto(id:number){
+  const newProduto = await prisma.peca_produto.delete
+}
+export async function porcentagem_venda(tipo:string){
+  const newProduto = await prisma.peca_produto.delete
+}
+export async function returnProduto(id:number){
+  const newProduto = await prisma.peca_produto.findUnique({
+      where: {
+    id_peca: id
+      }
+  })
+}
+export async function changeProduto(id:number, data:{ nome?:string, material?:string, descricao?:string, preco?:number, status?:string, tamanho?: number, cor?:string}){
+  const filteredData = Object.fromEntries(
+  Object.entries(data).filter(([_, value]) => value !== undefined)
+);
+  const updateProduto = await prisma.peca_produto.update({
+    where: {
+    id_peca: id
+  },
+  data: filteredData,
+    include:{
+        historico_peca: true
+    }
+})
+}
+export async function reservar(){
+  const newProduto = await prisma.peca_produto.delete
+}
+export async function devolucao(){
+  const newProduto = await prisma.peca_produto.delete
+}
+export async function venda(){
+  const newProduto = await prisma.peca_produto.delete
+}
+export async function troca(){
+  const newProduto = await prisma.peca_produto.delete
+}
