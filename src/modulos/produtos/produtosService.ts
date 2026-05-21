@@ -50,52 +50,155 @@ export async function addProduto(nome:string, material:string, descricao:string,
   });
   return newProduto
 }
-export async function removeProduto(id:number){
-  const newProduto = await prisma.peca_produto.delete({
-      where: {
-    id_peca: id
-      }
-  })
-}
-export async function listProduto(){
-  const newProduto = await prisma.peca_produto.findMany()
-}
-export async function precificaProduto(id:number){
-  const newProduto = await prisma.peca_produto.delete
-}
-export async function porcentagem_venda(tipo:string){
-  const newProduto = await prisma.peca_produto.delete
-}
-export async function returnProduto(id:number){
-  const newProduto = await prisma.peca_produto.findUnique({
-      where: {
-    id_peca: id
-      }
-  })
-}
-export async function changeProduto(id:number, data:{ nome?:string, material?:string, descricao?:string, preco?:number, status?:string, tamanho?: number, cor?:string}){
-  const filteredData = Object.fromEntries(
-  Object.entries(data).filter(([_, value]) => value !== undefined)
-);
-  const updateProduto = await prisma.peca_produto.update({
+
+export async function removeProduto(id: number) {
+  return await prisma.peca_produto.delete({
     where: {
-    id_peca: id
-  },
-  data: filteredData,
-    include:{
-        historico_peca: true
+      id_peca: id
     }
-})
+  })
 }
-export async function reservar(){
-  const newProduto = await prisma.peca_produto.delete
+
+export async function listProduto() {
+  return await prisma.peca_produto.findMany({
+    include: {
+      historico_peca: true
+    }
+  })
 }
-export async function devolucao(){
-  const newProduto = await prisma.peca_produto.delete
+
+export async function precificaProduto(id: number) {
+  const produto = await prisma.peca_produto.findUnique({
+    where: {
+      id_peca: id
+    }
+  })
+
+  if (!produto) {
+    throw new Error("Produto não encontrado")
+  }
+
+  return {
+    id: produto.id_peca,
+    preco: produto.preco
+  }
 }
-export async function venda(){
-  const newProduto = await prisma.peca_produto.delete
+
+export async function porcentagem_venda(tipo: string, tipo_buscado:string) {
+  const total = await prisma.peca_produto.count()
+
+  const vendidos = await prisma.peca_produto.count({
+    where: {
+      [tipo]: tipo_buscado
+    }
+  })
+
+  if (total === 0) {
+    return {
+      porcentagem: 0
+    }
+  }
+
+  return {
+    porcentagem: (vendidos / total) * 100
+  }
 }
-export async function troca(){
-  const newProduto = await prisma.peca_produto.delete
+
+export async function returnProduto(id: number) {
+  const produto = await prisma.peca_produto.findUnique({
+    where: {
+      id_peca: id
+    },
+    include: {
+      historico_peca: true
+    }
+  })
+
+  if (!produto) {
+    throw new Error("Produto não encontrado")
+  }
+
+  return produto
+}
+
+export async function changeProduto(
+  id: number,
+  data: {
+    nome?: string
+    material?: string
+    descricao?: string
+    preco?: number
+    status?: string
+    tamanho?: number
+    cor?: string
+  }
+) {
+  const filteredData = Object.fromEntries(
+    Object.entries({
+      codigo_unico: data.nome,
+      material: data.material,
+      descricao: data.descricao,
+      preco: data.preco,
+      status: data.status,
+      tamanho: data.tamanho ? String(data.tamanho) : undefined,
+      cor: data.cor
+    }).filter(([_, value]) => value !== undefined)
+  )
+
+  return await prisma.peca_produto.update({
+    where: {
+      id_peca: id
+    },
+    data: filteredData,
+    include: {
+      historico_peca: true
+    }
+  })
+}
+
+export async function reservar(id: number) {
+  return await prisma.peca_produto.update({
+    where: {
+      id_peca: id
+    },
+    data: {
+      status: "alugado"
+    }
+  })
+}
+
+export async function devolucao(id: number) {
+  return await prisma.peca_produto.update({
+    where: {
+      id_peca: id
+    },
+    data: {
+      status: "disponível"
+    }
+  })
+}
+
+export async function venda(id: number) {
+  return await prisma.peca_produto.update({
+    where: {
+      id_peca: id
+    },
+    data: {
+      status: "à venda"
+    }
+  })
+}
+
+export async function troca(
+  id: number,
+  data: {
+    nome?: string
+    material?: string
+    descricao?: string
+    preco?: number
+    tamanho?: number
+    cor?: string
+  }
+) {
+  return await changeProduto(id, data)
 }

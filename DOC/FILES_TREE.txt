@@ -1,0 +1,63 @@
+
+.
+├── banco
+│   ├── dev.db
+│   ├── PI_BD_DER_Aluguel de Trajes.odm
+│   ├── PI_BD_EER_Locacao_trajes.png
+│   ├── PI_BD_EER_locacao_trajes.sql
+│   ├── PI_BD_EER_locacao_trajes_Tabelas.mwb
+│   ├── PI_BD_EER_locacao_trajes_T.mwb.bak
+│   ├── PI_BD_EER_locacao_trajes_T.mwb.bak.mwb
+│   └── PI_DER_Locacao_trajes_Rev1.png.png
+├── frontEnd
+│   ├── front.html
+│   ├── images.png
+│   ├── index.html
+│   └── style.css
+├── Guia para o desenvolvedor.txt
+├── LICENSE
+├── package.json
+├── package-lock.json
+├── prisma
+│   ├── banco
+│   │   └── dev.db
+│   ├── migrations
+│   │   ├── 20260508181459_migracao_cliente_funcionario
+│   │   │   └── migration.sql
+│   │   └── migration_lock.toml
+│   ├── schema.prisma
+│   └── seed.ts
+├── prisma.config.ts
+├── README.md
+├── resumo do chatgpt.txt
+├── src
+│   ├── generated
+│   │   └── prisma
+│   ├── modulos
+│   │   ├── administrador
+│   │   │   ├── administradorController.ts
+│   │   │   ├── administradorRouter.ts
+│   │   │   └── administradorService.ts
+│   │   ├── cliente
+│   │   │   ├── clienteController.ts
+│   │   │   ├── clienteRouter.ts
+│   │   │   └── clienteService.ts
+│   │   ├── financeiro
+│   │   │   └── financeiro.ts
+│   │   ├── funcionario
+│   │   │   ├── fucionarioService.ts
+│   │   │   ├── funcionarioController.ts
+│   │   │   └── funcionarioRouter.ts
+│   │   ├── produtos
+│   │   │   ├── produtoController.ts
+│   │   │   ├── produtosRouter.ts
+│   │   │   └── produtosService.ts
+│   │   ├── teste
+│   │   │   ├── teste-orm-del.ts
+│   │   │   └── teste-orm-ins.ts
+│   │   └── utils
+│   ├── routes.ts
+│   └── server.ts
+└── tsconfig.json
+
+18 directories, 42 files

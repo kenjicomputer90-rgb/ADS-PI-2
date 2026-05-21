@@ -5,7 +5,7 @@ const produtoRouter = Router()
 
 produtoRouter.post("/", addProdutoController)
 
-produtoRouter.get("/", returnProdutoController)
+produtoRouter.get("/:id", returnProdutoController)
 
 produtoRouter.delete("/", removeProdutoController)
 

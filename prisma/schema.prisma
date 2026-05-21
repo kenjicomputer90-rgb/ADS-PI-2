@@ -110,7 +110,7 @@ model pagamento {
 
 model peca_produto {
   id_peca        Int              @id @default(autoincrement())
-  codigo_unico   String           @unique
+  codigo_unico   String?           @unique
   descricao      String
   tamanho        String
   cor            String
