@@ -6,6 +6,7 @@
   "scripts": {
     "start-dev": "tsx watch src/server.ts",
     "start:dev": "tsx watch src/server.ts",
+    "treeDOC": "echo \"last updated: $(date +%d/%m/%y)\" > DOC/FILES_TREE.txt && tree . -I node_modules -I dist >> DOC/FILES_TREE.txt",
     "seed": "node prisma/seed.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
