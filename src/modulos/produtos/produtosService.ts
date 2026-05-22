@@ -41,11 +41,12 @@ export async function removeProduto(id: number) {
 }
 
 export async function listProduto() {
-  return await prisma.peca_produto.findMany({
+  const produtos = await prisma.peca_produto.findMany({
     include: {
       historico_peca: true
     }
   })
+  return produtos
 }
 
 export async function precificaProduto(id: number) {

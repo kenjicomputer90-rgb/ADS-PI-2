@@ -5,16 +5,16 @@ const produtoRouter = Router()
 
 produtoRouter.post("/", addProdutoController)
 
-produtoRouter.get("/:id", returnProdutoController)
-
 produtoRouter.delete("/", removeProdutoController)
 
 produtoRouter.patch("/", changeProdutoController)
+
+produtoRouter.get("/listaProduto", listProdutoController)
 
 produtoRouter.get("/precificacao/:id", precificaProdutoController)
 
 produtoRouter.get("/porcentagem_venda/:tipo/:tipo_buscado", porcentagem_vendaController)
 
-produtoRouter.get("/listaProduto", listProdutoController)
+produtoRouter.get("/:id", returnProdutoController)
 
 export default produtoRouter
