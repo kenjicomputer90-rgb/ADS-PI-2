@@ -52,10 +52,13 @@ export const precificaProdutoController = async( req: Request, res: Response) =>
 }
 export const porcentagem_vendaController = async( req: Request, res: Response) => {
   try {
-    const { tipo, tipo_buscado }: {
+    const {
+      tipo,
+      tipo_buscado
+    } = req.params as {
       tipo: "sexo" | "cor" | "tamanho"
       tipo_buscado: string
-    } = req.body
+    }
     const produto = await porcentagem_venda(tipo, tipo_buscado)
     //exemplo: cor, azul
     return res.status(201).json(produto)

@@ -2,51 +2,32 @@ import { PrismaClient, Prisma } from "@prisma/client";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 
 const adapter = new PrismaBetterSqlite3({
- url: "file:./banco/dev.db"
+  url: "file:./banco/dev.db"
 });
 
 const prisma = new PrismaClient({
   adapter,
 });
 
-
-/*import { prisma } from "../database/prisma";
-
-export async function criarCliente() {
- 
-}
-
-//export const prisma = new PrismaClient();
 export async function addProduto(nome:string, material:string, descricao:string, preco:number, status:"alugado"|"disponível"|"à venda"|"em manutenção", tamanho:number , cor:string, foto?:string){
-    return await prisma.peca.create({
-    data: {
-      codigo_unico: "",
-      descricao: "",
-      tamanho: "",
-      cor: ""
+  const newProduto = await prisma.peca_produto.create({
+  data: {
+    codigo_unico:  nome,       
+    descricao: descricao,
+    tamanho:  String(tamanho),
+    cor: cor,     
+    material: material,
+    preco: preco,     
+    historico_peca:{   
+    create:{
+        id_status:1,
+        data_inicio: new Date(),
+      },    
     },
-  });
-}
-  */
- export async function addProduto(nome:string, material:string, descricao:string, preco:number, status:"alugado"|"disponível"|"à venda"|"em manutenção", tamanho:number , cor:string, foto?:string){
-    const newProduto = await prisma.peca_produto.create({
-    data: {
-      codigo_unico:  nome,       
-      descricao: descricao,
-      tamanho:  String(tamanho),
-      cor: cor,     
-      material: material,
-      preco: preco,     
-      historico_peca:{   
-      create:{
-          id_status:1,
-          data_inicio: new Date(),
-        },    
-      },
-    },
-     include:{
-          historico_peca: true
-      }
+  },
+    include:{
+        historico_peca: true
+    }
   });
   return newProduto
 }
@@ -86,7 +67,7 @@ export async function precificaProduto(id: number) {
 
 export async function porcentagem_venda(tipo: string, tipo_buscado:string) {
   const total = await prisma.peca_produto.count()
-
+  console.log(tipo_buscado)
   const vendidos = await prisma.peca_produto.count({
     where: {
       [tipo]: tipo_buscado
@@ -98,7 +79,7 @@ export async function porcentagem_venda(tipo: string, tipo_buscado:string) {
       porcentagem: 0
     }
   }
-
+  console.log("teste: "+vendidos+" "+total)
   return {
     porcentagem: (vendidos / total) * 100
   }
@@ -132,7 +113,7 @@ export async function changeProduto(
     tamanho?: number
     cor?: string
   }
-) {
+  ) {
   const filteredData = Object.fromEntries(
     Object.entries({
       codigo_unico: data.nome,

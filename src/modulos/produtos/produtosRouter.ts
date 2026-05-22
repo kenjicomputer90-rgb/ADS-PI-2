@@ -11,9 +11,9 @@ produtoRouter.delete("/", removeProdutoController)
 
 produtoRouter.patch("/", changeProdutoController)
 
-produtoRouter.get("/precificacao", precificaProdutoController)
+produtoRouter.get("/precificacao/:id", precificaProdutoController)
 
-produtoRouter.get("/porcentagem_venda", porcentagem_vendaController)
+produtoRouter.get("/porcentagem_venda/:tipo/:tipo_buscado", porcentagem_vendaController)
 
 produtoRouter.get("/listaProduto", listProdutoController)
 
