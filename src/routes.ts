@@ -17,7 +17,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(express.json())
-
+ 
 app.use("/cliente", clienteRouter)
 app.use("/administrador", administradorRouter)
 app.use("/funcionario", funcionarioRouter)
