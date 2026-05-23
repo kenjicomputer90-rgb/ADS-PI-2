@@ -7,18 +7,23 @@ export default function Clientes() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
 
+
   useEffect(() => {
     carregarClientes();
   }, []);
 
   const carregarClientes = async () => {
-    try {
-      const response = await clienteService.listar();
-      setClientes(response.data);
-    } catch (error) {
-      console.error("Erro ao buscar clientes do back-end", error);
-    }
-  };
+  try {
+    const response = await clienteService.listar();
+    
+    // ADICIONE ESTA LINHA AQUI:
+    console.log("Dados que vieram do Back-end:", response.data);
+    
+    setClientes(response.data);
+  } catch (error) {
+    console.error("Erro ao buscar clientes do back-end", error);
+  }
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -17,7 +17,7 @@ export const clienteService = {
 export const produtoService = {
   listar: () => api.get('/produtos'),
   criar: (dados: any) => api.post('/produtos', dados),
-  deletar: (id: string | number) => api.delete(`/produtos/${id}`),
+  deletar: (id: string | number) => api.delete(`/produto/${id}`),
 };
 
 export const funcionarioService = {

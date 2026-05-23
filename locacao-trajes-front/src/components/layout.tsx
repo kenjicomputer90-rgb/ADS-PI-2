@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Users, Shirt, UserCheck, DollarSign, LayoutDashboard } from 'lucide-react';
 
@@ -7,9 +7,9 @@ export default function Layout() {
 
   const menuItems = [
     { path: '/', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/clientes', label: 'Clientes', icon: Users },
-    { path: '/produtos', label: 'Produtos (Trajes)', icon: Shirt },
-    { path: '/funcionarios', label: 'Funcionários', icon: UserCheck },
+    { path: '/cliente', label: 'Clientes', icon: Users },
+    { path: '/produto', label: 'Produtos (Trajes)', icon: Shirt },
+    { path: '/funcionario', label: 'Funcionários', icon: UserCheck },
     { path: '/financeiro', label: 'Financeiro', icon: DollarSign },
   ];
 
