@@ -23,13 +23,17 @@ export async function addCliente(nome:string, cpf:string,telefone: string,
     }
   })
 }
-export function removeCliente(id:number){
+export async function removeCliente(id:number){
+return await prisma.cliente.delete({
+    where: {
+        id_cliente: id
+    }
+})
+}
+export async function changeCliente(id:number, nome?:string, cpf?:string, rg?:string, data_nascimento?:string){
 
 }
-export function changeCliente(id:number, nome?:string, cpf?:number, rg?:number, data_nacimento?:string){
-
-}
-export function returnCliente(id:number){
+export async function returnCliente(id:number){
 
 }
 
