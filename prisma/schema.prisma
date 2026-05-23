@@ -145,6 +145,5 @@ model usuario {
   perfil_acesso String
   cliente       cliente?
   funcionario   funcionario?
-  administrador administrador?
   locacao       locacao[]
 }
