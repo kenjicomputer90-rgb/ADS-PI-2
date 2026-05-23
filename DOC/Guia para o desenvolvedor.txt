@@ -32,4 +32,6 @@ http --json POST http://localhost:3000/produtos nome=teste material=teste descri
 #converter para javascript e gerar o dist 
 npx tsc
 
+#se o vscode estiver acusando error no principal npx prisma generate
+
 #veja "resumo do chatgpt.txt" para mais informações sobre o projeto
