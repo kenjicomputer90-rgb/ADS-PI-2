@@ -9,11 +9,12 @@ const prisma = new PrismaClient({
   adapter,
 })
 
+// Create a user with perfil_acesso = 'administrador'
 export async function addAdministrador(
   nome: string,
-  cpf: string,
-  rg: string,
-  data_nascimento: string,
+  _cpf: string,
+  _rg: string,
+  _data_nascimento: string,
   email: string,
   senha: string
 ) {
@@ -26,37 +27,24 @@ export async function addAdministrador(
     },
   })
 
-  const administrador = await prisma.administrador.create({
-    data: {
-      id_usuario: usuario.id_usuario,
-      nome,
-      cpf,
-      rg,
-      data_nascimento: new Date(data_nascimento),
-    },
-    include: {
-      usuario: true,
-    },
-  })
-
-  return administrador
+  return usuario
 }
 
 export async function removeAdministrador(id: number) {
-  const administrador = await prisma.administrador.findUnique({
-    where: { id_administrador: id },
+  const usuario = await prisma.usuario.findUnique({
+    where: { id_usuario: id },
   })
 
-  if (!administrador) {
+  if (!usuario) {
     throw new Error("Administrador não encontrado")
   }
 
-  await prisma.administrador.delete({
-    where: { id_administrador: id },
-  })
+  if (usuario.perfil_acesso !== "administrador") {
+    throw new Error("O usuário não é um administrador")
+  }
 
   await prisma.usuario.delete({
-    where: { id_usuario: administrador.id_usuario },
+    where: { id_usuario: id },
   })
 
   return { message: "Administrador removido", id }
@@ -64,81 +52,57 @@ export async function removeAdministrador(id: number) {
 
 export async function returnAdministrador(id?: number) {
   if (!id) {
-    return await prisma.administrador.findMany({
-      include: {
-        usuario: true,
-      },
+    return await prisma.usuario.findMany({
+      where: { perfil_acesso: "administrador" },
     })
   }
 
-  const administrador = await prisma.administrador.findUnique({
-    where: { id_administrador: id },
-    include: {
-      usuario: true,
-    },
+  const usuario = await prisma.usuario.findUnique({
+    where: { id_usuario: id },
   })
 
-  if (!administrador) {
+  if (!usuario || usuario.perfil_acesso !== "administrador") {
     throw new Error("Administrador não encontrado")
   }
 
-  return administrador
+  return usuario
 }
 
 export async function changeAdministrador(
   id: number,
   nome?: string,
-  cpf?: string,
-  rg?: string,
-  data_nascimento?: string,
+  _cpf?: string,
+  _rg?: string,
+  _data_nascimento?: string,
   email?: string,
   senha?: string
 ) {
-  const administrador = await prisma.administrador.findUnique({
-    where: { id_administrador: id },
+  const usuario = await prisma.usuario.findUnique({
+    where: { id_usuario: id },
   })
 
-  if (!administrador) {
+  if (!usuario) {
     throw new Error("Administrador não encontrado")
   }
 
-  const administradorData: {
-    nome?: string
-    cpf?: string
-    rg?: string
-    data_nascimento?: Date
-  } = {}
+  if (usuario.perfil_acesso !== "administrador") {
+    throw new Error("O usuário não é um administrador")
+  }
 
-  if (nome !== undefined) administradorData.nome = nome
-  if (cpf !== undefined) administradorData.cpf = cpf
-  if (rg !== undefined) administradorData.rg = rg
-  if (data_nascimento !== undefined) administradorData.data_nascimento = new Date(data_nascimento)
-
-  const usuarioData: {
+  const data: {
     nome?: string
     email?: string
     senha?: string
   } = {}
 
-  if (nome !== undefined) usuarioData.nome = nome
-  if (email !== undefined) usuarioData.email = email
-  if (senha !== undefined) usuarioData.senha = senha
+  if (nome !== undefined) data.nome = nome
+  if (email !== undefined) data.email = email
+  if (senha !== undefined) data.senha = senha
 
-  const updatedAdministrador = await prisma.administrador.update({
-    where: { id_administrador: id },
-    data: administradorData,
+  const updated = await prisma.usuario.update({
+    where: { id_usuario: id },
+    data,
   })
 
-  const updatedUsuario =
-    Object.keys(usuarioData).length > 0
-      ? await prisma.usuario.update({
-          where: { id_usuario: administrador.id_usuario },
-          data: usuarioData,
-        })
-      : undefined
-
-  return {
-    ...updatedAdministrador,
-    usuario: updatedUsuario,
-  }
+  return updated
 }
