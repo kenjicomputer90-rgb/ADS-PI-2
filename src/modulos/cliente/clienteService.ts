@@ -1,14 +1,39 @@
-export function addCliente(nome:string, cpf:number, rg:number, data_nascimento:string){
-    const novoCliente= nome+cpf+rg+data_nascimento
-    return novoCliente
+import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+
+const adapter = new PrismaBetterSqlite3({
+  url: "file:./banco/dev.db"
+});
+
+const prisma = new PrismaClient({
+  adapter,
+});
+
+export async function addCliente(nome:string, cpf:string,telefone: string,
+     endereco:string, rg?:string, data_nascimento?:string)
+{
+  const newCliente = await prisma.cliente.create({
+    data: {
+        nome: nome,
+        cpf: cpf,
+        rg: rg,
+        telefone: telefone,
+        data_nascimento: data_nascimento,
+        endereco: endereco,
+    }
+  })
 }
-export function removeCliente(id:number){
+export async function removeCliente(id:number){
+return await prisma.cliente.delete({
+    where: {
+        id_cliente: id
+    }
+})
+}
+export async function changeCliente(id:number, nome?:string, cpf?:string, rg?:string, data_nascimento?:string){
 
 }
-export function changeCliente(id:number, nome?:string, cpf?:number, rg?:number, data_nacimento?:string){
-
-}
-export function returnCliente(id:number){
+export async function returnCliente(id:number){
 
 }
 
