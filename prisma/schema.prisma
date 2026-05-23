@@ -46,6 +46,16 @@ model funcionario {
   locacao         locacao[]
 }
 
+model administrador {
+  id_administrador Int       @id @default(autoincrement())
+  id_usuario       Int       @unique
+  nome             String
+  cpf              String    @unique
+  rg               String?
+  data_nascimento  DateTime?
+  usuario          usuario   @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+}
+
 model historico_peca {
   id_historico Int          @id @default(autoincrement())
   id_peca      Int
@@ -135,5 +145,6 @@ model usuario {
   perfil_acesso String
   cliente       cliente?
   funcionario   funcionario?
+  administrador administrador?
   locacao       locacao[]
 }
