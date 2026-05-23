@@ -57,6 +57,7 @@ export async function returnAdministrador(id?: number) {
     })
   }
 
+  console.log(id)
   const usuario = await prisma.usuario.findUnique({
     where: { id_usuario: id },
   })

@@ -1,4 +1,4 @@
-last updated: 21/05/26
+last updated: 23/05/26
 .
 ├── banco
 │   ├── dev.db
@@ -13,12 +13,38 @@ last updated: 21/05/26
 │   ├── FILES_TREE.txt
 │   ├── Guia para o desenvolvedor.txt
 │   └── resumo do chatgpt.txt
-├── frontEnd
-│   ├── front.html
-│   ├── images.png
-│   ├── index.html
-│   └── style.css
 ├── LICENSE
+├── locacao-trajes-front
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── postcss.config.js
+│   ├── public
+│   │   ├── favicon.svg
+│   │   └── icons.svg
+│   ├── README.md
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.tsx
+│   │   ├── assets
+│   │   │   ├── hero.png
+│   │   │   ├── react.svg
+│   │   │   └── vite.svg
+│   │   ├── components
+│   │   │   ├── dashboards.tsx
+│   │   │   └── layout.tsx
+│   │   ├── index.css
+│   │   ├── main.tsx
+│   │   ├── pages
+│   │   │   └── clientes.tsx
+│   │   └── services
+│   │       └── api.ts
+│   ├── tailwind.config.js
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   └── vite.config.ts
 ├── package.json
 ├── package-lock.json
 ├── prisma
@@ -62,4 +88,4 @@ last updated: 21/05/26
 │   └── server.ts
 └── tsconfig.json
 
-19 directories, 43 files
+25 directories, 63 files
