@@ -82,17 +82,20 @@ model item_locacao {
 }
 
 model locacao {
-  id_locacao     Int            @id @default(autoincrement())
+  id_locacao     Int       @id @default(autoincrement())
   id_cliente     Int
   id_usuario     Int
   id_funcionario Int
   data_evento    DateTime
+  data_entrega   DateTime?
   data_devolucao DateTime?
-  item_locacao   item_locacao[]
-  funcionario    funcionario    @relation(fields: [id_funcionario], references: [id_funcionario])
-  usuario        usuario        @relation(fields: [id_usuario], references: [id_usuario])
-  cliente        cliente        @relation(fields: [id_cliente], references: [id_cliente])
-  pagamento      pagamento[]
+  status         String    @default("RESERVADA")
+
+  item_locacao item_locacao[]
+  funcionario  funcionario    @relation(fields: [id_funcionario], references: [id_funcionario])
+  usuario      usuario        @relation(fields: [id_usuario], references: [id_usuario])
+  cliente      cliente        @relation(fields: [id_cliente], references: [id_cliente])
+  pagamento    pagamento[]
 
   @@index([id_cliente])
   @@index([id_funcionario])
@@ -120,7 +123,7 @@ model pagamento {
 
 model peca_produto {
   id_peca        Int              @id @default(autoincrement())
-  codigo_unico   String?           @unique
+  codigo_unico   String?          @unique
   descricao      String
   tamanho        String
   cor            String
@@ -138,12 +141,13 @@ model status_peca {
 }
 
 model usuario {
-  id_usuario    Int          @id @default(autoincrement())
+  id_usuario    Int            @id @default(autoincrement())
   nome          String
-  email         String       @unique
+  email         String         @unique
   senha         String
   perfil_acesso String
   cliente       cliente?
   funcionario   funcionario?
+  administrador administrador?
   locacao       locacao[]
 }
