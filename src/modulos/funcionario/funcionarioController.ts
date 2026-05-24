@@ -12,7 +12,6 @@ export const addFuncionarioController = ( req: Request, res: Response) => {
   }
 }
 
-
 export const removeFuncionarioController = ( req: Request, res: Response) => {
   try {
     const { id } = req.body
@@ -25,7 +24,6 @@ export const removeFuncionarioController = ( req: Request, res: Response) => {
 export const returnFuncionarioController = ( req: Request, res: Response) => {
   try {
     const { id } = req.body
-    console.log("o")
     return res.status(201).json(returnFuncionario)
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
