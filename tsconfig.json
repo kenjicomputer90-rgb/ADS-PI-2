@@ -7,10 +7,19 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "commonjs",
-    //"moduleResolution": "",
-    "target": "es2020",
-    "types": ["node"],
+    //"module": "NodeNext",
+    //"moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "esModuleInterop": true,
+    "types": ["node", "jest"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    //"baseUrl": "./",
+    //"paths": {
+    //  "@/components/*": ["components/*"]
+    //},
+
+
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],

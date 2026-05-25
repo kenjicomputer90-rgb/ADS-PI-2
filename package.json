@@ -23,13 +23,17 @@
   },
   "homepage": "https://github.com/kenjicomputer90-rgb/ADS-PI-2#readme",
   "devDependencies": {
+    "@babel/preset-typescript": "^7.29.7",
     "@types/cors": "^2.8.19",
-    "@types/node": "^25.6.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.9.1",
     "autoprefixer": "^10.5.0",
     "dotenv": "^17.4.2",
+    "jest": "^30.4.2",
     "postcss": "^8.5.15",
     "prisma": "^7.8.0",
     "tailwindcss": "^4.3.0",
+    "ts-jest": "^29.4.11",
     "typescript": "^6.0.2"
   },
   "dependencies": {
