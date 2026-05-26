@@ -1,4 +1,4 @@
-last updated: 23/05/26
+last updated: 26/05/26
 .
 ├── banco
 │   ├── dev.db
@@ -9,10 +9,13 @@ last updated: 23/05/26
 │   ├── PI_BD_EER_locacao_trajes_T.mwb.bak
 │   ├── PI_BD_EER_locacao_trajes_T.mwb.bak.mwb
 │   └── PI_DER_Locacao_trajes_Rev1.png.png
+├── Bruno
+│   └── PI2.zip
 ├── DOC
 │   ├── FILES_TREE.txt
 │   ├── Guia para o desenvolvedor.txt
 │   └── resumo do chatgpt.txt
+├── jest.config.ts
 ├── LICENSE
 ├── locacao-trajes-front
 │   ├── eslint.config.js
@@ -49,9 +52,12 @@ last updated: 23/05/26
 ├── package-lock.json
 ├── prisma
 │   ├── banco
+│   │   ├── dev-backup.db
 │   │   └── dev.db
 │   ├── migrations
 │   │   ├── 20260508181459_migracao_cliente_funcionario
+│   │   │   └── migration.sql
+│   │   ├── 20260524010912_add_status_locacao
 │   │   │   └── migration.sql
 │   │   └── migration_lock.toml
 │   ├── schema.prisma
@@ -59,8 +65,6 @@ last updated: 23/05/26
 ├── prisma.config.ts
 ├── README.md
 ├── src
-│   ├── generated
-│   │   └── prisma
 │   ├── modulos
 │   │   ├── administrador
 │   │   │   ├── administradorController.ts
@@ -78,14 +82,14 @@ last updated: 23/05/26
 │   │   │   └── funcionarioRouter.ts
 │   │   ├── produtos
 │   │   │   ├── produtoController.ts
+│   │   │   ├── produtoService.test.ts
 │   │   │   ├── produtosRouter.ts
 │   │   │   └── produtosService.ts
-│   │   ├── teste
-│   │   │   ├── teste-orm-del.ts
-│   │   │   └── teste-orm-ins.ts
-│   │   └── utils
+│   │   └── teste
+│   │       ├── teste-orm-del.ts
+│   │       └── teste-orm-ins.ts
 │   ├── routes.ts
 │   └── server.ts
 └── tsconfig.json
 
-25 directories, 63 files
+24 directories, 68 files

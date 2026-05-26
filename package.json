@@ -8,6 +8,8 @@
     "start:dev": "tsx watch src/server.ts",
     "treeDOC": "echo \"last updated: $(date +%d/%m/%y)\" > DOC/FILES_TREE.txt && tree . -I node_modules -I dist >> DOC/FILES_TREE.txt",
     "seed": "node prisma/seed.ts",
+    "autoConfig": "npm i; prisma generate; npm run seed;echo current branch:; git branch --show-current; echo configuração concluída; echo digite npm run start:dev para inicializar o servidor",
+    "studio": "npx prisma studio",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
