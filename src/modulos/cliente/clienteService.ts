@@ -16,9 +16,9 @@ export async function addCliente(nome:string, cpf:string,telefone: string,
     data: {
         nome: nome,
         cpf: cpf,
-        rg: rg,
+        rg: rg ?? null,
         telefone: telefone,
-        data_nascimento: data_nascimento,
+        data_nascimento: data_nascimento ?? null,
         endereco: endereco,
     }
   })
