@@ -49,7 +49,7 @@ describe("addProduto", () => {
       "Couro",
       "Cadeira gamer",
       500,
-      "disponível",
+      1,
       42,
       "Preta"
     )

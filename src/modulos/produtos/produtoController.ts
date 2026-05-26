@@ -59,7 +59,7 @@ export const porcentagem_vendaController = async( req: Request, res: Response) =
       tipo: "sexo" | "cor" | "tamanho"
       tipo_buscado: string
     }
-    const produto = await porcentagem_venda(tipo, tipo_buscado)
+    const produto = await porcentagem_venda(tipo, tipo_buscado, 4)
     //exemplo: cor, azul
     return res.status(200).json(produto)
   } catch (error: any) {

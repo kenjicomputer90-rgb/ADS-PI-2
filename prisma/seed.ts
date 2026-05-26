@@ -40,7 +40,16 @@ async function main() {
     },
   });
 
-  console.log({ statusDisponivel, statusAlugado, statusManutencao });
+   const statusVendido = await prisma.status_peca.upsert({
+    where: { id_status: 4 },
+    update: {},
+    create: {
+      id_status: 4,
+      descricao: 'Vendido',
+    },
+  });
+
+  console.log({ statusDisponivel, statusAlugado, statusManutencao, statusVendido });
 }
 
 main()

@@ -9,7 +9,7 @@ const prisma = new PrismaClient({
   adapter,
 });
 
-export async function addProduto(nome:string, material:string, descricao:string, preco:number, status:"alugado"|"disponível"|"à venda"|"em manutenção", tamanho:number , cor:string, foto?:string){
+export async function addProduto(nome:string, material:string, descricao:string, preco:number, status:1 | 2 | 3 |4, tamanho:number , cor:string, foto?:string){
   const newProduto = await prisma.peca_produto.create({
   data: {
     codigo_unico:  nome,       
@@ -20,7 +20,7 @@ export async function addProduto(nome:string, material:string, descricao:string,
     preco: preco,     
     historico_peca:{   
     create:{
-        id_status:1,
+        id_status:status,
         data_inicio: new Date(),
       },    
     },
@@ -66,12 +66,26 @@ export async function precificaProduto(id: number) {
   }
 }
 
-export async function porcentagem_venda(tipo: string, tipo_buscado:string) {
-  const total = await prisma.peca_produto.count()
+export async function porcentagem_venda(tipo: string, tipo_buscado:string, status:1|2|3|4) {
+  const total = await prisma.peca_produto.count({
+     where: {
+      historico_peca: {
+        some: {
+          id_status: status
+        }
+      }
+    }}
+  )
   console.log(tipo_buscado)
   const vendidos = await prisma.peca_produto.count({
     where: {
-      [tipo]: tipo_buscado
+      [tipo]: tipo_buscado,
+    
+      historico_peca: {
+        some: {
+          id_status: 4
+        }
+      }
     }
   })
 
@@ -93,8 +107,9 @@ export async function returnProduto(id: number) {
     },
     include: {
       historico_peca: true
-    }
-  })
+      }
+    })
+  
 
   if (!produto) {
     throw new Error("Produto não encontrado")
