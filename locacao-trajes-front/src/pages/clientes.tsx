@@ -1,108 +1,72 @@
-import React, { useEffect, useState } from 'react';
-import { clienteService } from '../services/api';
-import { Plus, Trash2 } from 'lucide-react';
+import { Cliente } from '../@types/ndex';
+import { useEffect, useState } from 'react';
+import { api } from '../services/api';
 
-export default function Clientes() {
-  const [clientes, setClientes] = useState<any[]>([]);
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
+export function Clientes() {
+  const [clientes, setClientes] = useState<Cliente[]>([]);
+  const [loading, setLoading] = useState(true);
 
-
+  // Busca os clientes assim que a tela carrega
   useEffect(() => {
-    carregarClientes();
+    api.get('/cliente') // Bate na rota app.use("/cliente", clienteRouter)
+      .then((response) => {
+        // Garantindo que a resposta seja uma array antes de salvar no estado
+        if (Array.isArray(response.data)) {
+          setClientes(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar clientes:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
-  const carregarClientes = async () => {
-  try {
-    const response = await clienteService.listar();
-    
-    // ADICIONE ESTA LINHA AQUI:
-    console.log("Dados que vieram do Back-end:", response.data);
-    
-    setClientes(response.data);
-  } catch (error) {
-    console.error("Erro ao buscar clientes do back-end", error);
-  }
-};
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!nome || !email) return;
-
-    try {
-      await clienteService.criar({ nome, email });
-      setNome('');
-      setEmail('');
-      carregarClientes(); // Atualiza a tabela
-    } catch (error) {
-      console.error("Erro ao cadastrar cliente", error);
-    }
-  };
-
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-800">Gerenciamento de Clientes</h1>
-
-      {/* Formulário de Cadastro */}
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-sm flex flex-col md:flex-row gap-4 items-end">
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
-          <input
-            type="text"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-            placeholder="Ex: Guilherme Takeshi"
-          />
+    <div className="p-8 bg-zinc-900 min-h-screen text-zinc-100">
+      <header className="mb-8 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Clientes</h1>
+          <p className="text-zinc-400 mt-1">Gerenciamento de clientes cadastrados no sistema.</p>
         </div>
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-            placeholder="exemplo@email.com"
-          />
-        </div>
-        <button type="submit" className="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-2">
-          <Plus size={18} /> Cadastrar
+        <button className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+          Novo Cliente
         </button>
-      </form>
+      </header>
 
-      {/* Tabela de Listagem */}
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-gray-50 border-b border-gray-200 text-gray-600 text-sm font-semibold">
-              <th className="p-4">ID</th>
-              <th className="p-4">Nome</th>
-              <th className="p-4">E-mail</th>
-              <th className="p-4 text-center">Ações</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100 text-gray-700 text-sm">
-            {clientes.length === 0 ? (
-              <tr>
-                <td colSpan={4} className="p-4 text-center text-gray-400">Nenhum cliente retornado do banco de dados.</td>
+      {loading ? (
+        <p className="text-zinc-400 animate-pulse">Carregando clientes...</p>
+      ) : (
+        <div className="bg-zinc-800 border border-zinc-700 rounded-xl overflow-hidden">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-zinc-700 bg-zinc-800/50 text-zinc-300 font-semibold text-sm">
+                <th className="p-4">Nome</th>
+                <th className="p-4">CPF</th>
+                <th className="p-4">Telefone</th>
+                <th className="p-4">Endereço</th>
               </tr>
-            ) : (
-              clientes.map((cliente) => (
-                <tr key={cliente.id} className="hover:bg-gray-50">
-                  <td className="p-4 font-mono text-xs text-gray-500">{cliente.id}</td>
-                  <td className="p-4 font-medium text-gray-900">{cliente.nome}</td>
-                  <td className="p-4">{cliente.email}</td>
-                  <td className="p-4 text-center">
-                    <button className="text-red-500 hover:text-red-700 transition">
-                      <Trash2 size={16} />
-                    </button>
-                  </td>
+            </thead>
+            <tbody className="divide-y divide-zinc-700 text-sm text-zinc-300">
+              {clientes.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="p-4 text-center text-zinc-500">Nenhum cliente cadastrado.</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+              ) : (
+                clientes.map((cliente) => (
+                  <tr key={cliente.id_cliente} className="hover:bg-zinc-700/30 transition-colors">
+                    <td className="p-4 font-medium text-white">{cliente.nome}</td>
+                    <td className="p-4">{cliente.cpf}</td>
+                    <td className="p-4">{cliente.telefone}</td>
+                    <td className="p-4 truncate max-w-xs">{cliente.endereco}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
