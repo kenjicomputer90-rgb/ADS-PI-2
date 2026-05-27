@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 
 const adapter = new PrismaBetterSqlite3({
- url: "file:./banco/dev.db"
+  url: "file:./banco/dev.db",
 });
 
 const prisma = new PrismaClient({
@@ -10,15 +10,14 @@ const prisma = new PrismaClient({
 });
 
 async function main() {
-  console.log('Semeando status padrões...');
+  console.log("Semeando status padrões...");
 
-  // Criando os status usando upsert (evita duplicar se rodar mais de uma vez)
   const statusDisponivel = await prisma.status_peca.upsert({
     where: { id_status: 1 },
     update: {},
     create: {
       id_status: 1,
-      descricao: 'Disponível',
+      descricao: "Disponível",
     },
   });
 
@@ -27,7 +26,7 @@ async function main() {
     update: {},
     create: {
       id_status: 2,
-      descricao: 'Alugado',
+      descricao: "Alugado",
     },
   });
 
@@ -36,20 +35,45 @@ async function main() {
     update: {},
     create: {
       id_status: 3,
-      descricao: 'Em Manutenção',
+      descricao: "Em Manutenção",
     },
   });
 
-   const statusVendido = await prisma.status_peca.upsert({
+  const statusVendido = await prisma.status_peca.upsert({
     where: { id_status: 4 },
     update: {},
     create: {
       id_status: 4,
-      descricao: 'Vendido',
+      descricao: "Vendido",
     },
   });
 
-  console.log({ statusDisponivel, statusAlugado, statusManutencao, statusVendido });
+  const statusReservado = await prisma.status_peca.upsert({
+    where: { id_status: 5 },
+    update: {},
+    create: {
+      id_status: 5,
+      descricao: "Reservado",
+    },
+  });
+
+  const statusPreparacao = await prisma.status_peca.upsert({
+    where: { id_status: 6 },
+    update: {},
+    create: {
+      id_status: 6,
+      descricao: "Em Preparação",
+    },
+  });
+
+  console.log({
+    statusDisponivel,
+    statusAlugado,
+    statusManutencao,
+    statusVendido,
+    statusReservado,
+    statusPreparacao,
+  });
 }
 
 main()
@@ -59,5 +83,5 @@ main()
   .catch(async (e) => {
     console.error(e);
     await prisma.$disconnect();
-    //process.exit(1);
+    // process.exit(1);
   });

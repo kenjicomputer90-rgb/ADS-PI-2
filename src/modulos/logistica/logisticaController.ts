@@ -1,31 +1,101 @@
 import type { Request, Response } from "express"
 
-export const listarEstoqueController = (req: Request, res: Response) => {
-  res.status(200).json({
-    mensagem: "Listar estoque funcionando",
-  })
+import {
+  listarEstoque,
+  separarPeca,
+  conferirSaida,
+  conferirDevolucao,
+  listarPecasEmPreparacao,
+} from "./logisticaService.js"
+
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) {
+    return error.message
+  }
+
+  return "Erro interno no servidor"
 }
 
-export const separarPecaController = (req: Request, res: Response) => {
-  res.status(200).json({
-    mensagem: "Separação de peça funcionando",
-  })
+export const listarEstoqueController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const estoque = await listarEstoque()
+
+    res.status(200).json(estoque)
+  } catch (error) {
+    res.status(400).json({
+      erro: getErrorMessage(error),
+    })
+  }
 }
 
-export const conferirSaidaController = (req: Request, res: Response) => {
-  res.status(200).json({
-    mensagem: "Conferência de saída funcionando",
-  })
+export const separarPecaController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id_peca } = req.body
+
+    const resultado = await separarPeca(Number(id_peca))
+
+    res.status(200).json(resultado)
+  } catch (error) {
+    res.status(400).json({
+      erro: getErrorMessage(error),
+    })
+  }
 }
 
-export const conferirDevolucaoController = (req: Request, res: Response) => {
-  res.status(200).json({
-    mensagem: "Conferência de devolução funcionando",
-  })
+export const conferirSaidaController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id_peca } = req.body
+
+    const resultado = await conferirSaida(Number(id_peca))
+
+    res.status(200).json(resultado)
+  } catch (error) {
+    res.status(400).json({
+      erro: getErrorMessage(error),
+    })
+  }
 }
 
-export const listarPreparacaoController = (req: Request, res: Response) => {
-  res.status(200).json({
-    mensagem: "Listar peças em preparação funcionando",
-  })
+export const conferirDevolucaoController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id_peca, possuiAvaria } = req.body
+
+    const resultado = await conferirDevolucao(
+      Number(id_peca),
+      Boolean(possuiAvaria)
+    )
+
+    res.status(200).json(resultado)
+  } catch (error) {
+    res.status(400).json({
+      erro: getErrorMessage(error),
+    })
+  }
+}
+
+export const listarPreparacaoController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const pecas = await listarPecasEmPreparacao()
+
+    res.status(200).json(pecas)
+  } catch (error) {
+    res.status(400).json({
+      erro: getErrorMessage(error),
+    })
+  }
 }

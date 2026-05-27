@@ -11,8 +11,8 @@ const prisma = new PrismaClient({
 
 const STATUS_DISPONIVEL = 1
 const STATUS_ALUGADO = 2
-const STATUS_RESERVADO = 4
-const STATUS_PREPARACAO = 5
+const STATUS_RESERVADO = 5
+const STATUS_PREPARACAO = 6
 
 export async function buscarStatusAtualPeca(idPeca: number) {
   return await prisma.historico_peca.findFirst({
