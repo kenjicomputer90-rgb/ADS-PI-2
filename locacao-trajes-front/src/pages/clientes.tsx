@@ -38,40 +38,41 @@ export function Clientes() {
     carregarClientes();
   }, []);
 
-  // Função para lidar com o envio do formulário
   async function handleCriarCliente(e: React.FormEvent) {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!nome || !cpf || !telefone || !endereco) {
-      alert("Por favor, preencha todos os campos obrigatórios.");
-      return;
-    }
-
-    try {
-      // Bate exatamente na rota POST do back-end
-      await api.post('/cliente', {
-        nome,
-        cpf,
-        telefone,
-        endereco,
-        rg: rg || null
-      });
-
-      // Limpa os campos do formulário
-      setNome('');
-      setCpf('');
-      setTelefone('');
-      setEndereco('');
-      setRg('');
-      
-      setIsModalOpen(false); // Fecha o modal
-      carregarClientes();   // Atualiza a tabela automaticamente
-    } catch (error: any) {
-      console.error("Erro ao cadastrar cliente:", error);
-      alert(error.response?.data?.erro || "Erro ao salvar cliente no banco de dados.");
-    }
+  if (!nome || !cpf || !telefone || !endereco) {
+    alert("Por favor, preencha todos os campos obrigatórios.");
+    return;
   }
 
+  try {
+    // 1. Envia os dados para a API
+    const response = await api.post('/cliente', {
+      nome,
+      cpf,
+      telefone,
+      endereco,
+      rg: rg || null
+    });
+
+    // Se o back responder com sucesso, limpamos os inputs
+    setNome('');
+    setCpf('');
+    setTelefone('');
+    setEndereco('');
+    setRg('');
+    
+    setIsModalOpen(false); // Fecha o modal
+    
+    // 2. CHAMA A FUNÇÃO DE CARREGAR IMEDIATAMENTE APÓS O CADASTRO
+    carregarClientes(); 
+
+  } catch (error: any) {
+    console.error("Erro ao cadastrar cliente:", error);
+    alert(error.response?.data?.erro || "Erro ao salvar cliente.");
+  }
+}
   return (
     <div className="p-8 bg-zinc-900 min-h-screen text-zinc-100 relative">
       {/* HEADER */}
