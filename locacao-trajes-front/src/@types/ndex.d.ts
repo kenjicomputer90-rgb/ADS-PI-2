@@ -19,3 +19,22 @@ export interface Produto {
   material?: string | null;
   preco: number;
 }
+
+export interface HistoricoPeca {
+  id_historico: number;
+  id_peca: number;
+  id_status: number;
+  data_inicio: string;
+  data_fim?: string | null;
+}
+
+export interface Produto {
+  id_peca?: number;
+  codigo_unico: string; // O back-end recebe como 'nome'
+  descricao: string;
+  tamanho: string;
+  cor: string;
+  material: string;
+  preco: number;
+  historico_peca?: HistoricoPeca[];
+}
