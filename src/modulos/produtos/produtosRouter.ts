@@ -9,7 +9,7 @@ produtoRouter.delete("/", removeProdutoController)
 
 produtoRouter.patch("/", changeProdutoController)
 
-produtoRouter.get("/listaProduto", listProdutoController)
+produtoRouter.get("/", listProdutoController)
 
 produtoRouter.get("/precificacao/:id", precificaProdutoController)
 
