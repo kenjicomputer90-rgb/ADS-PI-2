@@ -19,6 +19,13 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(express.json())
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    mensagem: "API ADS-PI-2 funcionando",
+    modulos: ["locacoes", "logistica", "processos"],
+  })
+})
  
 app.use("/cliente", clienteRouter)
 app.use("/administrador", administradorRouter)
