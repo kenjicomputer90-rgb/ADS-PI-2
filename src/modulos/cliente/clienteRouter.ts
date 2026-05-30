@@ -6,7 +6,7 @@ const clienteRouter = Router()
 
 clienteRouter.post("/", addClienteController)
 
-clienteRouter.get("/", returnClienteController)
+clienteRouter.get("/:id", returnClienteController)
 
 clienteRouter.delete("/", removeClienteController)
 

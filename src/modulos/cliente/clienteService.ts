@@ -10,7 +10,7 @@ const prisma = new PrismaClient({
 });
 
 export async function addCliente(nome:string, cpf:string,telefone: string,
-     endereco:string, rg?:string, data_nascimento?:string)
+     endereco:string, rg?:string, data_nascimento?:Date)
 {
   const newCliente = await prisma.cliente.create({
     data: {
@@ -18,7 +18,7 @@ export async function addCliente(nome:string, cpf:string,telefone: string,
         cpf: cpf,
         rg: rg ?? null,
         telefone: telefone,
-        data_nascimento: data_nascimento ?? null,
+        data_nascimento: data_nascimento ? new Date(data_nascimento) : null,
         endereco: endereco,
     }
   })

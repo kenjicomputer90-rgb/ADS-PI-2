@@ -23,7 +23,7 @@ export const removeClienteController = ( req: Request, res: Response) => {
 
 export const returnClienteController = ( req: Request, res: Response) => {
   try {
-    const { id } = req.body
+    const id = Number(req.params)
     return res.status(201).json(returnCliente(id))
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
