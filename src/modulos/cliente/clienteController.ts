@@ -9,7 +9,7 @@ export const addClienteController = async ( req: Request, res: Response) => {
   try {
     const { nome, cpf, telefone, endereco, rg, data_nascimento} = req.body
     const novoCliente = await addCliente(nome, cpf, telefone, endereco, rg, data_nascimento)
-    return res.status(201).json(addCliente(nome, cpf, telefone, endereco, rg, data_nascimento))
+    return res.status(201).json(novoCliente)
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
   }

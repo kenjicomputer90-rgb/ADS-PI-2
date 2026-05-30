@@ -21,7 +21,7 @@ app.use(cors({
 app.use(express.json())
 
 app.get("/", (req, res) => {
-  res.status(200).json({
+  res.status(200).json({      
     mensagem: "API ADS-PI-2 funcionando",
     modulos: ["locacoes", "logistica", "processos"],
   })

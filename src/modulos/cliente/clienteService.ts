@@ -12,6 +12,16 @@ const prisma = new PrismaClient({
 export async function addCliente(nome:string, cpf:string,telefone: string,
      endereco:string, rg?:string, data_nascimento?:Date)
 {
+  console.log(nome,cpf,rg,telefone,data_nascimento,endereco)
+  const clienteExistente = await prisma.cliente.findUnique({
+    where: {
+      cpf,
+    },
+  })
+
+  if (clienteExistente) {
+    throw new Error("CPF já cadastrado")
+  }
   const newCliente = await prisma.cliente.create({
     data: {
         nome: nome,
@@ -22,6 +32,7 @@ export async function addCliente(nome:string, cpf:string,telefone: string,
         endereco: endereco,
     }
   })
+  return newCliente
 }
 export async function removeCliente(id:number){
 return await prisma.cliente.delete({
