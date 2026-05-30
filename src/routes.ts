@@ -4,6 +4,7 @@ import cors from "cors"
 import express from "express"
 import funcionarioRouter from "./modulos/funcionario/funcionarioRouter.js";
 import produtoRouter from "./modulos/produtos/produtosRouter.js";
+import financeiroRouter from "./modulos/financeiro/financeiroRouter.js";
 
 
 const app = express();
@@ -22,5 +23,6 @@ app.use("/cliente", clienteRouter)
 app.use("/administrador", administradorRouter)
 app.use("/funcionario", funcionarioRouter)
 app.use("/produtos", produtoRouter)
+app.use("/financeiro", financeiroRouter);
 
 export default app
