@@ -90,6 +90,7 @@ model locacao {
   data_entrega   DateTime?
   data_devolucao DateTime?
   status         String    @default("RESERVADA")
+  multa          Decimal   @default(0.00)
 
   item_locacao item_locacao[]
   funcionario  funcionario    @relation(fields: [id_funcionario], references: [id_funcionario])
