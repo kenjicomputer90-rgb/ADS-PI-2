@@ -1,4 +1,4 @@
-last updated: 26/05/26
+last updated: 30/05/26
 .
 ├── banco
 │   ├── dev.db
@@ -14,7 +14,8 @@ last updated: 26/05/26
 ├── DOC
 │   ├── FILES_TREE.txt
 │   ├── Guia para o desenvolvedor.txt
-│   └── resumo do chatgpt.txt
+│   ├── resumo do chatgpt.txt
+│   └── ROTAS_FUNCIONARIO.md
 ├── jest.config.ts
 ├── LICENSE
 ├── locacao-trajes-front
@@ -22,7 +23,6 @@ last updated: 26/05/26
 │   ├── index.html
 │   ├── package.json
 │   ├── package-lock.json
-│   ├── postcss.config.js
 │   ├── public
 │   │   ├── favicon.svg
 │   │   └── icons.svg
@@ -35,15 +35,16 @@ last updated: 26/05/26
 │   │   │   ├── react.svg
 │   │   │   └── vite.svg
 │   │   ├── components
-│   │   │   ├── dashboards.tsx
 │   │   │   └── layout.tsx
 │   │   ├── index.css
 │   │   ├── main.tsx
 │   │   ├── pages
-│   │   │   └── clientes.tsx
-│   │   └── services
-│   │       └── api.ts
-│   ├── tailwind.config.js
+│   │   │   ├── clientes.tsx
+│   │   │   └── produtos.tsx
+│   │   ├── services
+│   │   │   └── api.ts
+│   │   └── @types
+│   │       └── ndex.d.ts
 │   ├── tsconfig.app.json
 │   ├── tsconfig.json
 │   ├── tsconfig.node.json
@@ -65,6 +66,8 @@ last updated: 26/05/26
 ├── prisma.config.ts
 ├── README.md
 ├── src
+│   ├── generated
+│   │   └── prisma
 │   ├── modulos
 │   │   ├── administrador
 │   │   │   ├── administradorController.ts
@@ -80,16 +83,29 @@ last updated: 26/05/26
 │   │   │   ├── fucionarioService.ts
 │   │   │   ├── funcionarioController.ts
 │   │   │   └── funcionarioRouter.ts
+│   │   ├── locacoes
+│   │   │   ├── locacaoController.ts
+│   │   │   ├── locacaoRouter.ts
+│   │   │   └── locacaoService.ts
+│   │   ├── logistica
+│   │   │   ├── logisticaController.ts
+│   │   │   ├── logisticaRouter.ts
+│   │   │   └── logisticaService.ts
+│   │   ├── processos
+│   │   │   ├── processosController.ts
+│   │   │   ├── processosRouter.ts
+│   │   │   └── processosService.ts
 │   │   ├── produtos
 │   │   │   ├── produtoController.ts
 │   │   │   ├── produtoService.test.ts
 │   │   │   ├── produtosRouter.ts
 │   │   │   └── produtosService.ts
-│   │   └── teste
-│   │       ├── teste-orm-del.ts
-│   │       └── teste-orm-ins.ts
+│   │   ├── teste
+│   │   │   ├── teste-orm-del.ts
+│   │   │   └── teste-orm-ins.ts
+│   │   └── utils
 │   ├── routes.ts
 │   └── server.ts
 └── tsconfig.json
 
-24 directories, 68 files
+31 directories, 77 files
