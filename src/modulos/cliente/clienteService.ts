@@ -35,12 +35,21 @@ export async function addCliente(nome:string, cpf:string,telefone: string,
   return newCliente
 }
 export async function removeCliente(id:number){
-return await prisma.cliente.delete({
+  const cliente = await prisma.cliente.findUnique({
     where: {
         id_cliente: id
     }
 })
+if (!cliente){
+  throw new Error("Cliente não encontrado")
 }
+return await prisma.cliente.delete({
+  where:{
+    id_cliente: id
+  }
+})
+}
+
 export async function changeCliente(id: number, nome: string, cpf: string, telefone: string, 
   endereco: string, rg?: string, data_nascimento?: Date,){
     const cliente = await prisma.cliente.findUnique({
@@ -67,20 +76,76 @@ return await prisma.cliente.update({
 }
 
 export async function returnCliente(id:number){
+  const cliente = await prisma.cliente.findUnique({
+    where: {
+      id_cliente: id 
+    }
+  })
+  if (!cliente){
+    throw new Error("Cliente não encontrado")
+  }
+  return cliente 
 
 }
 
-export function getClientPedidos(){
-
+export async function getClientPedidos(
+  idCliente: number
+){
+  return await prisma.locacao.findMany({
+    where:{
+      id_cliente: idCliente
+    }
+  })
 }
 
-export function getClientProdutos(){
-    
+export async function getClientProdutos(
+  idCliente: number
+){
+    return await prisma.peca_produto.findMany({
+      where:{
+        locacao:{
+          id_cliente: idCliente 
+        }
+      },
+      include:{
+        peca_produto: true
+      }
+    })
 }
 
-export function consultaHistoricoLocacaoCliente(){
-
+export async function consultaHistoricoLocacaoCliente(
+  idCliente: number 
+){
+  return await prisma.locacao.findMany({
+    where: {
+      id_cliente: idCliente
+    },
+    include:{
+      item_locacao:{
+        include:{ peca_produto: true}
+      },
+      pagamento: true
+    }
+  })
 }
-export function consultaPreferenciasCliente(){
 
+export async function consultaPreferenciasCliente(
+idCliente: number
+){
+return await prisma.item_locacao.groupBy({
+  by:["id_peca"],
+  where:{
+    locacao:{
+      id_cliente: idCliente
+    }
+  },
+  _count:{
+    id_peca: true
+  },
+  orderBy:{
+    _count:{
+      id_peca: "desc"
+    }
+  }
+})
 }
