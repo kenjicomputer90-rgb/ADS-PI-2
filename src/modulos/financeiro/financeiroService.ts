@@ -1,16 +1,15 @@
 import { PrismaClient } from '@prisma/client';
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 
-const prisma = new PrismaClient();
+const adapter = new PrismaBetterSqlite3({
+  url: "file:./banco/dev.db"
+});
+
+const prisma = new PrismaClient({ adapter });
 
 export class FinanceiroService {
-  // Calcula o faturamento extra obtido através de taxas de manutenção/reparos
   async calculaFaturamentoManutencao() {
-    // Busca todas as manutenções registradas no banco SQLite
-    // (Nota: Se o nome exato da tabela no seu schema for diferente, o TypeScript vai te avisar aqui)
     const manutencoes = await prisma.manutencao.findMany();
-
-    // Regra de Negócio: Calcula o valor total cobrado pelos reparos das roupas devolvidas com defeito
-    // Substitua 'valor' pelo nome real da coluna de preço/custo da taxa na sua tabela
     const totalArrecadado = manutencoes.reduce((total, item) => total + Number(item.valor || 0), 0);
 
     return {
