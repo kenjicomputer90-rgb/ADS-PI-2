@@ -41,7 +41,7 @@ return await prisma.cliente.delete({
     }
 })
 }
-export async function changeCliente(id:number, nome?:string, cpf?:string, rg?:string, data_nascimento?:string){
+export async function changeCliente(nome: string, cpf: string, telefone: string, endereco: string, rg?: string, data_nascimento?: Date, data_nascimento?: any){
 
 }
 export async function returnCliente(id:number){

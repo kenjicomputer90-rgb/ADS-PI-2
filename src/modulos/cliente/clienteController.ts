@@ -16,29 +16,31 @@ export const addClienteController = async ( req: Request, res: Response) => {
 }
 
 
-export const removeClienteController = ( req: Request, res: Response) => {
+export const removeClienteController = async ( req: Request, res: Response) => {
   try {
     const { id } = req.body
-    return res.status(201).json(removeCliente(id))
+    const clienteRemovido = await removeCliente(id)
+    return res.status(200).json(clienteRemovido)
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
   }
 }
 
-export const returnClienteController = ( req: Request, res: Response) => {
+export const returnClienteController = async ( req: Request, res: Response) => {
   try {
-    const id = Number(req.params)
-    return res.status(201).json(returnCliente(id))
+    const id = Number(req.params.id)
+    const cliente = await returnCliente(id)
+    return res.status(200).json(cliente)
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
   }
 }
 
-export const changeClienteController = ( req: Request, res: Response) => {
+export const changeClienteController = async ( req: Request, res: Response) => {
   try {
-    const { id, nome, cpf, rg, data_nascimento } = req.body
-    return res.status(201).json(changeCliente(id, nome, cpf,rg, data_nascimento))
-    return res.status(201).json(returnCliente)
+    const { id, nome, cpf, telefone, endereco, rg, data_nascimento } = req.body
+    const clienteAtualizado = await changeCliente(id, nome, cpf, telefone, endereco, rg, data_nascimento )
+    return res.status(200).json(clienteAtualizado)
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
   }
