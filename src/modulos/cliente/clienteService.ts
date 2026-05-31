@@ -41,9 +41,31 @@ return await prisma.cliente.delete({
     }
 })
 }
-export async function changeCliente(nome: string, cpf: string, telefone: string, endereco: string, rg?: string, data_nascimento?: Date, data_nascimento?: any){
-
+export async function changeCliente(id: number, nome: string, cpf: string, telefone: string, 
+  endereco: string, rg?: string, data_nascimento?: Date,){
+    const cliente = await prisma.cliente.findUnique({
+      where: {
+        id_cliente: id 
+      }
+    })
+if (!cliente){
+  throw new Error("Cliente não encontrado")
 }
+return await prisma.cliente.update({
+  where: {
+    id_cliente: id
+  },
+  data:{
+    nome,
+    cpf,
+    telefone,
+    endereco,
+    rg: rg? null, 
+    data_nascimento: data_nascimento ? new Date(data_nascimento) : null
+  }
+})
+}
+
 export async function returnCliente(id:number){
 
 }
