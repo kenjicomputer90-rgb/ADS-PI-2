@@ -5,7 +5,9 @@ import express from "express"
 import funcionarioRouter from "./modulos/funcionario/funcionarioRouter.js";
 import produtoRouter from "./modulos/produtos/produtosRouter.js";
 import financeiroRouter from "./modulos/financeiro/financeiroRouter.js";
-
+import locacaoRouter from "./modulos/locacoes/locacaoRouter.js"
+import logisticaRouter from "./modulos/logistica/logisticaRouter.js"
+import processosRouter from "./modulos/processos/processosRouter.js"
 
 const app = express();
 
@@ -31,5 +33,9 @@ app.use("/administrador", administradorRouter)
 app.use("/funcionario", funcionarioRouter)
 app.use("/produtos", produtoRouter)
 app.use("/financeiro", financeiroRouter);
+
+app.use("/locacoes", locacaoRouter)
+app.use("/logistica", logisticaRouter)
+app.use("/processos", processosRouter)
 
 export default app
