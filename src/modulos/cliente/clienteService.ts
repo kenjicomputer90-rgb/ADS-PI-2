@@ -10,7 +10,7 @@ const prisma = new PrismaClient({
 });
 
 export async function addCliente(nome:string, cpf:string,telefone: string,
-     endereco:string, rg?:string, data_nascimento?:Date)
+     endereco:string, rg?:string, data_nascimento?:string)
 {
   console.log(nome,cpf,rg,telefone,data_nascimento,endereco)
   const clienteExistente = await prisma.cliente.findUnique({
@@ -51,7 +51,7 @@ return await prisma.cliente.delete({
 }
 
 export async function changeCliente(id: number, nome: string, cpf: string, telefone: string, 
-  endereco: string, rg?: string, data_nascimento?: Date,){
+  endereco: string, rg?: string, data_nascimento?: string ){
     const cliente = await prisma.cliente.findUnique({
       where: {
         id_cliente: id 

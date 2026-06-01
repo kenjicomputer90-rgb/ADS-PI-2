@@ -8,8 +8,8 @@ clienteRouter.post("/", addClienteController)
 
 clienteRouter.get("/:id", returnClienteController)
 
-clienteRouter.delete("/", removeClienteController)
+clienteRouter.delete("/:id", removeClienteController)
 
-clienteRouter.patch("/", changeClienteController)
+clienteRouter.patch("/:id", changeClienteController)
 
 export default clienteRouter
