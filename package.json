@@ -11,6 +11,8 @@
     "autoConfig": "npm i; prisma generate; npm run seed;echo current branch:; git branch --show-current; npx tsc --noEmit; echo digite npm run start:dev para inicializar o servidor",
     "autoConfigW": "npm install && npx prisma generate && npm run seed && echo current branch && git branch --show-current && npx tsc --noEmit && echo digite npm run start:dev para inicializar o servidor",
     "studio": "npx prisma studio",
+    "frontend": "cd locacao-trajes-front && npm run dev",
+    "initbackfront": "concurrently \"npm run start:dev\" \"npm run frontend\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -46,6 +48,7 @@
     "@prisma/client": "^7.8.0",
     "axios": "^1.16.1",
     "better-sqlite3": "^12.10.0",
+    "concurrently": "^10.0.1",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "lucide-react": "^1.16.0",

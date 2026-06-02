@@ -1,4 +1,4 @@
-last updated: 30/05/26
+last updated: 31/05/26
 .
 ├── banco
 │   ├── dev.db
@@ -78,7 +78,9 @@ last updated: 30/05/26
 │   │   │   ├── clienteRouter.ts
 │   │   │   └── clienteService.ts
 │   │   ├── financeiro
-│   │   │   └── financeiro.ts
+│   │   │   ├── financeiroController.ts
+│   │   │   ├── financeiroRouter.ts
+│   │   │   └── financeiroService.ts
 │   │   ├── funcionario
 │   │   │   ├── fucionarioService.ts
 │   │   │   ├── funcionarioController.ts
@@ -108,4 +110,4 @@ last updated: 30/05/26
 │   └── server.ts
 └── tsconfig.json
 
-31 directories, 77 files
+31 directories, 79 files
