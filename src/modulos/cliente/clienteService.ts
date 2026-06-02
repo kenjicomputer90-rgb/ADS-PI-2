@@ -69,7 +69,7 @@ return await prisma.cliente.update({
     cpf,
     telefone,
     endereco,
-    rg: rg? null, 
+    rg: rg ? rg : null,
     data_nascimento: data_nascimento ? new Date(data_nascimento) : null
   }
 })
@@ -100,17 +100,25 @@ export async function getClientPedidos(
 
 export async function getClientProdutos(
   idCliente: number
-){
-    return await prisma.peca_produto.findMany({
-      where:{
-        locacao:{
-          id_cliente: idCliente 
+) {
+  return await prisma.peca_produto.findMany({
+    where: {
+      item_locacao: {
+        some: {
+          locacao: {
+            id_cliente: idCliente
+          }
         }
-      },
-      include:{
-        peca_produto: true
       }
-    })
+    },
+    include: {
+      item_locacao: {
+        include: {
+          locacao: true
+        }
+      }
+    }
+  })
 }
 
 export async function consultaHistoricoLocacaoCliente(
