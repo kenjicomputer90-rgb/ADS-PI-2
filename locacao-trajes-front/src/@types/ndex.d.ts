@@ -38,3 +38,19 @@ export interface Produto {
   preco: number;
   historico_peca?: HistoricoPeca[];
 }
+
+export interface Funcionario {
+  id_funcionario?: number;
+  nome: string;
+  cpf: number;
+  cargo: string;
+  rg: number;
+  email: string;
+  telefone: number;
+  cpts: number;
+  dependentes: number;
+  sexo: string;
+  salario: number;
+  data_de_nascimento: string;
+  estado_civil: string;
+}
