@@ -73,10 +73,10 @@ export const getPermissoesController = async (req: Request, res: Response) => {
 export const updatePermissaoController = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id)
-    const { nome, descricao, usuarioIds } = req.body
-    const permissao = await updatePermissao(id, { nome, descricao, usuarioIds })
+    const { perfil_acesso } = req.body
+    const permissao = await updatePermissao(id, { perfil_acesso })
     const requesterId = getRequesterId(req, res)
-    await logAction(requesterId, "ATUALIZAR_PERMISSAO", `permissao:${id}`, JSON.stringify({ nome, descricao, usuarioIds }))
+    await logAction(requesterId, "ATUALIZAR_PERMISSAO", `usuario:${id}`, JSON.stringify({ perfil_acesso }))
     return res.status(200).json(permissao)
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })

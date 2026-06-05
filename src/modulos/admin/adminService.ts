@@ -9,6 +9,24 @@ const prisma = new PrismaClient({
   adapter,
 })
 
+const actionTypes = [
+  "CRIAR_USUARIO",
+  "ATUALIZAR_USUARIO",
+  "EXCLUIR_USUARIO",
+  "ATUALIZAR_PERMISSAO",
+]
+
+const auditLogs: Array<{
+  id_log: number
+  id_usuario?: number | undefined
+  acao: string
+  alvo?: string | undefined
+  descricao?: string | undefined
+  data: string
+}> = []
+
+let nextLogId = 1
+
 export async function listUsuarios() {
   return await prisma.usuario.findMany({
     select: {
@@ -95,110 +113,52 @@ export async function deleteUsuario(id: number) {
 }
 
 export async function listPermissoes() {
-  return await prisma.permissao.findMany({
-    include: {
-      usuarios: {
-        select: {
-          usuario: {
-            select: {
-              id_usuario: true,
-              nome: true,
-              email: true,
-            },
-          },
-        },
-      },
+  const perfis = await prisma.usuario.findMany({
+    distinct: ["perfil_acesso"],
+    select: {
+      perfil_acesso: true,
     },
   })
+
+  return perfis.map((item) => item.perfil_acesso)
 }
 
 export async function updatePermissao(
   id: number,
   data: {
-    nome?: string
-    descricao?: string
-    usuarioIds?: number[]
+    perfil_acesso?: string
   }
 ) {
-  const permissao = await prisma.permissao.findUnique({
-    where: { id_permissao: id },
+  const usuario = await prisma.usuario.findUnique({
+    where: { id_usuario: id },
   })
 
-  if (!permissao) {
-    throw new Error("Permissão não encontrada")
+  if (!usuario) {
+    throw new Error("Usuário não encontrado")
   }
 
-  const updated = await prisma.permissao.update({
-    where: { id_permissao: id },
+  const updated = await prisma.usuario.update({
+    where: { id_usuario: id },
     data: {
-      nome: data.nome ?? permissao.nome,
-      descricao: data.descricao ?? permissao.descricao,
+      perfil_acesso: data.perfil_acesso ?? usuario.perfil_acesso,
     },
-    include: {
-      usuarios: true,
-    },
-  })
-
-  if (data.usuarioIds) {
-    await prisma.usuario_permissao.deleteMany({
-      where: { id_permissao: id },
-    })
-
-    await Promise.all(
-      data.usuarioIds.map((id_usuario) =>
-        prisma.usuario_permissao.create({
-          data: {
-            id_usuario,
-            id_permissao: id,
-          },
-        })
-      )
-    )
-  }
-
-  return await prisma.permissao.findUnique({
-    where: { id_permissao: id },
-    include: {
-      usuarios: {
-        select: {
-          usuario: {
-            select: {
-              id_usuario: true,
-              nome: true,
-              email: true,
-            },
-          },
-        },
-      },
+    select: {
+      id_usuario: true,
+      nome: true,
+      email: true,
+      perfil_acesso: true,
     },
   })
+
+  return updated
 }
 
 export async function listAcoes() {
-  return await prisma.acao.findMany({
-    orderBy: {
-      nome: "asc",
-    },
-  })
+  return actionTypes.map((nome) => ({ nome, descricao: nome }))
 }
 
 export async function listLogs() {
-  return await prisma.log.findMany({
-    orderBy: {
-      data: "desc",
-    },
-    include: {
-      usuario: {
-        select: {
-          id_usuario: true,
-          nome: true,
-          email: true,
-          perfil_acesso: true,
-        },
-      },
-      acao: true,
-    },
-  })
+  return auditLogs
 }
 
 export async function logAction(
@@ -207,21 +167,15 @@ export async function logAction(
   alvo?: string,
   detalhes?: string
 ) {
-  const acao = await prisma.acao.upsert({
-    where: { nome: nomeAcao },
-    update: {},
-    create: {
-      nome: nomeAcao,
-      descricao: nomeAcao,
-    },
-  })
+  const log = {
+    id_log: nextLogId++,
+    id_usuario: usuarioId,
+    acao: nomeAcao,
+    alvo: alvo ?? undefined,
+    descricao: detalhes ?? undefined,
+    data: new Date().toISOString(),
+  }
 
-  return await prisma.log.create({
-    data: {
-      id_usuario: usuarioId ?? null,
-      id_acao: acao.id_acao,
-      alvo: alvo ?? null,
-      descricao: detalhes ?? null,
-    },
-  })
+  auditLogs.unshift(log)
+  return log
 }
