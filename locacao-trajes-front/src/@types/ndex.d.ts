@@ -1,13 +1,38 @@
 export interface Cliente {
-  id_cliente?: number;
-  id_usuario?: number | null;
+  id_cliente: number;
   nome: string;
   cpf: string;
+  rg?: string | null;
   telefone: string;
   endereco: string;
-  rg?: string | null;
-  medidas?: string | null;
   data_nascimento?: string | null;
+}
+
+export interface PreferenciaCliente {
+  id_peca: number;
+  _count: {
+    id_peca: number;
+  };
+}
+
+export interface HistoricoLocacaoCliente {
+  id_locacao: number;
+  data_locacao: string;
+  data_evento: string;
+  status: string;
+  pagamento?: {
+    id_pagamento: number;
+    valor_total: number;
+    status_pagamento: string;
+  }[];
+  item_locacao: {
+    id_item_locacao: number;
+    peca_produto: {
+      codigo_unico: string;
+      descricao: string;
+      tamanho: string;
+    };
+  }[];
 }
 
 export interface Produto {
