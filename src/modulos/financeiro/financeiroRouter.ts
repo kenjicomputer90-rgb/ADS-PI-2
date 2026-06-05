@@ -4,6 +4,6 @@ import { obterRelatorioManutencao } from './financeiroController';
 const financeiroRouter = Router();
 
 // Endpoint que devolve o faturamento de manutenções/defeitos (Aula 12)
-financeiroRouter.get('/financeiro/manutencao', obterRelatorioManutencao);
+financeiroRouter.get('/manutencao', obterRelatorioManutencao);
 
 export default financeiroRouter;

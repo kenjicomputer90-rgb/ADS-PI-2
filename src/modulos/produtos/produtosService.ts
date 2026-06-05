@@ -66,7 +66,8 @@ export async function precificaProduto(id: number) {
   }
 }
 
-export async function porcentagem_venda(tipo: string, tipo_buscado:string, status:number) {
+type TipoPermitido_porcentagem_venda = "sexo" | "cor" | "tamanho | material | preco | descricao"
+export async function porcentagem_venda(tipo: string, tipo_buscado:TipoPermitido_porcentagem_venda, status:number) {
   const total = await prisma.peca_produto.count({
      where: {
       historico_peca: {

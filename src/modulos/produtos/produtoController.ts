@@ -63,6 +63,23 @@ export const porcentagem_vendaController = async( req: Request, res: Response) =
     const statusParam =  req.query.status
     const status = statusParam ? Number(statusParam) : 4
 
+    const tiposPermitidosPorcentagemVenda = [
+  "sexo",
+  "cor",
+  "tamanho",
+  "material",
+  "preco",
+  "descricao"
+] as const
+
+    type TipoPermitidoPorcentagemVenda =
+  typeof tiposPermitidosPorcentagemVenda[number]
+    if (!tiposPermitidosPorcentagemVenda.includes(tipo as TipoPermitidoPorcentagemVenda)) {
+      return res.status(400).json({
+        erro: "Tipo inválido"
+      })
+    }
+
     const produto = await porcentagem_venda(tipo, tipo_buscado, status)
     //exemplo: cor, azul
     return res.status(200).json(produto)
