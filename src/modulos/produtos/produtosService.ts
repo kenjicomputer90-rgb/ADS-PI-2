@@ -199,3 +199,66 @@ export async function troca(
 ) {
   return await changeProduto(id, data)
 }
+
+
+export async function saida(id: number) {
+    // fecha o status atual
+  await prisma.historico_peca.updateMany({
+    where: {
+      id_peca: id,
+      data_fim: null
+    },
+    data: {
+      data_fim: new Date()
+    }
+  })
+
+  // cria novo status
+  return await prisma.historico_peca.create({
+    data: {
+      id_peca: id,
+      id_status: 7, // vendido
+      data_inicio: new Date()
+    }
+  })
+}
+
+export async function updateProdutoStatus(
+  idProduto: number,
+  status: 1 | 2 | 3 | 4
+) {
+  return await prisma.historico_peca.create({
+    data: {
+      id_peca: idProduto,
+      id_status: status,
+      data_inicio: new Date()
+    }
+  })
+}
+
+
+export async function alterarStatus(
+  idPeca: number,
+  idStatus: number
+) {
+  // encerra o status atual
+  console.log(idPeca, idStatus)
+  await prisma.historico_peca.updateMany({
+    where: {
+      id_peca: idPeca,
+      data_fim: null
+    },
+    data: {
+      data_fim: new Date()
+    }
+  })
+
+  // cria o novo status
+  return await prisma.historico_peca.create({
+    data: {
+      id_peca: idPeca,
+      id_status: idStatus,
+      data_inicio: new Date()
+    }
+  })
+}

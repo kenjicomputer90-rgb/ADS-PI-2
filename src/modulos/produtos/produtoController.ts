@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { addProduto, changeProduto, precificaProduto, removeProduto, returnProduto, porcentagem_venda, listProduto} from "./produtosService.js"
+import { addProduto, changeProduto, precificaProduto, removeProduto, returnProduto, porcentagem_venda, listProduto, updateProdutoStatus, reservar, devolucao, troca, venda, saida, alterarStatus} from "./produtosService.js"
 import produtoRouter from "./produtosRouter.js"
 
 export const addProdutoController = async( req: Request, res: Response) => {
@@ -14,7 +14,7 @@ export const addProdutoController = async( req: Request, res: Response) => {
 
 export const removeProdutoController = async( req: Request, res: Response) => {
   try {
-    const { id } = req.body
+    const id = Number(req.params)
     const produto = await removeProduto(id)
     return res.status(200).json(produto)
   } catch (error: any) {
@@ -24,7 +24,7 @@ export const removeProdutoController = async( req: Request, res: Response) => {
 
 export const returnProdutoController = async( req: Request, res: Response) => {
   try {
-    const id = Number(req.params)
+    const id = Number(req.params.id)
     const produto = await returnProduto(id)
     return res.status(200).json(produto)
   } catch (error: any) {
@@ -34,7 +34,8 @@ export const returnProdutoController = async( req: Request, res: Response) => {
 
 export const changeProdutoController = async( req: Request, res: Response) => {
   try {
-    const { id, nome, material, descricao, preco, status } = req.body
+    const id = Number(req.params)
+    const { nome, material, descricao, preco, status } = req.body
     const produto= await changeProduto(id, {nome, material, descricao, preco, status})
     return res.status(200).json(produto)
   } catch (error: any) {
@@ -72,5 +73,112 @@ export const listProdutoController = async( req: Request, res: Response) => {
     return res.status(200).json(produto)
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
+  }
+}
+
+export const updateProdutoStatusController =  async( req: Request, res: Response) => {
+  try {
+    const id = Number(req.params)
+    const { status }= req.body
+    const produto = await updateProdutoStatus(id, status)
+    return res.status(200).json(produto)
+  } catch (error: any) {
+    return res.status(400).json({ erro: error.message })
+  }
+}
+
+export const reservarProdutoController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const id = Number(req.params.id)
+
+    const produto = await reservar(id)
+
+    return res.status(200).json(produto)
+  } catch (error: any) {
+    return res.status(400).json({ erro: error.message })
+  }
+}
+
+export const saidaProdutoController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const id = Number(req.params.id)
+
+    const produto = await saida(id)
+
+    return res.status(200).json(produto)
+  } catch (error: any) {
+    return res.status(400).json({ erro: error.message })
+  }
+}
+
+export const devolucaoProdutoController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const id = Number(req.params.id)
+
+    const produto = await devolucao(id)
+
+    return res.status(200).json(produto)
+  } catch (error: any) {
+    return res.status(400).json({ erro: error.message })
+  }
+}
+
+export const trocaProdutoController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const id = Number(req.params.id)
+
+    const produto = await troca(id, req.body)
+
+    return res.status(200).json(produto)
+  } catch (error: any) {
+    return res.status(400).json({ erro: error.message })
+  }
+}
+
+export const vendaProdutoController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const id = Number(req.params.id)
+
+    const produto = await venda(id)
+
+    return res.status(200).json(produto)
+  } catch (error: any) {
+    return res.status(400).json({ erro: error.message })
+  }
+}
+
+export async function alterarStatusController(
+  req: Request,
+  res: Response
+) {
+  try {
+    const idPeca = Number(req.params.id)
+    const { id_status } = req.body
+
+    const resultado = await alterarStatus(
+      idPeca,
+      id_status
+    )
+
+    return res.status(200).json(resultado)
+  } catch (error) {
+    return res.status(500).json({
+      erro: "Erro ao alterar status"
+    })
   }
 }
