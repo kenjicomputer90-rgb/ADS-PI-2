@@ -135,7 +135,15 @@ Resposta esperada:
 - Se o header `x-requester-id` não for informado ou o usuário não for administrador, o servidor retorna 401/403.
 - Para testar localmente, primeiro garanta que o servidor esteja rodando em `http://localhost:3000`.
 - Caso precise, use o arquivo `prisma/seed.ts` para criar o usuário administrador inicial com `id_usuario: 1`.
+## Script de teste automático
+O repositório inclui o arquivo `test-admin-routes.sh` na raiz. Ele executa todas as chamadas listadas acima na ordem e permite que qualquer pessoa abra o projeto e rode os testes sem criar cada comando manualmente.
 
+Para usar:
+```bash
+npm run start-dev
+ADMIN_ID=3 ./test-admin-routes.sh
+```
+Substitua `3` pelo `id` do administrador que existe no seu banco.
 ## Exemplos com curl
 
 ### Criar usuário admin
