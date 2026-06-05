@@ -1,4 +1,5 @@
 import administradorRouter from "./modulos/administrador/administradorRouter.js";
+import adminRouter from "./modulos/admin/adminRouter.js";
 import clienteRouter from "./modulos/cliente/clienteRouter.js";
 import cors from "cors"
 import express from "express"
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
  
 app.use("/cliente", clienteRouter)
 app.use("/administrador", administradorRouter)
+app.use("/admin", adminRouter)
 app.use("/funcionario", funcionarioRouter)
 app.use("/produtos", produtoRouter)
 app.use("/financeiro", financeiroRouter);

@@ -25,6 +25,7 @@ export async function ensureAdministradorRequester(
       return res.status(403).json({ erro: "Ação permitida apenas para administradores" })
     }
 
+    res.locals.requesterId = requesterId
     next()
   } catch (error: any) {
     return res.status(500).json({ erro: "Erro interno ao validar administrador" })

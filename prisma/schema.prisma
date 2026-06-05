@@ -152,4 +152,46 @@ model usuario {
   funcionario   funcionario?
   administrador administrador?
   locacao       locacao[]
+  usuario_permissao usuario_permissao[]
+  log            log[]
+}
+
+model permissao {
+  id_permissao Int                  @id @default(autoincrement())
+  nome         String               @unique
+  descricao    String?
+  usuarios     usuario_permissao[]
+}
+
+model usuario_permissao {
+  id              Int       @id @default(autoincrement())
+  id_usuario      Int
+  id_permissao    Int
+  usuario         usuario   @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+  permissao       permissao @relation(fields: [id_permissao], references: [id_permissao], onDelete: Cascade)
+
+  @@unique([id_usuario, id_permissao])
+  @@index([id_usuario])
+  @@index([id_permissao])
+}
+
+model acao {
+  id_acao   Int    @id @default(autoincrement())
+  nome      String @unique
+  descricao String?
+  log       log[]
+}
+
+model log {
+  id_log     Int       @id @default(autoincrement())
+  id_usuario Int?
+  id_acao    Int
+  alvo       String?
+  descricao  String?
+  data       DateTime  @default(now())
+  usuario    usuario?  @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+  acao       acao      @relation(fields: [id_acao], references: [id_acao], onDelete: Cascade)
+
+  @@index([id_usuario])
+  @@index([id_acao])
 }
