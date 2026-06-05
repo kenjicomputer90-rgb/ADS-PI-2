@@ -1,9 +1,17 @@
-import { Router } from 'express';
-import { obterRelatorioManutencao } from './financeiroController';
+import { Router } from "express";
+import {
+  addFinanceiroController, returnFinanceiroController, removeFinanceiroController, changeFinanceiroController
+} 
+from "./financeiroController.js";
 
 const financeiroRouter = Router();
 
-// Endpoint que devolve o faturamento de manutenções/defeitos (Aula 12)
-financeiroRouter.get('/manutencao', obterRelatorioManutencao);
+financeiroRouter.post("/", addFinanceiroController);
+
+financeiroRouter.get("/", returnFinanceiroController);
+
+financeiroRouter.delete("/", removeFinanceiroController);
+
+financeiroRouter.patch("/", changeFinanceiroController);
 
 export default financeiroRouter;

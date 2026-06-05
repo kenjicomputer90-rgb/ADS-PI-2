@@ -84,6 +84,86 @@ async function main() {
     statusPreparacao,
     statusSaida,
   });
+  console.log({ statusDisponivel, statusAlugado, statusManutencao, statusVendido });
+
+  // =========================================================================
+  // PARTE DO FINANCEIRO: Dados adicionais para testar o fluxo de caixa
+  // =========================================================================
+
+  // 1. Criando usuários de teste para amarrar os registros
+  const userAdmin = await prisma.usuario.upsert({
+    where: { id_usuario: 1 },
+    update: {},
+    create: { id_usuario: 1, nome: "Admin", email: "admin@loja.com", senha: "123", perfil_acesso: "GERENTE" }
+  });
+
+  const userCliente = await prisma.usuario.upsert({
+    where: { id_usuario: 2 },
+    update: {},
+    create: { id_usuario: 2, nome: "Carlos", email: "carlos@email.com", senha: "123", perfil_acesso: "CLIENTE" }
+  });
+
+  // 2. Criando funcionário com salário para testar custos/despesas
+  await prisma.funcionario.upsert({
+    where: { id_funcionario: 1 },
+    update: {},
+    create: {
+      id_funcionario: 1,
+      id_usuario: userAdmin.id_usuario,
+      nome: "Laerte Dev",
+      cpf: "111.111.111-11",
+      telefone: "(19) 99999-1111",
+      salario: 4500.00
+    }
+  });
+
+  // 3. Criando cliente de teste
+  await prisma.cliente.upsert({
+    where: { id_cliente: 1 },
+    update: {},
+    create: {
+      id_cliente: 1,
+      id_usuario: userCliente.id_usuario,
+      nome: "Carlos Silva",
+      cpf: "222.222.222-22",
+      telefone: "(19) 98888-2222",
+      endereco: "Rua das Flores, 123"
+    }
+  });
+
+  // 4. Criando locações de teste para simular o faturamento bruto e multas por atraso
+  await prisma.locacao.upsert({
+    where: { id_locacao: 1 },
+    update: {},
+    create: {
+      id_locacao: 1,
+      id_cliente: 1,
+      id_usuario: 1,
+      id_funcionario: 1,
+      data_evento: new Date(),
+      status: "FINALIZADA",
+      preco_total: 250.00,
+      multa: 0.00
+    }
+  });
+
+  await prisma.locacao.upsert({
+    where: { id_locacao: 2 },
+    update: {},
+    create: {
+      id_locacao: 2,
+      id_cliente: 1,
+      id_usuario: 1,
+      id_funcionario: 1,
+      data_evento: new Date(),
+      status: "Atraso Item Indisponível",
+      preco_total: 300.00,
+      multa: 60.00
+    }
+  });
+
+  console.log("✨ Dados do módulo financeiro anexados com sucesso!");
+
 }
 
 main()
