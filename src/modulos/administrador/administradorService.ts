@@ -107,3 +107,9 @@ export async function changeAdministrador(
 
   return updated
 }
+
+export async function getUsuarioById(id: number) {
+  return await prisma.usuario.findUnique({
+    where: { id_usuario: id },
+  })
+}
