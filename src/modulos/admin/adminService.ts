@@ -179,3 +179,9 @@ export async function logAction(
   auditLogs.unshift(log)
   return log
 }
+
+export async function getUsuarioById(id: number) {
+  return await prisma.usuario.findUnique({
+    where: { id_usuario: id },
+  })
+}

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"
-import { getUsuarioById } from "./administradorService.js"
+import { getUsuarioById } from "./adminService.js"
 
-export async function ensureAdministradorRequester(
+export async function ensureAdminRequester(
   req: Request,
   res: Response,
   next: NextFunction

@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { ensureAdministradorRequester } from "../administrador/administradorAuth.js"
+import { ensureAdminRequester } from "./adminAuth.js"
 import {
   createUsuarioController,
   getUsuariosController,
@@ -13,7 +13,7 @@ import {
 
 const adminRouter = Router()
 
-adminRouter.use(ensureAdministradorRequester)
+adminRouter.use(ensureAdminRequester)
 
 adminRouter.post("/usuarios", createUsuarioController)
 adminRouter.get("/usuarios", getUsuariosController)
