@@ -9,11 +9,10 @@ export function Funcionarios() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Estados do Formulário (alinhados com o req.body do seu controller)
-  const [nome, setNome] = useState('');
+  const [id_usuario, setId_usuario] = useState('');
   const [cpf, setCpf] = useState('');
   const [cargo, setCargo] = useState('');
   const [rg, setRg] = useState('');
-  const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
   const [cpts, setCpts] = useState('');
   const [dependentes, setDependentes] = useState('0');
@@ -26,7 +25,7 @@ export function Funcionarios() {
     setLoading(true);
     try {
       // Bate no seu funcionarioRouter.ts (GET /)
-      const response = await api.get('/funcionarios'); 
+      const response = await api.get('/funcionario'); 
       if (Array.isArray(response.data)) {
         setFuncionarios(response.data);
       }
@@ -44,19 +43,18 @@ export function Funcionarios() {
   async function handleCriarFuncionario(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!nome || !cpf || !cargo || !rg || !email || !telefone || !salario || !dataNascimento) {
+    if (!id_usuario || !cpf || !cargo || !rg || !telefone || !salario || !dataNascimento) {
       alert("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
     try {
       // Envia os dados convertendo strings numéricas para number conforme o service espera
-      await api.post('/funcionarios', {
-        nome,
+      await api.post('/funcionario', {
+        id_usuario,
         cpf: Number(cpf),
         cargo,
         rg: Number(rg),
-        email,
         telefone: Number(telefone),
         cpts: Number(cpts || 0),
         dependentes: Number(dependentes),
@@ -67,7 +65,7 @@ export function Funcionarios() {
       });
 
       // Limpa os campos após o sucesso
-      setNome(''); setCpf(''); setCargo(''); setRg(''); setEmail('');
+      setId_usuario(''); setCpf(''); setCargo(''); setRg('');
       setTelefone(''); setCpts(''); setDependentes('0'); setSexo('M');
       setSalario(''); setDataNascimento(''); setEstadoCivil('Solteiro(a)');
       
@@ -106,10 +104,9 @@ export function Funcionarios() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-zinc-700 bg-zinc-800/50 text-zinc-300 font-semibold text-sm">
-                <th className="p-4">Nome</th>
+                <th className="p-4">id_usuario</th>
                 <th className="p-4">Cargo</th>
                 <th className="p-4">Telefone</th>
-                <th className="p-4">E-mail</th>
                 <th className="p-4">Salário</th>
               </tr>
             </thead>
@@ -120,8 +117,8 @@ export function Funcionarios() {
                 </tr>
               ) : (
                 funcionarios.map((func, index) => (
-                  <tr key={func.id_funcionario ?? index} className="hover:bg-zinc-700/30 transition-colors">
-                    <td className="p-4 font-medium text-white">{func.nome}</td>
+                  <tr key={func.id_usuario ?? index} className="hover:bg-zinc-700/30 transition-colors">
+                    <td className="p-4 font-medium text-white">{func.id_usuario}</td>
                     <td className="p-4">
                       <span className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded text-xs font-medium">
                         {func.cargo}
@@ -155,7 +152,7 @@ export function Funcionarios() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
                   <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Nome Completo *</label>
-                  <input type="text" value={nome} onChange={(e) => setNome(e.target.value)}
+                  <input type="text" value={id_usuario} onChange={(e) => setId_usuario(e.target.value)}
                     className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="Ex: João da Silva" />
                 </div>
               </div>
@@ -192,13 +189,7 @@ export function Funcionarios() {
                   <input type="number" value={telefone} onChange={(e) => setTelefone(e.target.value)}
                     className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="19999999999" />
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">E-mail *</label>
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="exemplo@email.com" />
-                </div>
               </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Nº CTPS (Carteira de Trab.)</label>

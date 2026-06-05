@@ -65,8 +65,7 @@ export interface Produto {
 }
 
 export interface Funcionario {
-  id_funcionario?: number;
-  nome: string;
+  id_usuario: number;
   cpf: number;
   cargo: string;
   rg: number;
