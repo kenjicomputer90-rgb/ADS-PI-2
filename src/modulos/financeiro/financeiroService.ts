@@ -57,7 +57,7 @@ export async function removeManutencao(id: number) {
   });
 }
 
-export async function changeManutencao(id: number, descricao?: string) {
+export async function changeManutencao(id: number, descricao: string) {
   return await prisma.manutencao.update({
     where: { id_manutencao: id },
     data: { descricao }
