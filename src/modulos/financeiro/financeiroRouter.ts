@@ -1,12 +1,12 @@
 import { Router } from "express";
 import {
-  addFinanceiroController, returnFinanceiroController, removeFinanceiroController, changeFinanceiroController
+  addPagamentoController, returnFinanceiroController, removeFinanceiroController, changeFinanceiroController
 } 
 from "./financeiroController.js";
 
 const financeiroRouter = Router();
 
-financeiroRouter.post("/", addFinanceiroController);
+financeiroRouter.post("/", addPagamentoController);
 
 financeiroRouter.get("/", returnFinanceiroController);
 

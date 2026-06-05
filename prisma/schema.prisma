@@ -76,7 +76,7 @@ model item_locacao {
   ajuste       ajuste[]
   peca_produto peca_produto @relation(fields: [id_peca], references: [id_peca])
   locacao      locacao      @relation(fields: [id_locacao], references: [id_locacao], onDelete: Cascade)
-
+  preco_aluguel Int
   @@index([id_locacao])
   @@index([id_peca])
 }
@@ -134,6 +134,7 @@ model peca_produto {
   historico_peca historico_peca[]
   item_locacao   item_locacao[]
   manutencao     manutencao[]
+  sexo String?
 }
 
 model status_peca {

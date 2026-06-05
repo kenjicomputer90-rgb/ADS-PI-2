@@ -1,12 +1,12 @@
 
 import { Request, Response } from "express"
 
-import { returnFuncionario, changeFuncionario, removeFuncionario, addFuncionario } from "./fucionarioService.js"
+import { returnFuncionario, changeFuncionario, removeFuncionario, addFuncionario } from "./funcionarioService.js"
 
 export const addFuncionarioController = ( req: Request, res: Response) => {
   try {
-    const { id_usuario, cpf, cargo, rg, telefone, cpts,dependentes,sexo,salario, data_de_nascimento, estado_civil } = req.body
-    return res.status(201).json(addFuncionario(id_usuario, cpf, cargo, rg, telefone, cpts,dependentes,sexo,salario, data_de_nascimento, estado_civil))
+    const { id_usuario, nome, cpf, rg, telefone, cpts,dependente,sexo,salario, data_de_nascimento, estado_civil } = req.body
+    return res.status(201).json(addFuncionario(id_usuario, nome, cpf, rg, telefone, cpts,dependente,sexo,salario, data_de_nascimento, estado_civil))
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
   }

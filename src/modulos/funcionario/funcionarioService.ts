@@ -21,6 +21,31 @@ export async function addFuncionario(
   data_nascimento: string,
   estado_civil: string
 ) {
+  console.log("teste1")
+  const usuario=await prisma.funcionario.findUnique({
+    where:{ 
+    id_usuario:id_usuario
+    }
+  })
+  
+
+  const funcionarioCpf = await prisma.funcionario.findUnique({
+  where: {
+    cpf
+  }
+})
+if (usuario){
+  return "usuario já sendo usado"
+}
+if(funcionarioCpf){
+  return "cpf já sendo usado"
+}
+
+
+console.log("CPF encontrado:", funcionarioCpf)
+   // console.log("teste2")
+ //return "erro id_usuario já sendo usado"
+  
   return await prisma.funcionario.create({
     data: {
       id_usuario,

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as financeiroService from "./financeiroService.js";
 
-export async function addFinanceiroController(req: Request, res: Response) {
+export async function addPagamentoController(req: Request, res: Response) {
   try {
     const { id_locacao, valor } = req.body;
     const novoPagamento = await financeiroService.addPagamento(Number(id_locacao), Number(valor));
