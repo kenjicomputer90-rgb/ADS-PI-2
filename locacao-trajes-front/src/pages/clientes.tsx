@@ -60,24 +60,34 @@ export function Clientes() {
     }
   }
 
-  // Ação de Salvar (Adicionar ou Alterar)
-  async function handleSalvarCliente(e: React.FormEvent) {
-    e.preventDefault();
-    const payload = { nome, cpf, telefone, endereco, rg: rg || undefined, data_nascimento: dataNascimento || undefined };
+async function handleSalvarCliente(e: React.FormEvent) {
+  e.preventDefault();
+  
+  const rgTratado = rg.trim() === "" ? undefined : rg.trim();
+  const dataNascimentoTratada = dataNascimento ? `${dataNascimento}T12:00:00` : undefined;
 
-    try {
-      if (editingId) {
-        await api.patch(`/clientes/${editingId}`, payload);
-      } else {
-        await api.post('/clientes', payload);
-      }
-      fecharModal();
-      carregarClientes();
-    } catch (error: any) {
-      alert(error.response?.data?.erro || "Erro ao salvar dados do cliente.");
+  const payload = { 
+    nome: nome.trim(), 
+    cpf: cpf.replace(/\D/g, ''), 
+    telefone: telefone.trim(), 
+    endereco: endereco.trim(), 
+    rg: rgTratado, 
+    data_nascimento: dataNascimentoTratada 
+  };
+
+  try {
+    if (editingId) {
+      // Garante ID na URL para o PATCH
+      await api.patch(`/clientes/${editingId}`, payload); 
+    } else {
+      await api.post('/clientes', payload);
     }
+    fecharModal();
+    carregarClientes();
+  } catch (error: any) {
+    alert(`Erro: ${error.response?.data?.erro || "Erro ao salvar"}`);
   }
-
+}
   // Preenche dados para edição
   function handleEditarCliente(cliente: Cliente) {
     setEditingId(cliente.id_cliente);
@@ -94,17 +104,36 @@ export function Clientes() {
     setIsModalOpen(true);
   }
 
-  // Ação de Remoção
-  async function handleRemoverCliente(id: number, nome: string) {
-    if (!confirm(`Tem certeza que deseja remover o cadastro de ${nome}?`)) return;
-    try {
-      await api.delete(`/clientes/${id}`);
-      if (selectedCliente?.id_cliente === id) setSelectedCliente(null);
-      carregarClientes();
-    } catch (error: any) {
-      alert(error.response?.data?.erro || "Não foi possível remover o cliente.");
-    }
+  async function handleDeletarCliente(id_cliente: number) {
+  if (!confirm("Tem certeza que deseja excluir este cliente?")) return;
+  
+  try {
+    // CORREÇÃO: Enviando o ID na URL conforme o clienteRouter.ts espera
+    await api.delete(`/clientes/${id_cliente}`); 
+    carregarClientes();
+  } catch (error: any) {
+    alert(`Erro ao excluir: ${error.response?.data?.erro || "Erro interno"}`);
   }
+}
+
+// 3. FUNÇÃO DO CRM (HISTÓRICO)
+const abrirCRM = async (cliente: Cliente) => {
+  setSelectedCliente(cliente);
+  setLoadingCRM(true);
+  try {
+    // Garante o uso de id_cliente
+    const [historicoRes, prefRes] = await Promise.all([
+      api.get(`/clientes/${cliente.id_cliente}/historico`),
+      api.get(`/clientes/${cliente.id_cliente}/preferencias`)
+    ]);
+    setHistorico(historicoRes.data);
+    setPreferencias(prefRes.data);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoadingCRM(false);
+  }
+};
 
   function fecharModal() {
     setIsModalOpen(false);
