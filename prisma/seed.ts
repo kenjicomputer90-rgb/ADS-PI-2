@@ -94,7 +94,7 @@ async function main() {
   const userAdmin = await prisma.usuario.upsert({
     where: { id_usuario: 1 },
     update: {},
-    create: { id_usuario: 1, nome: "Admin", email: "admin@loja.com", senha: "123", perfil_acesso: "GERENTE" }
+    create: { id_usuario: 1, nome: "Admin", email: "admin@loja.com", senha: "123", perfil_acesso: "administrador" }
   });
 
   const userCliente = await prisma.usuario.upsert({
