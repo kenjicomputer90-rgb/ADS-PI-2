@@ -23,7 +23,7 @@ export async function obterFaturamentoTotal() {
   };
 }
 
-export async function addFinanceiro(id_locacao: number, valor: number) {
+export async function addPagamento(id_locacao: number, valor: number) {
   const newPagamento = await prisma.pagamento.create({
     data: {
       id_locacao: id_locacao,

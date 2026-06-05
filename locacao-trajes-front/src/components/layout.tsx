@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Shirt, Users, Briefcase } from 'lucide-react'; // Adicionado Briefcase aqui
+import { Shirt, Users, Briefcase, Calendar, Package, Layers } from 'lucide-react'; // Adicionado Layers
 
 export function Layout() {
   const location = useLocation();
@@ -22,6 +22,22 @@ export function Layout() {
 
           <nav className="space-y-2">
             <Link to="/" className={linkClass('/')}>
+              <Calendar size={20} />
+              Controle de Locações
+            </Link>
+
+            {/* INSERÇÃO DO LINK DE PROCESSOS */}
+            <Link to="/processos" className={linkClass('/processos')}>
+              <Layers size={20} />
+              Processos & Fluxos
+            </Link>
+
+            <Link to="/logistica" className={linkClass('/logistica')}>
+              <Package size={20} />
+              Controle Logístico
+            </Link>
+
+            <Link to="/produtos" className={linkClass('/produtos')}>
               <Shirt size={20} />
               Estoque de Trajes
             </Link>
@@ -31,7 +47,6 @@ export function Layout() {
               Clientes
             </Link>
 
-            {/* NOVA ROTA ADICIONADA AQUI */}
             <Link to="/funcionarios" className={linkClass('/funcionarios')}>
               <Briefcase size={20} />
               Funcionários

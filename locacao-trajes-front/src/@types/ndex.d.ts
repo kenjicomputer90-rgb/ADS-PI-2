@@ -1,13 +1,38 @@
 export interface Cliente {
-  id_cliente?: number;
-  id_usuario?: number | null;
+  id_cliente: number;
   nome: string;
   cpf: string;
+  rg?: string | null;
   telefone: string;
   endereco: string;
-  rg?: string | null;
-  medidas?: string | null;
   data_nascimento?: string | null;
+}
+
+export interface PreferenciaCliente {
+  id_peca: number;
+  _count: {
+    id_peca: number;
+  };
+}
+
+export interface HistoricoLocacaoCliente {
+  id_locacao: number;
+  data_locacao: string;
+  data_evento: string;
+  status: string;
+  pagamento?: {
+    id_pagamento: number;
+    valor_total: number;
+    status_pagamento: string;
+  }[];
+  item_locacao: {
+    id_item_locacao: number;
+    peca_produto: {
+      codigo_unico: string;
+      descricao: string;
+      tamanho: string;
+    };
+  }[];
 }
 
 export interface Produto {
@@ -53,4 +78,89 @@ export interface Funcionario {
   salario: number;
   data_de_nascimento: string;
   estado_civil: string;
+}
+
+export interface ItemLocacao {
+  id_item_locacao: number;
+  id_locacao: number;
+  id_peca: number;
+}
+
+export interface Locacao {
+  id_locacao?: number;
+  id_cliente: number;
+  id_usuario: number;
+  id_funcionario: number;
+  data_locacao: string;
+  data_evento: string;
+  data_devolucao?: string | null;
+  status: 'RESERVADA' | 'ENTREGUE' | 'DEVOLVIDA' | 'CANCELADA';
+  item_locacao?: ItemLocacao[];
+}
+
+export interface StatusPeca {
+  id_status: number;
+  nome_status: string;
+}
+
+export interface PecaProdutoLogistica {
+  id_peca: number;
+  codigo_unico: string;
+  descricao: string;
+  tamanho: string;
+  cor: string;
+  material: string;
+}
+
+export interface RegistroLogistica {
+  id_historico: number;
+  id_peca: number;
+  id_status: number;
+  data_inicio: string;
+  data_fim?: string | null;
+  status_peca?: StatusPeca;
+  peca_produto?: PecaProdutoLogistica;
+}
+
+export interface ClienteProcesso {
+  id_cliente: number;
+  nome: string;
+  email: string;
+  telefone: string;
+}
+
+export interface FuncionarioProcesso {
+  id_funcionario: number;
+  nome: string;
+}
+
+export interface ItemLocacaoProcesso {
+  id_item_locacao: number;
+  id_peca: number;
+  peca_produto: {
+    id_peca: number;
+    codigo_unico: string;
+    descricao: string;
+    tamanho: string;
+  };
+}
+
+export interface LocacaoProcesso {
+  id_locacao: number;
+  id_cliente: number;
+  id_funcionario: number;
+  data_locacao: string;
+  data_evento: string;
+  data_devolucao?: string | null;
+  status: 'RESERVADA' | 'ENTREGUE' | 'DEVOLVIDA' | 'CANCELADA';
+  cliente: ClienteProcesso;
+  funcionario: FuncionarioProcesso;
+  item_locacao: ItemLocacaoProcesso[];
+}
+
+export interface ResponseKanban {
+  reservadas: LocacaoProcesso[];
+  entregues: LocacaoProcesso[];
+  devolvidas: LocacaoProcesso[];
+  canceladas: LocacaoProcesso[];
 }
