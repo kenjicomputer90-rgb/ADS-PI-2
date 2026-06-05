@@ -66,7 +66,7 @@ export async function precificaProduto(id: number) {
   }
 }
 
-export async function porcentagem_venda(tipo: string, tipo_buscado:string, status:1|2|3|4) {
+export async function porcentagem_venda(tipo: string, tipo_buscado:string, status:number) {
   const total = await prisma.peca_produto.count({
      where: {
       historico_peca: {
@@ -83,7 +83,7 @@ export async function porcentagem_venda(tipo: string, tipo_buscado:string, statu
     
       historico_peca: {
         some: {
-          id_status: 4
+          id_status: status
         }
       }
     }
@@ -259,6 +259,52 @@ export async function alterarStatus(
       id_peca: idPeca,
       id_status: idStatus,
       data_inicio: new Date()
+    }
+  })
+}
+
+export async function produtosOciosos() {
+  const noventaDiasAtras = new Date()
+
+  noventaDiasAtras.setDate(
+    noventaDiasAtras.getDate() - 90
+  )
+
+  return await prisma.peca_produto.findMany({
+    where: {
+      historico_peca: {
+        some: {
+          data_inicio: {
+            lt: noventaDiasAtras
+          }
+        }
+      }
+    }
+  })
+}
+/*
+export async function rastreioProduto(
+  codigo: string
+) {
+  return await prisma.peca_produto.findFirst({
+    where: {
+      codigo_rastreio: codigo
+    }
+  })
+}
+*/
+
+// produtosService.ts
+
+export async function produtosPorStatus(status:number) {
+  console.log(status)
+  return await prisma.peca_produto.findMany({
+    where: {
+      historico_peca:{
+        some:{
+          id_status:status
+        }
+      }
     }
   })
 }

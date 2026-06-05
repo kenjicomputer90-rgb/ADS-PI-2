@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { addProduto, changeProduto, precificaProduto, removeProduto, returnProduto, porcentagem_venda, listProduto, updateProdutoStatus, reservar, devolucao, troca, venda, saida, alterarStatus} from "./produtosService.js"
+import { addProduto, changeProduto, precificaProduto, removeProduto, returnProduto, porcentagem_venda, listProduto, updateProdutoStatus, reservar, devolucao, troca, venda, saida, alterarStatus, produtosPorStatus} from "./produtosService.js"
 import produtoRouter from "./produtosRouter.js"
 
 export const addProdutoController = async( req: Request, res: Response) => {
@@ -55,12 +55,15 @@ export const porcentagem_vendaController = async( req: Request, res: Response) =
   try {
     const {
       tipo,
-      tipo_buscado
+      tipo_buscado,
     } = req.params as {
       tipo: "sexo" | "cor" | "tamanho"
       tipo_buscado: string
-    }
-    const produto = await porcentagem_venda(tipo, tipo_buscado, 4)
+    } 
+    const statusParam =  req.query.status
+    const status = statusParam ? Number(statusParam) : 4
+
+    const produto = await porcentagem_venda(tipo, tipo_buscado, status)
     //exemplo: cor, azul
     return res.status(200).json(produto)
   } catch (error: any) {
@@ -182,3 +185,61 @@ export async function alterarStatusController(
     })
   }
 }
+
+
+export const produtosPorStatusController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const status = Number(req.params.status)
+    const produtos = await produtosPorStatus(status)
+
+    return res.status(200).json(produtos)
+  } catch (error) {
+    return res.status(500).json({
+      erro: "Erro ao listar produtos disponíveis"
+    })
+  }
+}
+
+/*
+export const produtosOciososController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const produtos = await produtosOciosos()
+
+    return res.status(200).json(produtos)
+  } catch (error) {
+    return res.status(500).json({
+      erro: "Erro ao listar produtos ociosos"
+    })
+  }
+}
+*/
+/*
+export const rastreioProdutoController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { codigo } = req.params
+
+    const produto = await rastreioProduto(codigo)
+
+    if (!produto) {
+      return res.status(404).json({
+        erro: "Produto não encontrado"
+      })
+    }
+
+    return res.status(200).json(produto)
+  } catch (error) {
+    return res.status(500).json({
+      erro: "Erro ao rastrear produto"
+    })
+  }
+}
+  */

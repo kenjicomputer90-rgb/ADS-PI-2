@@ -66,6 +66,15 @@ async function main() {
     },
   });
 
+    const statusSaida = await prisma.status_peca.upsert({
+    where: { id_status: 7 },
+    update: {},
+    create: {
+      id_status: 7,
+      descricao: "saida",
+    },
+  });
+
   console.log({
     statusDisponivel,
     statusAlugado,
@@ -73,6 +82,7 @@ async function main() {
     statusVendido,
     statusReservado,
     statusPreparacao,
+    statusSaida,
   });
 }
 

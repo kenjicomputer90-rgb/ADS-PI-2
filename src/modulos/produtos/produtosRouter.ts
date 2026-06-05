@@ -1,5 +1,5 @@
 import { Router } from "express"
-import {addProdutoController, alterarStatusController, changeProdutoController, devolucaoProdutoController, listProdutoController, porcentagem_vendaController, precificaProdutoController, removeProdutoController, reservarProdutoController, returnProdutoController, saidaProdutoController, trocaProdutoController, updateProdutoStatusController, vendaProdutoController} from "./produtoController.js"
+import {addProdutoController, alterarStatusController, changeProdutoController, devolucaoProdutoController, listProdutoController, porcentagem_vendaController, precificaProdutoController, produtosPorStatusController, removeProdutoController, reservarProdutoController, returnProdutoController, saidaProdutoController, trocaProdutoController, updateProdutoStatusController, vendaProdutoController} from "./produtoController.js"
 
 const produtoRouter = Router()
 
@@ -25,11 +25,11 @@ produtoRouter.get("/:id", returnProdutoController)
 produtoRouter.put("/:id/status", updateProdutoStatusController)
 
 // Movimentação
-produtoRouter.post("/:id/reservar", reservarProdutoController)
-produtoRouter.post("/:id/saida", saidaProdutoController)
-produtoRouter.post("/:id/devolucao", devolucaoProdutoController)
-produtoRouter.post("/:id/troca", trocaProdutoController)
-produtoRouter.post("/:id/venda", vendaProdutoController)
+produtoRouter.patch(
+  "/:id/status",
+  alterarStatusController
+)
+
 
 // Manutenção / Problemas
 // produtoRouter.post("/:id/defeitos", registrarDefeitoController)
@@ -37,14 +37,9 @@ produtoRouter.post("/:id/venda", vendaProdutoController)
 // produtoRouter.post("/:id/ajustes", registrarAjusteController)
 
 // Consultas específicas
-// produtoRouter.get("/disponiveis", produtosDisponiveisController)
-// produtoRouter.get("/ociosos", produtosOciososController)
-// produtoRouter.get("/rastreio/:codigo", rastreioProdutoController)
-
-produtoRouter.patch(
-  "/:id/status",
-  alterarStatusController
-)
+produtoRouter.get("/status/:status", produtosPorStatusController)
+//produtoRouter.get("/ociosos", produtosOciososController)
+//produtoRouter.get("/rastreio/:codigo", rastreioProdutoController)
 
 
 export default produtoRouter
