@@ -1,21 +1,25 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/layout';
+import { Locacoes } from './pages/locacoes';
+import { Processos } from './pages/processos'; // Import do novo componente
+import { Logistica } from './pages/logistica';
 import { Produtos } from './pages/produtos';
 import { Clientes } from './pages/clientes';
-import { Funcionarios } from './pages/funcionarios'; // Importa a nova página
+import { Funcionarios } from './pages/funcionarios';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          {/* Rota do Estoque de Produtos */}
-          <Route index element={<Produtos />} />
+          <Route index element={<Locacoes />} />
           
-          {/* Rota do Módulo de Clientes */}
+          {/* Módulo de Inteligência de Processos */}
+          <Route path="processos" element={<Processos />} />
+          
+          <Route path="logistica" element={<Logistica />} />
+          <Route path="produtos" element={<Produtos />} />
           <Route path="clientes" element={<Clientes />} />
-
-          {/* NOVA ROTA DE FUNCIONÁRIOS REGISTRADA AQUI */}
           <Route path="funcionarios" element={<Funcionarios />} />
         </Route>
       </Routes>
