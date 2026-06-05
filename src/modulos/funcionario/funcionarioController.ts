@@ -5,8 +5,8 @@ import { returnFuncionario, changeFuncionario, removeFuncionario, addFuncionario
 
 export const addFuncionarioController = ( req: Request, res: Response) => {
   try {
-    const { nome, cpf, cargo, rg, email, telefone, cpts,dependentes,sexo,salario, data_de_nascimento, estado_civil } = req.body
-    return res.status(201).json(addFuncionario(nome, cpf, cargo, rg, email, telefone, cpts,dependentes,sexo,salario, data_de_nascimento, estado_civil))
+    const { id_usuario, cpf, cargo, rg, telefone, cpts,dependentes,sexo,salario, data_de_nascimento, estado_civil } = req.body
+    return res.status(201).json(addFuncionario(id_usuario, cpf, cargo, rg, telefone, cpts,dependentes,sexo,salario, data_de_nascimento, estado_civil))
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
   }
@@ -34,8 +34,9 @@ export const returnFuncionarioController = ( req: Request, res: Response) => {
 
 export const changeFuncionarioController = ( req: Request, res: Response) => {
   try {
-    const { nome, cpf, cargo, rg, email, telefone, cpts,dependentes,sexo,salario, data_de_nascimento, estado_civil} = req.body
-    return res.status(201).json(changeFuncionario(nome, cpf, cargo, rg, email, telefone, cpts,dependentes,sexo,salario, data_de_nascimento, estado_civil))
+    const { id_usuario, cpf, cargo, rg, telefone, cpts,dependente,sexo,salario, data_de_nascimento, estado_civil} = req.body
+    const id = Number(req.params.id)
+    return res.status(201).json(changeFuncionario(id,id_usuario, cpf, rg, telefone, cpts,dependente,sexo,salario, data_de_nascimento, estado_civil))
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
   }

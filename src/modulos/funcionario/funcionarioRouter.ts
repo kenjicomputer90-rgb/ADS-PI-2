@@ -6,7 +6,7 @@ const funcionarioRouter = Router()
 
 funcionarioRouter.post("/", addFuncionarioController)
 
-funcionarioRouter.get("/", returnFuncionarioController  )
+funcionarioRouter.get("/", returnFuncionarioController)
 
 funcionarioRouter.delete("/", removeFuncionarioController)
 
