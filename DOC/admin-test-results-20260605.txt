@@ -1,0 +1,31 @@
+1) GET /admin/usuarios
+[{"id_usuario":1,"nome":"Admin","email":"admin@loja.com","perfil_acesso":"GERENTE"},{"id_usuario":2,"nome":"Carlos","email":"carlos@email.com","perfil_acesso":"CLIENTE"},{"id_usuario":3,"nome":"Teste Admin","email":"testeadmin@loja.com","perfil_acesso":"administrador"},{"id_usuario":4,"nome":"Admin Teste 2","email":"adminteste2@loja.com","perfil_acesso":"administrador"},{"id_usuario":5,"nome":"Admin Teste 3","email":"adminteste3@loja.com","perfil_acesso":"administrador"}]
+
+
+2) POST /admin/usuarios
+{"id_usuario":6,"nome":"Admin Test","email":"admin.test@example.com","perfil_acesso":"administrador"}
+
+
+3) PUT /admin/usuarios/2
+{"id_usuario":2,"nome":"Admin Atualizado","email":"carlos@email.com","perfil_acesso":"administrador"}
+
+
+4) DELETE /admin/usuarios/2
+{"message":"Usuário deletado","id":2}
+
+
+5) GET /admin/permissoes
+["GERENTE","administrador"]
+
+
+6) PUT /admin/permissoes/1
+{"id_usuario":1,"nome":"Admin","email":"admin@loja.com","perfil_acesso":"administrador"}
+
+
+7) GET /admin/logs
+[{"id_log":4,"id_usuario":3,"acao":"ATUALIZAR_PERMISSAO","alvo":"usuario:1","descricao":"{\"perfil_acesso\":\"administrador\"}","data":"2026-06-05T21:48:50.307Z"},{"id_log":3,"id_usuario":3,"acao":"EXCLUIR_USUARIO","alvo":"usuario:2","descricao":"{\"message\":\"Usuário deletado\",\"id\":2}","data":"2026-06-05T21:48:50.286Z"},{"id_log":2,"id_usuario":3,"acao":"ATUALIZAR_USUARIO","alvo":"usuario:2","descricao":"{\"nome\":\"Admin Atualizado\",\"perfil_acesso\":\"administrador\"}","data":"2026-06-05T21:48:50.275Z"},{"id_log":1,"id_usuario":3,"acao":"CRIAR_USUARIO","alvo":"usuario:6","descricao":"{\"nome\":\"Admin Test\",\"email\":\"admin.test@example.com\",\"perfil_acesso\":\"administrador\"}","data":"2026-06-05T21:48:50.259Z"}]
+
+
+8) GET /admin/acoes
+[{"nome":"CRIAR_USUARIO","descricao":"CRIAR_USUARIO"},{"nome":"ATUALIZAR_USUARIO","descricao":"ATUALIZAR_USUARIO"},{"nome":"EXCLUIR_USUARIO","descricao":"EXCLUIR_USUARIO"},{"nome":"ATUALIZAR_PERMISSAO","descricao":"ATUALIZAR_PERMISSAO"}]
+
