@@ -17,7 +17,7 @@ const app = express();
 app.use(cors({
   origin: "http://localhost:5173", // URL do seu Vite Front-end
   methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requester-Id"]
 }));
 app.use(express.json())
 
