@@ -25,18 +25,20 @@ export function Clientes() {
   const [loadingCRM, setLoadingCRM] = useState(false);
 
   const carregarClientes = async () => {
-    setLoading(true);
-    try {
-      // Como o seu back-end fornece busca individual e rotas auxiliares,
-      // assumimos uma rota padrão de listagem no back-end.
-      const response = await api.get('/clientes');
+  setLoading(true);
+  try {
+    const response = await api.get('/clientes'); // ou a sua rota de listagem/busca correspondente
+    
+    // Certifique-se de que o response.data é realmente o array esperado
+    if (Array.isArray(response.data)) {
       setClientes(response.data);
-    } catch (error) {
-      console.error("Erro ao carregar clientes:", error);
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (error) {
+    console.error("Erro ao listar:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     carregarClientes();
@@ -136,10 +138,15 @@ const abrirCRM = async (cliente: Cliente) => {
 };
 
   function fecharModal() {
-    setIsModalOpen(false);
-    setEditingId(null);
-    setNome(''); setCpf(''); setRg(''); setTelefone(''); setEndereco(''); setDataNascimento('');
-  }
+  setIsModalOpen(false);
+  setEditingId(null);
+  setNome('');
+  setCpf('');
+  setRg('');
+  setTelefone('');
+  setEndereco('');
+  setDataNascimento('');
+}
 
   const clientesFiltrados = clientes.filter(c =>
     c.nome.toLowerCase().includes(search.toLowerCase()) ||
@@ -221,7 +228,7 @@ const abrirCRM = async (cliente: Cliente) => {
                           <Edit2 size={15} />
                         </button>
                         <button 
-                          onClick={() => handleRemoverCliente(cliente.id_cliente, cliente.nome)}
+                          onClick={() => handleDeletarCliente(cliente.id_cliente)}
                           className="p-2 hover:bg-zinc-700 text-zinc-400 hover:text-red-400 rounded-lg transition-colors"
                           title="Excluir Cadastro"
                         >
