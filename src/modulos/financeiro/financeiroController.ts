@@ -4,7 +4,7 @@ import * as financeiroService from "./financeiroService.js";
 export async function addFinanceiroController(req: Request, res: Response) {
   try {
     const { id_locacao, valor } = req.body;
-    const novoPagamento = await financeiroService.addFinanceiro(Number(id_locacao), Number(valor));
+    const novoPagamento = await financeiroService.addPagamento(Number(id_locacao), Number(valor));
     return res.status(201).json(novoPagamento);
   } catch (error: any) {
     return res.status(400).json({ erro: error.message });
