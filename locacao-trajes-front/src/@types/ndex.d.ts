@@ -66,16 +66,17 @@ export interface Produto {
 
 export interface Funcionario {
   id_usuario: number;
-  cpf: number;
+  nome: string;
+  cpf: string;
   cargo: string;
-  rg: number;
+  rg: string;
   email: string;
-  telefone: number;
-  cpts: number;
+  telefone: string;
+  cpts: string;
   dependentes: number;
   sexo: string;
   salario: number;
-  data_de_nascimento: string;
+  data_nascimento: string;
   estado_civil: string;
 }
 

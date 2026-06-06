@@ -1,11 +1,13 @@
 
 import { Router } from "express"
-import {addClienteController, changeClienteController, removeClienteController, 
+import {listClientesController, addClienteController, changeClienteController, removeClienteController, 
 returnClienteController, getClientPedidosController,
 getClientProdutosController, consultaHistoricoLocacaoClienteController, 
 consultaPreferenciasClienteController} from "./clienteController.js"
 
 const clienteRouter = Router()
+
+clienteRouter.get("/", listClientesController)
 
 clienteRouter.post("/", addClienteController)
 

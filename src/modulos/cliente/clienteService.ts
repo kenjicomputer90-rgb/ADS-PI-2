@@ -9,6 +9,10 @@ const prisma = new PrismaClient({
   adapter,
 });
 
+export async function listClientes() {
+  return await prisma.cliente.findMany({ orderBy: { nome: "asc" } });
+}
+
 export async function addCliente(nome:string, cpf:string,telefone: string,
      endereco:string, rg?:string, data_nascimento?:string)
 {

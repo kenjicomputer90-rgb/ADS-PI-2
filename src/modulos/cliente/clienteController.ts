@@ -1,11 +1,17 @@
 
 import { Request, Response } from "express"
-import { addCliente, changeCliente, removeCliente, returnCliente,
+import { listClientes, addCliente, changeCliente, removeCliente, returnCliente,
   getClientPedidos, getClientProdutos, consultaHistoricoLocacaoCliente, 
   consultaPreferenciasCliente
  } from "./clienteService.js"
 
-// ... mantenha os outros controllers abaixo
+export const listClientesController = async (req: Request, res: Response) => {
+  try {
+    return res.status(200).json(await listClientes())
+  } catch (error: any) {
+    return res.status(400).json({ erro: error.message })
+  }
+}
 
 export const addClienteController = async ( req: Request, res: Response) => {
   try {

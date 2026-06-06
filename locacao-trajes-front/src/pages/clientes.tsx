@@ -319,7 +319,7 @@ const abrirCRM = async (cliente: Cliente) => {
                       <div className="text-[11px] text-zinc-500 font-mono flex justify-between pt-1 border-t border-zinc-800/50">
                         <span>Retirada: {new Date(loc.data_locacao).toLocaleDateString('pt-BR')}</span>
                         {loc.pagamento && loc.pagamento[0] && (
-                          <span className="text-emerald-500 font-bold">R$ {loc.pagamento[0].valor_total.toFixed(2)}</span>
+                          <span className="text-emerald-500 font-bold">R$ {((loc.pagamento[0] as any).valor ?? loc.pagamento[0].valor_total)?.toFixed(2)}</span>
                         )}
                       </div>
                     </div>
