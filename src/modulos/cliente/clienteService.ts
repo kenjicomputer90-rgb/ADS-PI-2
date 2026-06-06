@@ -26,13 +26,16 @@ export async function addCliente(nome:string, cpf:string,telefone: string,
   if (clienteExistente) {
     throw new Error("CPF já cadastrado")
   }
+  // Prisma + SQLite (better-sqlite3) espera string "YYYY-MM-DD", nao objeto Date
+  const dataNascFormatada = data_nascimento ? new Date(data_nascimento.split('T')[0] + 'T12:00:00.000Z').toISOString() : null;
+
   const newCliente = await prisma.cliente.create({
     data: {
         nome: nome,
         cpf: cpf,
         rg: rg ?? null,
         telefone: telefone,
-        data_nascimento: data_nascimento ? new Date(data_nascimento) : null,
+        data_nascimento: dataNascFormatada,
         endereco: endereco,
     }
   })
@@ -74,7 +77,7 @@ return await prisma.cliente.update({
     telefone,
     endereco,
     rg: rg ? rg : null,
-    data_nascimento: data_nascimento ? new Date(data_nascimento) : null
+    data_nascimento: data_nascimento ? new Date(data_nascimento.split('T')[0] + 'T12:00:00.000Z').toISOString() : null
   }
 })
 }

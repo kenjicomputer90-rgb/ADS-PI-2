@@ -13,12 +13,14 @@ export const listClientesController = async (req: Request, res: Response) => {
   }
 }
 
-export const addClienteController = async ( req: Request, res: Response) => {
+export const addClienteController = async (req: Request, res: Response) => {
   try {
-    const { nome, cpf, telefone, endereco, rg, data_nascimento} = req.body
+    console.log("BODY RECEBIDO:", req.body) // ← adicione essa linha
+    const { nome, cpf, telefone, endereco, rg, data_nascimento } = req.body
     const novoCliente = await addCliente(nome, cpf, telefone, endereco, rg, data_nascimento)
     return res.status(201).json(novoCliente)
   } catch (error: any) {
+    console.log("ERRO NO CADASTRO:", error.message) // ← e essa
     return res.status(400).json({ erro: error.message })
   }
 }
