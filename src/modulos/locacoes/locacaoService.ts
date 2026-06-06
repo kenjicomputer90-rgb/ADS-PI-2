@@ -65,6 +65,7 @@ export async function criarLocacao(data: {
   id_funcionario: number
   id_peca: number
   data_evento: string
+  preco_aluguel: number
 }) {
   const cliente = await prisma.cliente.findUnique({
     where: {
@@ -126,6 +127,7 @@ export async function criarLocacao(data: {
       item_locacao: {
         create: {
           id_peca: data.id_peca,
+          preco_aluguel: data.preco_aluguel
         },
       },
     },
