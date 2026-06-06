@@ -3,6 +3,12 @@ import {addProdutoController, alterarStatusController, changeProdutoController, 
 
 const produtoRouter = Router()
 
+produtoRouter.get("/precificacao/:id", precificaProdutoController)
+
+produtoRouter.get("/porcentagem_venda/:tipo/:tipo_buscado", porcentagem_vendaController)
+
+produtoRouter.get("/status/:status", produtosPorStatusController)
+
 produtoRouter.post("/", addProdutoController)
 
 produtoRouter.delete("/:id", removeProdutoController)
@@ -11,9 +17,7 @@ produtoRouter.patch("/:id", changeProdutoController)
 
 produtoRouter.get("/", listProdutoController)
 
-produtoRouter.get("/precificacao/:id", precificaProdutoController)
 
-produtoRouter.get("/porcentagem_venda/:tipo/:tipo_buscado", porcentagem_vendaController)
 
 produtoRouter.get("/:id", returnProdutoController)
 
@@ -37,7 +41,7 @@ produtoRouter.patch(
 // produtoRouter.post("/:id/ajustes", registrarAjusteController)
 
 // Consultas específicas
-produtoRouter.get("/status/:status", produtosPorStatusController)
+
 //produtoRouter.get("/ociosos", produtosOciososController)
 //produtoRouter.get("/rastreio/:codigo", rastreioProdutoController)
 

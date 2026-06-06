@@ -228,6 +228,15 @@ export async function updateProdutoStatus(
   idProduto: number,
   status: 1 | 2 | 3 | 4
 ) {
+  await prisma.historico_peca.updateMany({
+    where: {
+      id_peca: idProduto,
+      data_fim: null
+    },
+    data: {
+      data_fim: new Date()
+    }
+  })
   return await prisma.historico_peca.create({
     data: {
       id_peca: idProduto,

@@ -1,4 +1,4 @@
-last updated: 31/05/26
+last updated: 06/06/26
 .
 ├── banco
 │   ├── dev.db
@@ -10,11 +10,17 @@ last updated: 31/05/26
 │   ├── PI_BD_EER_locacao_trajes_T.mwb.bak.mwb
 │   └── PI_DER_Locacao_trajes_Rev1.png.png
 ├── Bruno
-│   └── PI2.zip
+│   ├── kenjiBruno
+│   │   └── PI2.zip
+│   ├── laerteBruno
+│   ├── PI2.zip
+│   └── takeshiBruno
 ├── DOC
+│   ├── admin-test-results-20260605.txt
 │   ├── FILES_TREE.txt
 │   ├── Guia para o desenvolvedor.txt
 │   ├── resumo do chatgpt.txt
+│   ├── ROTAS_ADMIN_TESTES.md
 │   └── ROTAS_FUNCIONARIO.md
 ├── jest.config.ts
 ├── LICENSE
@@ -40,6 +46,10 @@ last updated: 31/05/26
 │   │   ├── main.tsx
 │   │   ├── pages
 │   │   │   ├── clientes.tsx
+│   │   │   ├── funcionarios.tsx
+│   │   │   ├── locacoes.tsx
+│   │   │   ├── logistica.tsx
+│   │   │   ├── processos.tsx
 │   │   │   └── produtos.tsx
 │   │   ├── services
 │   │   │   └── api.ts
@@ -60,6 +70,10 @@ last updated: 31/05/26
 │   │   │   └── migration.sql
 │   │   ├── 20260524010912_add_status_locacao
 │   │   │   └── migration.sql
+│   │   ├── 20260531153048_adiciona_multa_locacao
+│   │   │   └── migration.sql
+│   │   ├── 20260531183150_adiciona_preco_total_locacao
+│   │   │   └── migration.sql
 │   │   └── migration_lock.toml
 │   ├── schema.prisma
 │   └── seed.ts
@@ -69,10 +83,11 @@ last updated: 31/05/26
 │   ├── generated
 │   │   └── prisma
 │   ├── modulos
-│   │   ├── administrador
-│   │   │   ├── administradorController.ts
-│   │   │   ├── administradorRouter.ts
-│   │   │   └── administradorService.ts
+│   │   ├── admin
+│   │   │   ├── adminAuth.ts
+│   │   │   ├── adminController.ts
+│   │   │   ├── adminRouter.ts
+│   │   │   └── adminService.ts
 │   │   ├── cliente
 │   │   │   ├── clienteController.ts
 │   │   │   ├── clienteRouter.ts
@@ -82,9 +97,9 @@ last updated: 31/05/26
 │   │   │   ├── financeiroRouter.ts
 │   │   │   └── financeiroService.ts
 │   │   ├── funcionario
-│   │   │   ├── fucionarioService.ts
 │   │   │   ├── funcionarioController.ts
-│   │   │   └── funcionarioRouter.ts
+│   │   │   ├── funcionarioRouter.ts
+│   │   │   └── funcionarioService.ts
 │   │   ├── locacoes
 │   │   │   ├── locacaoController.ts
 │   │   │   ├── locacaoRouter.ts
@@ -107,7 +122,9 @@ last updated: 31/05/26
 │   │   │   └── teste-orm-ins.ts
 │   │   └── utils
 │   ├── routes.ts
-│   └── server.ts
+│   ├── server.ts
+│   └── teste-orm-del.ts
+├── test-admin-routes.sh
 └── tsconfig.json
 
-31 directories, 79 files
+36 directories, 91 files

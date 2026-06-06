@@ -98,7 +98,7 @@ export const listProdutoController = async( req: Request, res: Response) => {
 
 export const updateProdutoStatusController =  async( req: Request, res: Response) => {
   try {
-    const id = Number(req.params)
+    const id = Number(req.params.id)
     const { status }= req.body
     const produto = await updateProdutoStatus(id, status)
     return res.status(200).json(produto)
@@ -209,6 +209,7 @@ export const produtosPorStatusController = async (
   res: Response
 ) => {
   try {
+    console.log("teste")
     const status = Number(req.params.status)
     const produtos = await produtosPorStatus(status)
 
