@@ -75,6 +75,15 @@ async function main() {
     },
   });
 
+    const statusLavanderia = await prisma.status_peca.upsert({
+    where: { id_status: 8 },
+    update: {},
+    create: {
+      id_status: 8,
+      descricao: "lavanderia",
+    },
+  });
+
   console.log({
     statusDisponivel,
     statusAlugado,
@@ -83,6 +92,7 @@ async function main() {
     statusReservado,
     statusPreparacao,
     statusSaida,
+    statusLavanderia
   });
   console.log({ statusDisponivel, statusAlugado, statusManutencao, statusVendido });
 
