@@ -7,12 +7,14 @@ export function Funcionarios() {
   const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [funcSelecionado, setFuncSelecionado] = useState<Funcionario | null>(null);
 
   // Estados do Formulário (alinhados com o req.body do seu controller)
-  const[id_usuario, setId_usuario] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
-  const [cargo, setCargo] = useState('');
+
   const [rg, setRg] = useState('');
   const [telefone, setTelefone] = useState('');
   const [cpts, setCpts] = useState('');
@@ -26,7 +28,7 @@ export function Funcionarios() {
     setLoading(true);
     try {
       // Bate no seu funcionarioRouter.ts (GET /)
-      const response = await api.get('/funcionario'); 
+      const response = await api.get('/funcionarios'); 
       if (Array.isArray(response.data)) {
         setFuncionarios(response.data);
       }
@@ -44,22 +46,22 @@ export function Funcionarios() {
   async function handleCriarFuncionario(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!id_usuario || !nome || !cpf || !cargo || !rg || !telefone || !salario || !dataNascimento) {
+    if (!email || !senha || !nome || !cpf || !rg || !telefone || !salario || !dataNascimento) {
       alert("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
     try {
       // Envia os dados convertendo strings numéricas para number conforme o service espera
-      await api.post('/funcionario', {
-        id_usuario,
+      await api.post('/funcionarios', {
         nome,
-        cpf: (cpf),
-        cargo,
-        rg: (rg),
-        telefone: (telefone),
-        cpts: Number(cpts || 0),
-        dependentes: Number(dependentes),
+        email,
+        senha,
+        cpf,
+        rg,
+        telefone,
+        ctps: cpts,
+        dependente: Number(dependentes),
         sexo,
         salario: Number(salario),
         data_nascimento: dataNascimento,
@@ -67,8 +69,8 @@ export function Funcionarios() {
       });
 
       // Limpa os campos após o sucesso
-      setNome(''); setCpf(''); setCargo(''); setRg('');
-      setTelefone(''); setCpts(''); setDependentes('0'); setSexo('M');
+      setNome(''); setCpf(''); setRg('');
+      setEmail(''); setSenha(''); setTelefone(''); setCpts(''); setDependentes('0'); setSexo('M');
       setSalario(''); setDataNascimento(''); setEstadoCivil('Solteiro(a)');
       
       setIsModalOpen(false);
@@ -80,6 +82,7 @@ export function Funcionarios() {
   }
 
   return (
+<>
     <div className="p-8 bg-zinc-900 min-h-screen text-zinc-100">
       {/* HEADER */}
       <header className="mb-8 flex justify-between items-center">
@@ -106,11 +109,11 @@ export function Funcionarios() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-zinc-700 bg-zinc-800/50 text-zinc-300 font-semibold text-sm">
-                <th className="p-4">Id_usuario</th>
                 <th className="p-4">Nome</th>
-                <th className="p-4">Cargo</th>
+                <th className="p-4">CPF</th>
                 <th className="p-4">Telefone</th>
                 <th className="p-4">Salário</th>
+                <th className="p-4">Estado Civil</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-700 text-sm text-zinc-300">
@@ -120,16 +123,12 @@ export function Funcionarios() {
                 </tr>
               ) : (
                 funcionarios.map((func, index) => (
-                  <tr key={func.nome ?? index} className="hover:bg-zinc-700/30 transition-colors">
+                  <tr key={func.id_funcionario ?? index} onClick={() => setFuncSelecionado(func)} className="hover:bg-zinc-700/30 transition-colors cursor-pointer">
                     <td className="p-4 font-medium text-white">{func.nome}</td>
-                    <td className="p-4">
-                      <span className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded text-xs font-medium">
-                        {func.cargo}
-                      </span>
-                    </td>
+                    <td className="p-4 text-zinc-400">{func.cpf}</td>
                     <td className="p-4">{func.telefone}</td>
-                    <td className="p-4 text-zinc-400">{func.email}</td>
                     <td className="p-4 text-emerald-400 font-medium">R$ {Number(func.salario).toFixed(2)}</td>
+                    <td className="p-4 text-zinc-400">{func.estado_civil}</td>
                   </tr>
                 ))
               )}
@@ -153,10 +152,15 @@ export function Funcionarios() {
 
             <form onSubmit={handleCriarFuncionario} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2">
-                  <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Id_usuario *</label>
-                  <input type="text" value={id_usuario} onChange={(e) => setId_usuario(e.target.value)}
-                    className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="Ex: João da Silva" />
+                <div>
+                  <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">E-mail *</label>
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="email@exemplo.com" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Senha *</label>
+                  <input type="password" value={senha} onChange={(e) => setSenha(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="Senha de acesso" />
                 </div>
               </div>
 
@@ -169,11 +173,6 @@ export function Funcionarios() {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Cargo *</label>
-                  <input type="text" value={cargo} onChange={(e) => setCargo(e.target.value)}
-                    className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="Ex: Vendedor" />
-                </div>
                 <div>
                   <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Salário (R$) *</label>
                   <input type="number" step="0.01" value={salario} onChange={(e) => setSalario(e.target.value)}
@@ -256,5 +255,70 @@ export function Funcionarios() {
         </div>
       )}
     </div>
+      {/* PAINEL DE DETALHES */}
+      {funcSelecionado && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+          <div className="bg-zinc-800 border border-zinc-700 rounded-xl w-full max-w-md p-6 relative shadow-2xl">
+            <button onClick={() => setFuncSelecionado(null)}
+              className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-200 transition-colors">
+              <X size={20}></X>
+            </button>
+
+            <h2 className="text-xl font-bold text-white mb-1">{funcSelecionado.nome}</h2>
+            <p className="text-zinc-400 text-sm mb-5">Detalhes do funcionário</p>
+
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="bg-zinc-900 rounded-lg p-3">
+                <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1">ID Funcionário</p>
+                <p className="text-white font-mono font-bold">#{funcSelecionado.id_usuario}</p>
+              </div>
+              <div className="bg-zinc-900 rounded-lg p-3">
+                <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1">CPF</p>
+                <p className="text-white font-mono">{funcSelecionado.cpf}</p>
+              </div>
+              <div className="bg-zinc-900 rounded-lg p-3">
+                <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1">RG</p>
+                <p className="text-white font-mono">{funcSelecionado.rg ?? '—'}</p>
+              </div>
+              <div className="bg-zinc-900 rounded-lg p-3">
+                <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1">Telefone</p>
+                <p className="text-white">{funcSelecionado.telefone}</p>
+              </div>
+              <div className="bg-zinc-900 rounded-lg p-3">
+                <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1">Salário</p>
+                <p className="text-emerald-400 font-bold">R$ {Number(funcSelecionado.salario).toFixed(2)}</p>
+              </div>
+              <div className="bg-zinc-900 rounded-lg p-3">
+                <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1">Estado Civil</p>
+                <p className="text-white">{funcSelecionado.estado_civil ?? '—'}</p>
+              </div>
+              <div className="bg-zinc-900 rounded-lg p-3">
+                <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1">Sexo</p>
+                <p className="text-white">{funcSelecionado.sexo ?? '—'}</p>
+              </div>
+              <div className="bg-zinc-900 rounded-lg p-3">
+                <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1">Dependentes</p>
+                <p className="text-white">{funcSelecionado.dependente ?? 0}</p>
+              </div>
+              <div className="bg-zinc-900 rounded-lg p-3 col-span-2">
+                <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1">CTPS</p>
+                <p className="text-white font-mono">{funcSelecionado.ctps ?? '—'}</p>
+              </div>
+              <div className="bg-zinc-900 rounded-lg p-3 col-span-2">
+                <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1">Data de Nascimento</p>
+                <p className="text-white">{funcSelecionado.data_nascimento ? new Date(funcSelecionado.data_nascimento).toLocaleDateString('pt-BR') : '—'}</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setFuncSelecionado(null)}
+              className="w-full mt-5 bg-zinc-700 hover:bg-zinc-600 text-zinc-200 px-4 py-2 rounded-lg font-medium transition-colors"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

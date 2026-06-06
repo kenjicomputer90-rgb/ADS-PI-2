@@ -65,19 +65,18 @@ export interface Produto {
 }
 
 export interface Funcionario {
+  id_funcionario: number;
   id_usuario: number;
   nome: string;
   cpf: string;
-  cargo: string;
-  rg: string;
-  email: string;
-  telefone: string;
-  cpts: string;
-  dependentes: number;
-  sexo: string;
-  salario: number;
-  data_nascimento: string;
-  estado_civil: string;
+  rg?: string | null;
+  telefone?: string | null;
+  ctps?: string | null;
+  dependente?: number | null;
+  sexo?: string | null;
+  salario?: number | null;
+  data_nascimento?: string | null;
+  estado_civil?: string | null;
 }
 
 export interface ItemLocacao {
