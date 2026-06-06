@@ -62,42 +62,42 @@ model historico_peca {
   id_status    Int
   data_inicio  DateTime
   data_fim     DateTime?
-  status_peca  status_peca  @relation(fields: [id_status], references: [id_status])
   peca_produto peca_produto @relation(fields: [id_peca], references: [id_peca], onDelete: Cascade)
+  status_peca  status_peca  @relation(fields: [id_status], references: [id_status])
 
   @@index([id_peca])
   @@index([id_status])
 }
 
 model item_locacao {
-  id_item      Int          @id @default(autoincrement())
-  id_locacao   Int
-  id_peca      Int
-  ajuste       ajuste[]
-  peca_produto peca_produto @relation(fields: [id_peca], references: [id_peca])
-  locacao      locacao      @relation(fields: [id_locacao], references: [id_locacao], onDelete: Cascade)
+  id_item       Int          @id @default(autoincrement())
+  id_locacao    Int
+  id_peca       Int
   preco_aluguel Int
+  ajuste        ajuste[]
+  locacao       locacao      @relation(fields: [id_locacao], references: [id_locacao], onDelete: Cascade)
+  peca_produto  peca_produto @relation(fields: [id_peca], references: [id_peca])
+
   @@index([id_locacao])
   @@index([id_peca])
 }
 
 model locacao {
-  id_locacao     Int       @id @default(autoincrement())
+  id_locacao     Int            @id @default(autoincrement())
   id_cliente     Int
   id_usuario     Int
   id_funcionario Int
   data_evento    DateTime
   data_entrega   DateTime?
   data_devolucao DateTime?
-  status         String    @default("RESERVADA")
-  multa          Decimal   @default(0.00)
-  preco_total    Decimal   @default(0.00)
-
-  item_locacao item_locacao[]
-  funcionario  funcionario    @relation(fields: [id_funcionario], references: [id_funcionario])
-  usuario      usuario        @relation(fields: [id_usuario], references: [id_usuario])
-  cliente      cliente        @relation(fields: [id_cliente], references: [id_cliente])
-  pagamento    pagamento[]
+  status         String         @default("RESERVADA")
+  multa          Decimal        @default(0.00)
+  preco_total    Decimal        @default(0.00)
+  item_locacao   item_locacao[]
+  cliente        cliente        @relation(fields: [id_cliente], references: [id_cliente])
+  usuario        usuario        @relation(fields: [id_usuario], references: [id_usuario])
+  funcionario    funcionario    @relation(fields: [id_funcionario], references: [id_funcionario])
+  pagamento      pagamento[]
 
   @@index([id_cliente])
   @@index([id_funcionario])
@@ -125,16 +125,16 @@ model pagamento {
 
 model peca_produto {
   id_peca        Int              @id @default(autoincrement())
-  codigo_unico   String?          
+  codigo_unico   String?
   descricao      String
   tamanho        String
   cor            String
   material       String?
   preco          Decimal
+  sexo           String?
   historico_peca historico_peca[]
   item_locacao   item_locacao[]
   manutencao     manutencao[]
-  sexo String?
 }
 
 model status_peca {
@@ -149,8 +149,8 @@ model usuario {
   email         String         @unique
   senha         String
   perfil_acesso String
+  administrador administrador?
   cliente       cliente?
   funcionario   funcionario?
-  administrador administrador?
   locacao       locacao[]
 }
