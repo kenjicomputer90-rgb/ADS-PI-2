@@ -140,3 +140,30 @@ export async function produtosOciosos() {
     where: { historico_peca: { some: { data_inicio: { lt: noventaDiasAtras } } } }
   });
 }
+
+export async function returnProdutoStatus(id: number) {
+  const produto = await prisma.peca_produto.findUnique({
+  where: {
+    id_peca: id
+  },
+  include: {
+  historico_peca: {
+    include: {
+      status_peca: true
+    },
+    orderBy: {
+      data_inicio: 'desc'
+    },
+    take: 1
+  }
+}
+})
+
+  if (!produto) {
+    throw new Error("Produto não encontrado")
+  }
+
+  return produto.historico_peca[0]?.status_peca.descricao
+
+
+}

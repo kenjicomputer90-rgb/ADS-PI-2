@@ -22,8 +22,6 @@ produtoRouter.get("/buscaStatus/:id", returnProdutoStatusController)
 
 produtoRouter.get("/:id", returnProdutoController)
 
-
-
 // Atributos específicos
 //produtoRouter.post("/:id/fotos", addProdutoFotoController)
 //produtoRouter.put("/:id/localizacao", updateProdutoLocalizacaoController)

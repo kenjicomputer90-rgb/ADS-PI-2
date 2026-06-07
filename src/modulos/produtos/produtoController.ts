@@ -2,7 +2,8 @@ import { Request, Response } from "express"
 import {
   addProduto, changeProduto, precificaProduto, removeProduto, returnProduto,
   listProduto, updateProdutoStatus, reservar, devolucao, troca, venda, saida,
-  alterarStatus, produtosPorStatus, porcentagem_venda
+  alterarStatus, produtosPorStatus, porcentagem_venda,
+  returnProdutoStatus
 } from "./produtosService.js"
 // ← import produtoRouter removido (não era usado)
 
@@ -102,4 +103,14 @@ export const produtosPorStatusController = async (req: Request, res: Response) =
     const status = Number(req.params.status)
     return res.status(200).json(await produtosPorStatus(status))
   } catch (error) { return res.status(500).json({ erro: "Erro ao listar produtos" }) }
+}
+
+export const returnProdutoStatusController = async( req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id)
+    const produto = await returnProdutoStatus(id)
+    return res.status(200).json(produto)
+  } catch (error: any) {
+    return res.status(400).json({ erro: error.message })
+  }
 }
