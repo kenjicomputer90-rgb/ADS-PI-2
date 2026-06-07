@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { addProduto, changeProduto, precificaProduto, removeProduto, returnProduto, porcentagem_venda, listProduto, updateProdutoStatus, reservar, devolucao, troca, venda, saida, alterarStatus, produtosPorStatus} from "./produtosService.js"
+import { addProduto, changeProduto, precificaProduto, removeProduto, returnProduto, porcentagem_venda, listProduto, reservar, devolucao, troca, venda, saida, alterarStatus, produtosPorStatus} from "./produtosService.js"
 import produtoRouter from "./produtosRouter.js"
 
 export const addProdutoController = async( req: Request, res: Response) => {
@@ -14,7 +14,7 @@ export const addProdutoController = async( req: Request, res: Response) => {
 
 export const removeProdutoController = async( req: Request, res: Response) => {
   try {
-    const id = Number(req.params)
+    const id = Number(req.params.id)
     const produto = await removeProduto(id)
     return res.status(200).json(produto)
   } catch (error: any) {
@@ -95,7 +95,7 @@ export const listProdutoController = async( req: Request, res: Response) => {
     return res.status(400).json({ erro: error.message })
   }
 }
-
+/*
 export const updateProdutoStatusController =  async( req: Request, res: Response) => {
   try {
     const id = Number(req.params.id)
@@ -105,7 +105,7 @@ export const updateProdutoStatusController =  async( req: Request, res: Response
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
   }
-}
+}*/
 
 export const reservarProdutoController = async (
   req: Request,

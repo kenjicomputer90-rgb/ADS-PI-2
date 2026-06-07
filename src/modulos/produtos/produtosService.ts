@@ -223,7 +223,7 @@ export async function saida(id: number) {
     }
   })
 }
-
+/*
 export async function updateProdutoStatus(
   idProduto: number,
   status: 1 | 2 | 3 | 4
@@ -244,7 +244,7 @@ export async function updateProdutoStatus(
       data_inicio: new Date()
     }
   })
-}
+}*/
 
 
 export async function alterarStatus(

@@ -12,16 +12,7 @@ import processosRouter from "./modulos/processos/processosRouter.js"
 const app = express();
 
 // <-- 2. ADICIONE ESTA LINHA AQUI (Libera o acesso para o seu Front-end)
-app.use(cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5176"
-    ], // URL do seu Vite Front-end
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requester-Id"],
-  credentials: true
-}));
-
+app.use(cors());
 app.use(express.json())
 
 app.get("/", (req, res) => {
