@@ -8,6 +8,7 @@ import financeiroRouter from "./modulos/financeiro/financeiroRouter.js";
 import locacaoRouter from "./modulos/locacoes/locacaoRouter.js"
 import logisticaRouter from "./modulos/logistica/logisticaRouter.js"
 import processosRouter from "./modulos/processos/processosRouter.js"
+import listEndpoints from "express-list-endpoints";
 
 const app = express();
 
@@ -31,5 +32,5 @@ app.use("/financeiro", financeiroRouter);
 app.use("/locacoes", locacaoRouter)
 app.use("/logistica", logisticaRouter)
 app.use("/processos", processosRouter)
-
+//console.log(listEndpoints(app));
 export default app

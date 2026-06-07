@@ -1,6 +1,6 @@
 import { Router } from "express"
-import {addProdutoController, alterarStatusController, changeProdutoController, devolucaoProdutoController, listProdutoController, porcentagem_vendaController, precificaProdutoController, produtosManutencaoController, produtosPorStatusController, removeProdutoController, reservarProdutoController, returnProdutoController, returnProdutoStatusController, saidaProdutoController, trocaProdutoController, vendaProdutoController} from "./produtoController.js"
-import { returnProdutoStatus } from "./produtosService.js"
+import {addProdutoController, alterarStatusController, changeProdutoController,  listProdutoController, porcentagem_vendaController, precificaProdutoController, produtosManutencaoController, produtosPorStatusController, removeManutencaoController, removeProdutoController, reservarProdutoController, returnProdutoController, returnProdutoStatusController, saidaProdutoController, trocaProdutoController, vendaProdutoController} from "./produtoController.js"
+
 
 const produtoRouter = Router()
 
@@ -14,6 +14,8 @@ produtoRouter.post("/", addProdutoController)
 
 produtoRouter.delete("/:id", removeProdutoController)
 
+produtoRouter.delete("/removeManutencao/:id", removeManutencaoController)
+
 produtoRouter.patch("/:id", changeProdutoController)
 
 produtoRouter.get("/", listProdutoController)
@@ -23,6 +25,7 @@ produtoRouter.get("/buscaStatus/:id", returnProdutoStatusController)
 produtoRouter.get("/:id", returnProdutoController)
 
 produtoRouter.post("/produtosManutencao/:id_peca", produtosManutencaoController)
+
 
 // Atributos específicos
 //produtoRouter.post("/:id/fotos", addProdutoFotoController)

@@ -162,6 +162,14 @@ return await prisma.peca_produto.update({
 });
 }
 
+export async function removeManutencao(id: number) {
+  return await prisma.manutencao.deleteMany({
+    where: {
+      id_peca: id
+    }
+  });
+}
+
 export async function returnProdutoStatus(id: number) {
   const produto = await prisma.peca_produto.findUnique({
   where: {
