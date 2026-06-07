@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import type { Funcionario } from '../@types/ndex';
-import { Plus, X, Briefcase } from 'lucide-react';
+import { Plus, X, Briefcase, Trash2 } from 'lucide-react';
 
 export function Funcionarios() {
   const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
@@ -36,6 +36,28 @@ export function Funcionarios() {
       console.error("Erro ao carregar funcionários:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleExcluir = async (id: number, nome: string) => {
+    if (!window.confirm(`Tem certeza que deseja excluir o funcionário ${nome}?`)) {
+      return;
+    }
+
+    try {
+      // Dispara o DELETE para a sua rota do back-end: /funcionarios/:id
+      await api.delete(`/funcionarios/${id}`);
+      alert("Funcionário excluído com sucesso!");
+      
+      // Se o funcionário excluído estiver aberto no painel lateral, fecha ele
+      if (funcSelecionado?.id_funcionario === id) {
+        setFuncSelecionado(null);
+      }
+
+      // Recarrega a lista atualizada
+      carregarFuncionarios();
+    } catch (error: any) {
+      alert(error.response?.data?.erro || "Erro ao excluir funcionário.");
     }
   };
 
@@ -124,6 +146,8 @@ export function Funcionarios() {
               ) : (
                 funcionarios.map((func, index) => (
                   <tr key={func.id_funcionario ?? index} onClick={() => setFuncSelecionado(func)} className="hover:bg-zinc-700/30 transition-colors cursor-pointer">
+                    <button onClick={() => handleExcluir(func.id_funcionario, func.nome)} className="p-1.5 bg-zinc-800 hover:bg-red-950 border border-zinc-700 hover:border-red-900 text-zinc-400 hover:text-red-400 rounded-md transition-colors" title="Excluir Funcionário"><Trash2 size={15} />
+                    </button>
                     <td className="p-4 font-medium text-white">{func.nome}</td>
                     <td className="p-4 text-zinc-400">{func.cpf}</td>
                     <td className="p-4">{func.telefone}</td>
@@ -263,8 +287,7 @@ export function Funcionarios() {
               className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-200 transition-colors">
               <X size={20}></X>
             </button>
-
-            <h2 className="text-xl font-bold text-white mb-1">{funcSelecionado.nome}</h2>
+             <h2 className="text-xl font-bold text-white mb-1">{funcSelecionado.nome}</h2>
             <p className="text-zinc-400 text-sm mb-5">Detalhes do funcionário</p>
 
             <div className="grid grid-cols-2 gap-3 text-sm">
