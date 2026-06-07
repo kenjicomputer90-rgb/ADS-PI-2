@@ -43,6 +43,7 @@ export interface Produto {
   cor: string;
   material?: string | null;
   preco: number;
+  statusAtual: string;
 }
 
 export interface HistoricoPeca {

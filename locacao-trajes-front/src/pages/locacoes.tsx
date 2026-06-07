@@ -170,7 +170,7 @@ export function Locacoes() {
                 locacoes.map((loc, index) => (
                   <tr key={loc.id_locacao ?? index} className="hover:bg-zinc-700/30 transition-colors">
                     <td className="p-4 font-mono text-zinc-400">#00{loc.id_locacao}</td>
-                    <td className="p-4 font-medium text-white">Cliente ID: {loc.id_cliente}</td>
+                    <td className="p-4 font-medium text-white">{(loc as any).cliente?.nome || `Cliente #${loc.id_cliente}`}</td>
                     <td className="p-4">{new Date(loc.data_evento).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</td>
                     <td className="p-4">
                       <span className={`px-2 py-1 rounded-full text-xs font-bold ${

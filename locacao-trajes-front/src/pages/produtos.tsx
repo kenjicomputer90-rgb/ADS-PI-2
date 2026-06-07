@@ -5,14 +5,21 @@ import { Plus, X, Shirt } from 'lucide-react';
 
 // Mapeamento dos status textuais para os IDs aceitos pelo seu back-end (1 a 4)
 // Como você solicitou 6 status, agrupamos conforme a lógica do seu service
+// IDs mapeados com status_peca do banco (somente status válidos para cadastro)
 const STATUS_OPTIONS = [
   { id: 1, label: 'Disponível' },
-  { id: 2, label: 'Alugado' },
-  { id: 3, label: 'Em manutenção' },
-  { id: 4, label: 'Vendido' },
-  { id: 2, label: 'Reservado' },      // Mapeado para id_status correspondente
-  { id: 3, label: 'Em preparação' },  // Mapeado para id_status correspondente
+  { id: 3, label: 'Em Manutenção' },
 ];
+
+// Mapa completo para exibição na tabela
+const STATUS_MAP: Record<number, { label: string; color: string }> = {
+  1: { label: 'Disponível',     color: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' },
+  2: { label: 'Alugado',        color: 'bg-blue-500/10 text-blue-400 border border-blue-500/20' },
+  3: { label: 'Em Manutenção',  color: 'bg-red-500/10 text-red-400 border border-red-500/20' },
+  4: { label: 'Vendido',        color: 'bg-zinc-600/30 text-zinc-400 border border-zinc-500/20' },
+  5: { label: 'Reservado',      color: 'bg-purple-500/10 text-purple-400 border border-purple-500/20' },
+  6: { label: 'Em Preparação',  color: 'bg-amber-500/10 text-amber-400 border border-amber-500/20' },
+};
 
 export function Produtos() {
   const [produtos, setProdutos] = useState<Produto[]>([]);
@@ -83,10 +90,10 @@ export function Produtos() {
     }
   }
 
-  // Função auxiliar para descobrir o nome do status baseado no ID retornado do banco
-  const getStatusLabel = (idStatus?: number) => {
-    const found = STATUS_OPTIONS.find(opt => opt.id === idStatus);
-    return found ? found.label : 'Disponível';
+  // Status atual = historico_peca[0] (back retorna só o registro com data_fim null)
+  const getStatusAtual = (produto: Produto) => {
+    const id = produto.historico_peca?.[0]?.id_status;
+    return STATUS_MAP[id ?? 1] ?? STATUS_MAP[1];
   };
 
   return (
@@ -132,6 +139,7 @@ export function Produtos() {
                 </tr>
               ) : (
                 produtos.map((produto, index) => {
+                  const statusAtual = getStatusAtual(produto);
                   const últimoStatus = produto.historico_peca?.[produto.historico_peca.length - 1]?.id_status;
                   return (
                     <tr key={produto.id_peca ?? index} className="hover:bg-zinc-700/30 transition-colors">
@@ -148,7 +156,7 @@ export function Produtos() {
                           últimoStatus === 3 ? 'bg-zinc-600/30 text-zinc-400 border border-zinc-500/20' :
                           'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                         }`}>
-                          {getStatusLabel(últimoStatus)}
+                          {statusAtual.label}
                         </span>
                       </td>
                     </tr>

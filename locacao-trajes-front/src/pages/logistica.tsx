@@ -1,10 +1,19 @@
 import { useEffect, useState } from 'react';
 import { api } from '../services/api';
-import type { RegistroLogistica } from '../@types/ndex';
+// Tipo local alinhado com o retorno real de GET /logistica/estoque
 import { Package, CheckSquare, AlertTriangle, RefreshCw, ClipboardCheck, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 
 export function Logistica() {
-  const [estoqueLogistica, setEstoqueLogistica] = useState<RegistroLogistica[]>([]);
+  type PecaEstoque = {
+    id_peca: number;
+    codigo_unico: string;
+    descricao: string;
+    tamanho: string;
+    cor: string;
+    material: string;
+    historico_peca: { id_historico: number; id_status: number; data_inicio: string; data_fim: string | null; status_peca?: { descricao: string } }[];
+  };
+  const [estoqueLogistica, setEstoqueLogistica] = useState<PecaEstoque[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Estados para o Modal de Devolução (Conferência de Avaria)
@@ -129,19 +138,19 @@ export function Logistica() {
                 </tr>
               ) : (
                 estoqueLogistica.map((item, index) => {
-                  const peca = item.peca_produto;
-                  const idStatus = item.id_status;
+                  const peca = item;  // o item JÁ É a peça
+                  const idStatus = item.historico_peca?.[0]?.id_status ?? 0;
                   
                   return (
-                    <tr key={item.id_historico ?? index} className="hover:bg-zinc-700/30 transition-colors">
+                    <tr key={item.id_peca ?? index} className="hover:bg-zinc-700/30 transition-colors">
                       <td className="p-4 font-mono text-zinc-500">#PECA-{item.id_peca}</td>
                       <td className="p-4">
-                        <div className="font-medium text-white">{peca?.codigo_unico || "Peça Cadastrada"}</div>
-                        <div className="text-xs text-zinc-400 mt-0.5">{peca?.descricao}</div>
+                        <div className="font-medium text-white">{peca.codigo_unico || "Peça Cadastrada"}</div>
+                        <div className="text-xs text-zinc-400 mt-0.5">{peca.descricao}</div>
                       </td>
                       <td className="p-4 text-xs space-y-0.5">
-                        <div><span className="text-zinc-500">Tam:</span> {peca?.tamanho} | <span className="text-zinc-500">Cor:</span> {peca?.cor}</div>
-                        <div><span className="text-zinc-500">Mat:</span> {peca?.material}</div>
+                        <div><span className="text-zinc-500">Tam:</span> {peca.tamanho} | <span className="text-zinc-500">Cor:</span> {peca.cor}</div>
+                        <div><span className="text-zinc-500">Mat:</span> {peca.material}</div>
                       </td>
                       <td className="p-4">
                         <span className={`px-2 py-1 rounded-full text-xs font-bold ${
