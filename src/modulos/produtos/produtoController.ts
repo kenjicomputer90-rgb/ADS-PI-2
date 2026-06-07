@@ -119,7 +119,7 @@ export const returnProdutoStatusController = async( req: Request, res: Response)
 export const produtosManutencaoController = async (req: Request, res: Response) => {
   try {
     const id_peca = Number(req.params.id_peca)
-    const {descricao, id_status} = req.body
-    return res.status(200).json(await produtosManutencao(descricao,id_peca,id_status))
+    const {descricao} = req.body
+    return res.status(200).json(await produtosManutencao(descricao,id_peca))
   } catch (error) { return res.status(500).json({ erro: "Erro ao listar produtos" }) }
 }
