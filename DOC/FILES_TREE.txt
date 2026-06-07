@@ -45,6 +45,7 @@ last updated: 07/06/26
 │   │   ├── main.tsx
 │   │   ├── pages
 │   │   │   ├── clientes.tsx
+│   │   │   ├── financeiro.tsx
 │   │   │   ├── funcionarios.tsx
 │   │   │   ├── locacoes.tsx
 │   │   │   ├── logistica.tsx
@@ -62,8 +63,7 @@ last updated: 07/06/26
 ├── package-lock.json
 ├── prisma
 │   ├── banco
-│   │   ├── dev-backup.db
-│   │   └── dev.db
+│   │   └── dev-backup.db
 │   ├── migrations
 │   │   ├── 20260508181459_migracao_cliente_funcionario
 │   │   │   └── migration.sql
