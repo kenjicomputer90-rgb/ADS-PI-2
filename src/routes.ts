@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
   })
 })
  
-app.use("/cliente", clienteRouter)
+app.use("/clientes", clienteRouter)
 app.use("/admin", adminRouter)
 app.use("/funcionarios", funcionarioRouter)
 app.use("/produtos", produtoRouter)
