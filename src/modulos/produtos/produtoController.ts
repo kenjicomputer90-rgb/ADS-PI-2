@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { addProduto, changeProduto, precificaProduto, removeProduto, returnProduto, porcentagem_venda, listProduto, reservar, devolucao, troca, venda, saida, alterarStatus, produtosPorStatus} from "./produtosService.js"
+import { addProduto, changeProduto, precificaProduto, removeProduto, returnProduto, porcentagem_venda, listProduto, reservar, devolucao, troca, venda, saida, alterarStatus, produtosPorStatus, returnProdutoStatus} from "./produtosService.js"
 import produtoRouter from "./produtosRouter.js"
 
 export const addProdutoController = async( req: Request, res: Response) => {
@@ -26,6 +26,16 @@ export const returnProdutoController = async( req: Request, res: Response) => {
   try {
     const id = Number(req.params.id)
     const produto = await returnProduto(id)
+    return res.status(200).json(produto)
+  } catch (error: any) {
+    return res.status(400).json({ erro: error.message })
+  }
+}
+
+export const returnProdutoStatusController = async( req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id)
+    const produto = await returnProdutoStatus(id)
     return res.status(200).json(produto)
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })

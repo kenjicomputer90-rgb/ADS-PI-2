@@ -1,5 +1,6 @@
 import { Router } from "express"
-import {addProdutoController, alterarStatusController, changeProdutoController, devolucaoProdutoController, listProdutoController, porcentagem_vendaController, precificaProdutoController, produtosPorStatusController, removeProdutoController, reservarProdutoController, returnProdutoController, saidaProdutoController, trocaProdutoController, vendaProdutoController} from "./produtoController.js"
+import {addProdutoController, alterarStatusController, changeProdutoController, devolucaoProdutoController, listProdutoController, porcentagem_vendaController, precificaProdutoController, produtosPorStatusController, removeProdutoController, reservarProdutoController, returnProdutoController, returnProdutoStatusController, saidaProdutoController, trocaProdutoController, vendaProdutoController} from "./produtoController.js"
+import { returnProdutoStatus } from "./produtosService.js"
 
 const produtoRouter = Router()
 
@@ -17,7 +18,7 @@ produtoRouter.patch("/:id", changeProdutoController)
 
 produtoRouter.get("/", listProdutoController)
 
-
+produtoRouter.get("/buscaStatus/:id", returnProdutoStatusController)
 
 produtoRouter.get("/:id", returnProdutoController)
 
