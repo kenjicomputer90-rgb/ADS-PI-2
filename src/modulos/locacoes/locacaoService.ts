@@ -124,17 +124,36 @@ export async function devolverLocacao(idLocacao: number) {
     include: { item_locacao: true }
   })
   if (!locacao) throw new Error("Locação não encontrada")
-  if (locacao.status !== "ENTREGUE") throw new Error("Só é possível devolver uma locação entregue")
+  
+  // ALTERAÇÃO: Permite devolver se o status for ENTREGUE ou ATRASADA
+  const statusValidos = ["ENTREGUE", "ATRASADA", "ATRASADO"]
+  if (!statusValidos.includes(locacao.status)) {
+    throw new Error("Só é possível devolver uma locação que foi entregue ou está em atraso")
+  }
 
   for (const item of locacao.item_locacao) {
     await alterarStatusPeca(item.id_peca, STATUS_PREPARACAO)
+  }
+
+  // Calcula se houve atraso para aplicar a multa antes de fechar o status
+  let multaPorAtraso = 0
+  const hoje = new Date()
+  const dataEvento = new Date(locacao.data_evento)
+
+  if (hoje > dataEvento) {
+    // Exemplo: R$ 20,00 de multa por dia de atraso
+    const diferencaTempo = Math.abs(hoje.getTime() - dataEvento.getTime())
+    const diasAtraso = Math.ceil(diferencaTempo / (1000 * 60 * 60 * 24))
+    multaPorAtraso = diasAtraso * 20.00 
   }
 
   return await (prisma.locacao as any).update({
     where: { id_locacao: idLocacao },
     data: {
       status: "DEVOLVIDA",
-      data_devolucao: toISODate()
+      data_devolucao: toISODate(),
+      // Caso você tenha o campo multa mapeado no seu modelo de Locacao:
+      ...(multaPorAtraso > 0 && { multa: multaPorAtraso })
     },
     include: { item_locacao: true }
   })

@@ -1,9 +1,36 @@
 import { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import type { Locacao } from '../@types/ndex';
-import { Plus, X, Calendar, CheckCircle, Ban, ArrowLeftRight, Truck } from 'lucide-react';
+import { Plus, X, Calendar, CheckCircle, Ban, ArrowLeftRight, Truck, DollarSign} from 'lucide-react';
 
 export function Locacoes() {
+
+  // Novos estados para controle do Modal Financeiro de Pagamentos
+const [isPagamentoModalOpen, setIsPagamentoModalOpen] = useState(false);
+const [selectedLocacaoIdFinanceiro, setSelectedLocacaoIdFinanceiro] = useState<number | null>(null);
+const [valorPagamento, setValorPagamento] = useState('');
+const [formaPagamento, setFormaPagamento] = useState('Dinheiro');
+
+const handleRegistrarPagamento = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!selectedLocacaoIdFinanceiro || !valorPagamento) return;
+
+  try {
+    // Dispara a requisição POST para a rota do backend configurada
+    await api.post('/financeiro/pagamentos', {
+      id_locacao: selectedLocacaoIdFinanceiro,
+      valor: Number(valorPagamento),
+      forma_pagamento: formaPagamento
+    });
+
+    alert("Pagamento registrado e anexado à nota com sucesso!");
+    setIsPagamentoModalOpen(false);
+    setValorPagamento('');
+    carregarLocacoes(); // Recarrega a lista para atualizar a visão
+  } catch (error: any) {
+    alert(error.response?.data?.erro || "Erro ao processar pagamento.");
+  }
+};
   const [locacoes, setLocacoes] = useState<Locacao[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -126,8 +153,8 @@ export function Locacoes() {
       alert(error.response?.data?.erro || "Erro ao trocar a peça da locação.");
     }
   }
-
   return (
+    
     <div className="p-8 bg-zinc-900 min-h-screen text-zinc-100">
       {/* HEADER */}
       <header className="mb-8 flex justify-between items-center">
@@ -187,6 +214,7 @@ export function Locacoes() {
                         <>
                           <button onClick={() => handleRegistrarEntrega(loc.id_locacao!)} title="Registrar Saída/Entrega" className="bg-amber-600 hover:bg-amber-500 text-white p-1.5 rounded transition-colors flex items-center gap-1 text-xs"><Truck size={14}/> Retirada</button>
                           <button onClick={() => { setSelectedLocacaoId(loc.id_locacao!); setIsTrocaModalOpen(true); }} title="Trocar Peça do Traje" className="bg-zinc-700 hover:bg-zinc-600 text-zinc-200 p-1.5 rounded transition-colors flex items-center gap-1 text-xs"><ArrowLeftRight size={14}/> Trocar Peça</button>
+                          <button onClick={() => {setSelectedLocacaoIdFinanceiro(loc.id_locacao!); setIsPagamentoModalOpen(true);}}className="p-1.5 hover:bg-zinc-700 rounded text-zinc-400 hover:text-emerald-400 transition-colors" title="Lançar Pagamento / Nota"><DollarSign size={16} /></button>
                           <button onClick={() => handleCancelarLocacao(loc.id_locacao!)} title="Cancelar Reserva" className="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white p-1.5 rounded transition-colors text-xs"><Ban size={14}/></button>
                         </>
                       )}
@@ -257,6 +285,67 @@ export function Locacoes() {
           </div>
         </div>
       )}
+      {/* MODAL DE REGISTRO DE PAGAMENTO / NOTA FINANCEIRA */}
+{isPagamentoModalOpen && (
+  <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+    <div className="bg-zinc-800 border border-zinc-700 rounded-xl w-full max-w-sm p-6 relative shadow-2xl">
+      <button 
+        onClick={() => setIsPagamentoModalOpen(false)} 
+        className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-200"
+      >
+        <X size={20} />
+      </button>
+      
+      <h2 className="text-xl font-bold text-white mb-1">Baixar Pagamento</h2>
+      <p className="text-xs text-zinc-400 mb-4">Insira o valor pago pelo cliente para abater do saldo da locação.</p>
+      
+      <form onSubmit={handleRegistrarPagamento} className="space-y-4">
+        <div>
+          <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Valor do Recebimento (R$)*</label>
+          <input 
+            type="number" 
+            step="0.01" 
+            required
+            value={valorPagamento} 
+            onChange={(e) => setValorPagamento(e.target.value)} 
+            className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500" 
+            placeholder="Ex: 150.00" 
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Forma de Pagamento</label>
+          <select 
+            value={formaPagamento} 
+            onChange={(e) => setFormaPagamento(e.target.value)} 
+            className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 text-sm"
+          >
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Pix">Pix</option>
+            <option value="Cartão de Crédito">Cartão de Crédito</option>
+            <option value="Cartão de Débito">Cartão de Débito</option>
+          </select>
+        </div>
+
+        <div className="flex justify-end gap-3 pt-2">
+          <button 
+            type="button" 
+            onClick={() => setIsPagamentoModalOpen(false)} 
+            className="bg-zinc-700 text-zinc-200 px-4 py-2 rounded-lg text-sm hover:bg-zinc-600 transition-colors"
+          >
+            Voltar
+          </button>
+          <button 
+            type="submit" 
+            className="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-lg font-semibold text-sm transition-colors shadow-lg"
+          >
+            Confirmar Recebimento
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
     </div>
   );
 }

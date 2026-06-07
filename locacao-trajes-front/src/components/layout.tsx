@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Shirt, Users, Briefcase, Calendar, Package, Layers } from 'lucide-react'; // Adicionado Layers
+import { Shirt, Users, Briefcase, Calendar, Package, Layers, DollarSign } from 'lucide-react'; // 1. Adicionado DollarSign aqui
 
 export function Layout() {
   const location = useLocation();
@@ -8,8 +8,7 @@ export function Layout() {
     flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors
     ${location.pathname === path 
       ? 'bg-blue-600 text-white shadow-md' 
-      : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'}
-  `;
+      : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'}\n  `;
 
   return (
     <div className="flex min-h-screen bg-zinc-900 text-zinc-100">
@@ -26,7 +25,6 @@ export function Layout() {
               Controle de Locações
             </Link>
 
-            {/* INSERÇÃO DO LINK DE PROCESSOS */}
             <Link to="/processos" className={linkClass('/processos')}>
               <Layers size={20} />
               Processos & Fluxos
@@ -51,6 +49,14 @@ export function Layout() {
               <Briefcase size={20} />
               Funcionários
             </Link>
+
+            {/* ========================================================= */}
+            {/* 🟢 NOVO LINK: MÓDULO FINANCEIRO                          */}
+            {/* ========================================================= */}
+            <Link to="/financeiro" className={linkClass('/financeiro')}>
+              <DollarSign size={20} />
+              Gestão Financeira
+            </Link>
           </nav>
         </div>
 
@@ -60,7 +66,9 @@ export function Layout() {
       </aside>
 
       <main className="flex-1 overflow-y-auto">
-        <Outlet />
+        <div className="p-8">
+          <Outlet />
+        </div>
       </main>
     </div>
   );
