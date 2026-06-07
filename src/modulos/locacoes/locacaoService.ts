@@ -58,7 +58,7 @@ export async function criarLocacao(data: {
   if (!statusAtual) throw new Error("Peça não possui status cadastrado")
   if (statusAtual.id_status !== STATUS_DISPONIVEL) throw new Error("Peça não está disponível para locação")
 
-  const locacao = await (prisma.locacao as any).create({
+const locacao = await (prisma.locacao as any).create({
     data: {
       id_cliente: data.id_cliente,
       id_usuario: data.id_usuario,
@@ -66,7 +66,10 @@ export async function criarLocacao(data: {
       data_evento: toISODate(data.data_evento),
       status: "RESERVADA",
       item_locacao: {
-        create: { id_peca: data.id_peca }
+        create: { // <-- Apenas um bloco create aqui
+          id_peca: data.id_peca,
+          preco_aluguel: data.preco_aluguel || 0 // Ps: O "|| 0" evita que quebre se o front esquecer de mandar
+        }
       }
     },
     include: { item_locacao: true, cliente: true, funcionario: true }
