@@ -5,7 +5,10 @@ import {
   alterarStatus, produtosPorStatus, porcentagem_venda,
   returnProdutoStatus,
   produtosManutencao,
-  removeManutencao
+  removeManutencao,
+  listManutencao,
+  removeManutencaoPorIdManutencao,
+  returnManutencao
 } from "./produtosService.js"
 // ← import produtoRouter removido (não era usado)
 
@@ -125,13 +128,34 @@ export const produtosManutencaoController = async (req: Request, res: Response) 
   } catch (error) { return res.status(500).json({ erro: "Erro ao listar produtos" }) }
 }
 
-
-
-
 export const removeManutencaoController = async (req: Request, res: Response) => {
   try {
     const id_peca = Number(req.body.id_peca)
     console.log("teste")
     return res.status(200).json(await removeManutencao(id_peca))
+  } catch (error) { return res.status(500).json({ erro: "Erro ao listar produtos" }) }
+}
+
+export const listManutencaoController = async (req: Request, res: Response) => {
+  try {
+    console.log("teste")
+    return res.status(200).json(await listManutencao())
+  } catch (error) { return res.status(500).json({ erro: "Erro ao listar produtos" }) }
+}
+
+export const removeManutencaoPorIdManutencaoController = async (req: Request, res: Response) => {
+  try {
+    const id_manutencao = Number(req.body.id_manutencao)
+    console.log("teste")
+    return res.status(200).json(await removeManutencaoPorIdManutencao(id_manutencao))
+  } catch (error) { return res.status(500).json({ erro: "Erro ao listar produtos" }) }
+}
+
+
+export const returnManutencaoController= async (req: Request, res: Response) => {
+  try {
+    const id_manutencao = Number(req.body.id_manutencao)
+    console.log("teste")
+    return res.status(200).json(await returnManutencao(id_manutencao))
   } catch (error) { return res.status(500).json({ erro: "Erro ao listar produtos" }) }
 }

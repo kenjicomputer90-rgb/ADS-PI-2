@@ -170,6 +170,25 @@ export async function removeManutencao(id: number) {
   });
 }
 
+export async function removeManutencaoPorIdManutencao(id: number) {
+  return await prisma.manutencao.deleteMany({
+    where: {
+      id_manutencao: id
+    }
+  });
+}
+
+export async function returnManutencao(id: number) {
+  return await prisma.manutencao.findMany({
+    where: {
+      id_peca: id
+    }
+  });
+}
+export async function listManutencao() {
+  return await prisma.manutencao.findMany();
+}
+
 export async function returnProdutoStatus(id: number) {
   const produto = await prisma.peca_produto.findUnique({
   where: {

@@ -1,5 +1,6 @@
 import { Router } from "express"
-import {addProdutoController, alterarStatusController, changeProdutoController,  listProdutoController, porcentagem_vendaController, precificaProdutoController, produtosManutencaoController, produtosPorStatusController, removeManutencaoController, removeProdutoController, reservarProdutoController, returnProdutoController, returnProdutoStatusController, saidaProdutoController, trocaProdutoController, vendaProdutoController} from "./produtoController.js"
+import {addProdutoController, alterarStatusController, changeProdutoController,  listManutencaoController,  listProdutoController, porcentagem_vendaController, precificaProdutoController, produtosManutencaoController, produtosPorStatusController, removeManutencaoController, removeManutencaoPorIdManutencaoController, removeProdutoController, reservarProdutoController, returnManutencaoController, returnProdutoController, returnProdutoStatusController, saidaProdutoController, trocaProdutoController, vendaProdutoController} from "./produtoController.js"
+import { listManutencao, returnManutencao } from "./produtosService.js"
 
 
 const produtoRouter = Router()
@@ -16,9 +17,15 @@ produtoRouter.delete("/:id", removeProdutoController)
 
 produtoRouter.delete("/removeManutencao/:id", removeManutencaoController)
 
+produtoRouter.delete("/removeManutencaoPorIdManutencao/:id", removeManutencaoPorIdManutencaoController)
+
 produtoRouter.patch("/:id", changeProdutoController)
 
 produtoRouter.get("/", listProdutoController)
+
+produtoRouter.get("/manutencao",  listManutencaoController)
+
+produtoRouter.get("/manutencao/:id", returnManutencaoController)
 
 produtoRouter.get("/buscaStatus/:id", returnProdutoStatusController)
 
