@@ -146,13 +146,13 @@ export function Funcionarios() {
               ) : (
                 funcionarios.map((func, index) => (
                   <tr key={func.id_funcionario ?? index} onClick={() => setFuncSelecionado(func)} className="hover:bg-zinc-700/30 transition-colors cursor-pointer">
-                    <button onClick={() => handleExcluir(func.id_funcionario, func.nome)} className="p-1.5 bg-zinc-800 hover:bg-red-950 border border-zinc-700 hover:border-red-900 text-zinc-400 hover:text-red-400 rounded-md transition-colors" title="Excluir Funcionário"><Trash2 size={15} />
-                    </button>
                     <td className="p-4 font-medium text-white">{func.nome}</td>
                     <td className="p-4 text-zinc-400">{func.cpf}</td>
                     <td className="p-4">{func.telefone}</td>
                     <td className="p-4 text-emerald-400 font-medium">R$ {Number(func.salario).toFixed(2)}</td>
                     <td className="p-4 text-zinc-400">{func.estado_civil}</td>
+                    <td><button onClick={() => handleExcluir(func.id_funcionario, func.nome)} className="p-1.5 bg-zinc-800 hover:bg-red-950 border border-zinc-700 hover:border-red-900 text-zinc-400 hover:text-red-400 rounded-md transition-colors" title="Excluir Funcionário"><Trash2 size={15} />
+                    </button></td>
                   </tr>
                 ))
               )}
