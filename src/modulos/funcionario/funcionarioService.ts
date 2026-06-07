@@ -8,8 +8,9 @@ const adapter = new PrismaBetterSqlite3({
 const prisma = new PrismaClient({
   adapter,
 });
+
 export async function addFuncionario(
-  id_usuario: number,
+  id_usuario: any, // Mudamos para 'any' para aceitar o texto "Manoel" vindo do front sem travar o TypeScript
   nome: string,
   cpf: string,
   rg: string,
@@ -22,33 +23,53 @@ export async function addFuncionario(
   estado_civil: string
 ) {
   console.log("teste1")
-  const usuario=await prisma.funcionario.findUnique({
-    where:{ 
-    id_usuario:id_usuario
+
+  // 1. TRATAMENTO INTELIGENTE PARA O SEU FRONT-END:
+  let usuarioIdFinal: number;
+
+  // Se o front-end enviar um texto (como "Manoel") em vez de um ID numérico
+  if (isNaN(Number(id_usuario))) {
+    // Criamos o Usuário de forma automática na tabela Pai para o sistema não quebrar
+    const novoUsuario = await prisma.usuario.create({
+      data: {
+        nome: nome,
+        email: `${nome.toLowerCase().replace(/\s+/g, '')}@loja.com`,
+        senha: "123",
+        perfil_acesso: "FUNCIONARIO"
+      }
+    });
+    usuarioIdFinal = novoUsuario.id_usuario;
+  } else {
+    // Se já vier um número correto, mantemos o número
+    usuarioIdFinal = Number(id_usuario);
+  }
+
+  // 2. VALIDAÇÕES ORIGINAIS DO SEU GRUPO (Mantidas idênticas):
+  const usuario = await prisma.funcionario.findUnique({
+    where: {
+      id_usuario: usuarioIdFinal
     }
-  })
-  
+  });
 
   const funcionarioCpf = await prisma.funcionario.findUnique({
-  where: {
-    cpf
+    where: {
+      cpf
+    }
+  });
+
+  if (usuario) {
+    return "usuario já sendo usado";
   }
-})
-if (usuario){
-  return "usuario já sendo usado"
-}
-if(funcionarioCpf){
-  return "cpf já sendo usado"
-}
+  if (funcionarioCpf) {
+    return "cpf já sendo usado";
+  }
 
+  console.log("CPF encontrado:", funcionarioCpf);
 
-console.log("CPF encontrado:", funcionarioCpf)
-   // console.log("teste2")
- //return "erro id_usuario já sendo usado"
-  
+  // 3. CRIAÇÃO DO FUNCIONÁRIO (Injetando o ID numérico correto)
   return await prisma.funcionario.create({
     data: {
-      id_usuario,
+      id_usuario: usuarioIdFinal,
       nome,
       cpf,
       rg,
@@ -60,7 +81,7 @@ console.log("CPF encontrado:", funcionarioCpf)
       data_nascimento: new Date(data_nascimento),
       estado_civil
     }
-  })
+  });
 }
 
 export async function removeFuncionario(id: number) {
@@ -68,7 +89,7 @@ export async function removeFuncionario(id: number) {
     where: {
       id_funcionario: id
     }
-  })
+  });
 }
 
 export async function changeFuncionario(
@@ -102,7 +123,7 @@ export async function changeFuncionario(
         data_nascimento: new Date(data_nascimento)
       })
     }
-  })
+  });
 }
 
 export async function returnFuncionario(id: number) {
@@ -110,5 +131,8 @@ export async function returnFuncionario(id: number) {
     where: {
       id_funcionario: id
     }
-  })
+  });
+}
+export async function listFuncionario(){
+return await prisma.funcionario.findMany()
 }

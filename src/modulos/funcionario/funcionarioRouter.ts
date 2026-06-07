@@ -1,8 +1,16 @@
-
 import { Router } from "express"
-import { addFuncionarioController, changeFuncionarioController, removeFuncionarioController, returnFuncionarioController } from "./funcionarioController.js"
+import {
+  addFuncionarioController,
+  changeFuncionarioController,
+  removeFuncionarioController,
+  returnFuncionarioController,
+  listFuncionarioController // <-- Importa o novo controller de listar todos
+} from "./funcionarioController.js"
 
 const funcionarioRouter = Router()
+
+// Listar todos os funcionários (ADICIONADO!)
+funcionarioRouter.get("/", listFuncionarioController)
 
 // Criar funcionário
 funcionarioRouter.post("/", addFuncionarioController)
