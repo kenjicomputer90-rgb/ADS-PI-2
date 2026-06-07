@@ -3,7 +3,8 @@ import {
   addProduto, changeProduto, precificaProduto, removeProduto, returnProduto,
   listProduto, updateProdutoStatus, reservar, devolucao, troca, venda, saida,
   alterarStatus, produtosPorStatus, porcentagem_venda,
-  returnProdutoStatus
+  returnProdutoStatus,
+  produtosManutencao
 } from "./produtosService.js"
 // ← import produtoRouter removido (não era usado)
 
@@ -113,4 +114,12 @@ export const returnProdutoStatusController = async( req: Request, res: Response)
   } catch (error: any) {
     return res.status(400).json({ erro: error.message })
   }
+}
+
+export const produtosManutencaoController = async (req: Request, res: Response) => {
+  try {
+    const id_peca = Number(req.params.id_peca)
+    const {descricao, id_status} = req.body
+    return res.status(200).json(await produtosManutencao(descricao,id_peca,id_status))
+  } catch (error) { return res.status(500).json({ erro: "Erro ao listar produtos" }) }
 }

@@ -141,6 +141,27 @@ export async function produtosOciosos() {
   });
 }
 
+export async function produtosManutencao(descricao: string, id_peca:number, id_status:number) {
+ await mudarStatus(id_peca, id_status);
+
+return await prisma.peca_produto.update({
+  where: {
+    id_peca
+  },
+  data: {
+    manutencao: {
+      create: {
+        descricao,
+        data_manutencao: new Date()
+      }
+    }
+  },
+  include: {
+    manutencao: true
+  }
+});
+}
+
 export async function returnProdutoStatus(id: number) {
   const produto = await prisma.peca_produto.findUnique({
   where: {
