@@ -49,6 +49,42 @@ export function Produtos() {
     }
   };
 
+  // Função para tirar da manutenção (Voltar para Disponível)
+  const handleVoltarManutencao = async (id: number) => {
+    try {
+      await api.delete(`/produtos/removeManutencao/${id}`);
+      alert("Traje de volta ao estoque disponível!");
+      carregarProdutos();
+    } catch (error: any) {
+      alert(error.response?.data?.erro || "Erro ao tirar da manutenção.");
+    }
+  };
+
+  // Função para mandar para a manutenção (Pede a descrição do problema)
+  const handleMandarManutencao = async (id: number) => {
+    const descricao = prompt("Digite a descrição do problema/manutenção:");
+    if (!descricao) return;
+
+    try {
+      await api.post(`/produtos/produtosManutencao/${id}`, { descricao });
+      alert("Traje enviado para manutenção!");
+      carregarProdutos();
+    } catch (error: any) {
+      alert(error.response?.data?.erro || "Erro ao mandar para manutenção.");
+    }
+  };
+
+  // Função para mudar o status manualmente (ex: Mudar para Vendido - Status 4)
+  const handleMudarStatusManual = async (id: number, novoStatus: number) => {
+    try {
+      await api.patch(`/produtos/${id}/status`, { id_status: novoStatus });
+      alert("Status do traje atualizado com sucesso!");
+      carregarProdutos();
+    } catch (error: any) {
+      alert(error.response?.data?.erro || "Erro ao atualizar status.");
+    }
+  };
+
   useEffect(() => {
     carregarProdutos();
   }, []);
@@ -130,6 +166,7 @@ export function Produtos() {
                 <th className="p-4">Material</th>
                 <th className="p-4">Preço</th>
                 <th className="p-4">Status Atual</th>
+                <th className="px-6 py-4 text-center font-semibold w-48">Ações</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-700 text-sm text-zinc-300">
@@ -141,6 +178,15 @@ export function Produtos() {
                 produtos.map((produto, index) => {
                   const statusAtual = getStatusAtual(produto);
                   const últimoStatus = produto.historico_peca?.[produto.historico_peca.length - 1]?.id_status;
+                  let statusNumerico = 1; // Valor padrão caso não encontre
+
+    if (produto.statusAtual) {
+      statusNumerico = Number(produto.statusAtual);
+    } else if (Array.isArray((produto as any).historico_peca) && (produto as any).historico_peca.length > 0) {
+      // Pega o id_status do histórico ativo (onde data_fim é null ou o último inserido)
+      const historicoAtivo = (produto as any).historico_peca.find((h: any) => h.data_fim === null) || (produto as any).historico_peca[0];
+      statusNumerico = Number(historicoAtivo?.id_status || 1);
+    }
                   return (
                     <tr key={produto.id_peca ?? index} className="hover:bg-zinc-700/30 transition-colors">
                       <td className="p-4 font-medium text-white">{produto.codigo_unico}</td>
@@ -159,6 +205,53 @@ export function Produtos() {
                           {statusAtual.label}
                         </span>
                       </td>
+<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+          <div className="flex justify-end gap-2">
+            
+            {/* SE ESTIVER EM MANUTENÇÃO (Status 3) */}
+            {statusNumerico === 3 && (
+              <button
+                type="button"
+                onClick={() => handleVoltarManutencao(produto.id_peca!)}
+                className="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white text-xs px-2.5 py-1.5 rounded-lg transition-colors font-semibold"
+              >
+                Voltar p/ Estoque
+              </button>
+            )}
+
+            {/* SE ESTIVER DISPONÍVEL (Status 1) */}
+            {statusNumerico === 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => handleMandarManutencao(produto.id_peca!)}
+                  className="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white text-xs px-2.5 py-1.5 rounded-lg transition-colors font-semibold"
+                >
+                  Manutenção
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={() => handleMudarStatusManual(produto.id_peca!, 4)}
+                  className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs px-2.5 py-1.5 rounded-lg transition-colors font-semibold border border-zinc-700"
+                >
+                  Vender
+                </button>
+              </>
+            )}
+
+            {/* Se estiver Alugado (2) ou Reservado (5) */}
+            {(statusNumerico === 2 || statusNumerico === 5) && (
+              <span className="text-xs text-zinc-500 italic px-2 py-1">Em Contrato</span>
+            )}
+
+            {/* Se já foi vendido (4) */}
+            {statusNumerico === 4 && (
+              <span className="text-xs text-zinc-600 italic px-2 py-1">Item Vendido</span>
+            )}
+
+          </div>
+        </td>
                     </tr>
                   );
                 })

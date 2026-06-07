@@ -163,6 +163,10 @@ return await prisma.peca_produto.update({
 }
 
 export async function removeManutencao(id: number) {
+  // 1. Volta o status da peça para 1 (Disponível)
+  await mudarStatus(id, 1);
+
+  // 2. Remove os registros pendentes de manutenção dela
   return await prisma.manutencao.deleteMany({
     where: {
       id_peca: id
