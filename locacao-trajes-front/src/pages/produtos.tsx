@@ -51,28 +51,40 @@ export function Produtos() {
 
   // Função para tirar da manutenção (Voltar para Disponível)
   const handleVoltarManutencao = async (id: number) => {
-    try {
-      await api.delete(`/produtos/removeManutencao/${id}`);
-      alert("Traje de volta ao estoque disponível!");
-      carregarProdutos();
-    } catch (error: any) {
-      alert(error.response?.data?.erro || "Erro ao tirar da manutenção.");
-    }
-  };
+  if (!confirm("Tem certeza que deseja retornar este traje para o estoque disponível?")) return;
 
-  // Função para mandar para a manutenção (Pede a descrição do problema)
+  try {
+    // Como o axios.delete com corpo exige uma sintaxe específica,
+    // passamos o id_peca dentro do objeto 'data', casando com o seu req.body.id_peca
+    await api.delete(`/produtos/removeManutencao/${id}`, {
+      data: { id_peca: id }
+    });
+
+    alert("Traje retornado ao estoque disponível!");
+    carregarProdutos(); // Recarrega a tabela
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao remover produto da manutenção.");
+  }
+};
+
   const handleMandarManutencao = async (id: number) => {
-    const descricao = prompt("Digite a descrição do problema/manutenção:");
-    if (!descricao) return;
+  const motivo = prompt("Digite o motivo da manutenção:");
+  if (!motivo) return;
 
-    try {
-      await api.post(`/produtos/produtosManutencao/${id}`, { descricao });
-      alert("Traje enviado para manutenção!");
-      carregarProdutos();
-    } catch (error: any) {
-      alert(error.response?.data?.erro || "Erro ao mandar para manutenção.");
-    }
-  };
+  try {
+    // Ajustado para bater exatamente na rota mapeada no seu backend: /produtos/produtosManutencao/:id_peca
+    await api.post(`/produtos/produtosManutencao/${id}`, { 
+      descricao: motivo 
+    });
+    
+    alert("Traje enviado para manutenção com sucesso!");
+    carregarProdutos(); // Recarrega a tabela
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao mandar produto para manutenção.");
+  }
+};
 
   // Função para mudar o status manualmente (ex: Mudar para Vendido - Status 4)
   const handleMudarStatusManual = async (id: number, novoStatus: number) => {
@@ -177,16 +189,9 @@ export function Produtos() {
               ) : (
                 produtos.map((produto, index) => {
                   const statusAtual = getStatusAtual(produto);
-                  const últimoStatus = produto.historico_peca?.[produto.historico_peca.length - 1]?.id_status;
-                  let statusNumerico = 1; // Valor padrão caso não encontre
-
-    if (produto.statusAtual) {
-      statusNumerico = Number(produto.statusAtual);
-    } else if (Array.isArray((produto as any).historico_peca) && (produto as any).historico_peca.length > 0) {
-      // Pega o id_status do histórico ativo (onde data_fim é null ou o último inserido)
-      const historicoAtivo = (produto as any).historico_peca.find((h: any) => h.data_fim === null) || (produto as any).historico_peca[0];
-      statusNumerico = Number(historicoAtivo?.id_status || 1);
-    }
+                  const statusNumerico = statusAtual === STATUS_MAP[1] ? 1 :
+                    Object.entries(STATUS_MAP).find(([_, v]) => v === statusAtual)?.[0]
+                    ? Number(Object.entries(STATUS_MAP).find(([_, v]) => v === statusAtual)![0]) : 1;
                   return (
                     <tr key={produto.id_peca ?? index} className="hover:bg-zinc-700/30 transition-colors">
                       <td className="p-4 font-medium text-white">{produto.codigo_unico}</td>
@@ -196,12 +201,7 @@ export function Produtos() {
                       <td className="p-4">{produto.material}</td>
                       <td className="p-4 text-emerald-400 font-medium">R$ {Number(produto.preco).toFixed(2)}</td>
                       <td className="p-4">
-                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                          últimoStatus === 4 ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
-                          últimoStatus === 2 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                          últimoStatus === 3 ? 'bg-zinc-600/30 text-zinc-400 border border-zinc-500/20' :
-                          'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                        }`}>
+                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${statusAtual.color}`}>
                           {statusAtual.label}
                         </span>
                       </td>

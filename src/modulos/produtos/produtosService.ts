@@ -152,7 +152,7 @@ return await prisma.peca_produto.update({
     manutencao: {
       create: {
         descricao,
-        data_manutencao: new Date()
+        data_manutencao: toISODate()
       }
     }
   },
