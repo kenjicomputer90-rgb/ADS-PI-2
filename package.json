@@ -51,6 +51,7 @@
     "concurrently": "^10.0.1",
     "cors": "^2.8.6",
     "express": "^5.2.1",
+    "express-list-endpoints": "^7.1.1",
     "lucide-react": "^1.16.0",
     "react-router-dom": "^7.15.1",
     "tsx": "^4.21.0"

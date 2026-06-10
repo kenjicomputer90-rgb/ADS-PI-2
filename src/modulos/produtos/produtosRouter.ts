@@ -1,5 +1,7 @@
 import { Router } from "express"
-import {addProdutoController, alterarStatusController, changeProdutoController, devolucaoProdutoController, listProdutoController, porcentagem_vendaController, precificaProdutoController, produtosPorStatusController, removeProdutoController, reservarProdutoController, returnProdutoController, saidaProdutoController, trocaProdutoController, updateProdutoStatusController, vendaProdutoController} from "./produtoController.js"
+import {addProdutoController, alterarStatusController, changeProdutoController,  listManutencaoController,  listProdutoController, porcentagem_vendaController, precificaProdutoController, produtosManutencaoController, produtosPorStatusController, removeManutencaoController, removeManutencaoPorIdManutencaoController, removeProdutoController, reservarProdutoController, returnManutencaoController, returnProdutoController, returnProdutoStatusController, saidaProdutoController, trocaProdutoController, vendaProdutoController} from "./produtoController.js"
+import { listManutencao, returnManutencao } from "./produtosService.js"
+
 
 const produtoRouter = Router()
 
@@ -13,26 +15,36 @@ produtoRouter.post("/", addProdutoController)
 
 produtoRouter.delete("/:id", removeProdutoController)
 
+produtoRouter.delete("/removeManutencao/:id", removeManutencaoController)
+
+produtoRouter.delete("/removeManutencaoPorIdManutencao/:id", removeManutencaoPorIdManutencaoController)
+
 produtoRouter.patch("/:id", changeProdutoController)
 
 produtoRouter.get("/", listProdutoController)
 
+produtoRouter.get("/manutencao",  listManutencaoController)
 
+produtoRouter.get("/manutencao/:id", returnManutencaoController)
+
+produtoRouter.get("/buscaStatus/:id", returnProdutoStatusController)
 
 produtoRouter.get("/:id", returnProdutoController)
 
+produtoRouter.post("/produtosManutencao/:id_peca", produtosManutencaoController)
 
 
 // Atributos específicos
 //produtoRouter.post("/:id/fotos", addProdutoFotoController)
 //produtoRouter.put("/:id/localizacao", updateProdutoLocalizacaoController)
-produtoRouter.put("/:id/status", updateProdutoStatusController)
+//produtoRouter.put("/:id/status", updateProdutoStatusController)
 
 // Movimentação
 produtoRouter.patch(
   "/:id/status",
   alterarStatusController
 )
+
 
 
 // Manutenção / Problemas

@@ -8,19 +8,13 @@ import financeiroRouter from "./modulos/financeiro/financeiroRouter.js";
 import locacaoRouter from "./modulos/locacoes/locacaoRouter.js"
 import logisticaRouter from "./modulos/logistica/logisticaRouter.js"
 import processosRouter from "./modulos/processos/processosRouter.js"
- 
+
 const app = express();
- 
- 
- 
+
 // <-- 2. ADICIONE ESTA LINHA AQUI (Libera o acesso para o seu Front-end)
-app.use(cors({
-  origin: "http://localhost:5173", // URL do seu Vite Front-end
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requester-Id"]
-}));
+app.use(cors());
 app.use(express.json())
- 
+
 app.get("/", (req, res) => {
   res.status(200).json({      
     mensagem: "API ADS-PI-2 funcionando",
@@ -30,13 +24,12 @@ app.get("/", (req, res) => {
  
 app.use("/clientes", clienteRouter)
 app.use("/admin", adminRouter)
-app.use("/funcionario", funcionarioRouter)
+app.use("/funcionarios", funcionarioRouter)
 app.use("/produtos", produtoRouter)
 app.use("/financeiro", financeiroRouter);
- 
+
 app.use("/locacoes", locacaoRouter)
 app.use("/logistica", logisticaRouter)
 app.use("/processos", processosRouter)
- 
+//console.log(listEndpoints(app));
 export default app
- 

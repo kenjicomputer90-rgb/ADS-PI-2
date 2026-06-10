@@ -66,7 +66,7 @@ describe("addProduto", () => {
         historico_peca: {
           create: {
             id_status: 1,
-            data_inicio: expect.any(Date)
+            data_inicio: expect.any(String)
           }
         }
       },

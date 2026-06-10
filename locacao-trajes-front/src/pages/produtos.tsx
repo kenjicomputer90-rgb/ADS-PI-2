@@ -5,14 +5,21 @@ import { Plus, X, Shirt } from 'lucide-react';
 
 // Mapeamento dos status textuais para os IDs aceitos pelo seu back-end (1 a 4)
 // Como você solicitou 6 status, agrupamos conforme a lógica do seu service
+// IDs mapeados com status_peca do banco (somente status válidos para cadastro)
 const STATUS_OPTIONS = [
   { id: 1, label: 'Disponível' },
-  { id: 2, label: 'Alugado' },
-  { id: 3, label: 'Em manutenção' },
-  { id: 4, label: 'Vendido' },
-  { id: 2, label: 'Reservado' },      // Mapeado para id_status correspondente
-  { id: 3, label: 'Em preparação' },  // Mapeado para id_status correspondente
+  { id: 3, label: 'Em Manutenção' },
 ];
+
+// Mapa completo para exibição na tabela
+const STATUS_MAP: Record<number, { label: string; color: string }> = {
+  1: { label: 'Disponível',     color: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' },
+  2: { label: 'Alugado',        color: 'bg-blue-500/10 text-blue-400 border border-blue-500/20' },
+  3: { label: 'Em Manutenção',  color: 'bg-red-500/10 text-red-400 border border-red-500/20' },
+  4: { label: 'Vendido',        color: 'bg-zinc-600/30 text-zinc-400 border border-zinc-500/20' },
+  5: { label: 'Reservado',      color: 'bg-purple-500/10 text-purple-400 border border-purple-500/20' },
+  6: { label: 'Em Preparação',  color: 'bg-amber-500/10 text-amber-400 border border-amber-500/20' },
+};
 
 export function Produtos() {
   const [produtos, setProdutos] = useState<Produto[]>([]);
@@ -39,6 +46,54 @@ export function Produtos() {
       console.error("Erro ao carregar produtos:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Função para tirar da manutenção (Voltar para Disponível)
+  const handleVoltarManutencao = async (id: number) => {
+  if (!confirm("Tem certeza que deseja retornar este traje para o estoque disponível?")) return;
+
+  try {
+    // Como o axios.delete com corpo exige uma sintaxe específica,
+    // passamos o id_peca dentro do objeto 'data', casando com o seu req.body.id_peca
+    await api.delete(`/produtos/removeManutencao/${id}`, {
+      data: { id_peca: id }
+    });
+
+    alert("Traje retornado ao estoque disponível!");
+    carregarProdutos(); // Recarrega a tabela
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao remover produto da manutenção.");
+  }
+};
+
+  const handleMandarManutencao = async (id: number) => {
+  const motivo = prompt("Digite o motivo da manutenção:");
+  if (!motivo) return;
+
+  try {
+    // Ajustado para bater exatamente na rota mapeada no seu backend: /produtos/produtosManutencao/:id_peca
+    await api.post(`/produtos/produtosManutencao/${id}`, { 
+      descricao: motivo 
+    });
+    
+    alert("Traje enviado para manutenção com sucesso!");
+    carregarProdutos(); // Recarrega a tabela
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao mandar produto para manutenção.");
+  }
+};
+
+  // Função para mudar o status manualmente (ex: Mudar para Vendido - Status 4)
+  const handleMudarStatusManual = async (id: number, novoStatus: number) => {
+    try {
+      await api.patch(`/produtos/${id}/status`, { id_status: novoStatus });
+      alert("Status do traje atualizado com sucesso!");
+      carregarProdutos();
+    } catch (error: any) {
+      alert(error.response?.data?.erro || "Erro ao atualizar status.");
     }
   };
 
@@ -83,10 +138,10 @@ export function Produtos() {
     }
   }
 
-  // Função auxiliar para descobrir o nome do status baseado no ID retornado do banco
-  const getStatusLabel = (idStatus?: number) => {
-    const found = STATUS_OPTIONS.find(opt => opt.id === idStatus);
-    return found ? found.label : 'Disponível';
+  // Status atual = historico_peca[0] (back retorna só o registro com data_fim null)
+  const getStatusAtual = (produto: Produto) => {
+    const id = produto.historico_peca?.[0]?.id_status;
+    return STATUS_MAP[id ?? 1] ?? STATUS_MAP[1];
   };
 
   return (
@@ -123,6 +178,7 @@ export function Produtos() {
                 <th className="p-4">Material</th>
                 <th className="p-4">Preço</th>
                 <th className="p-4">Status Atual</th>
+                <th className="px-6 py-4 text-center font-semibold w-48">Ações</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-700 text-sm text-zinc-300">
@@ -132,7 +188,10 @@ export function Produtos() {
                 </tr>
               ) : (
                 produtos.map((produto, index) => {
-                  const últimoStatus = produto.historico_peca?.[produto.historico_peca.length - 1]?.id_status;
+                  const statusAtual = getStatusAtual(produto);
+                  const statusNumerico = statusAtual === STATUS_MAP[1] ? 1 :
+                    Object.entries(STATUS_MAP).find(([_, v]) => v === statusAtual)?.[0]
+                    ? Number(Object.entries(STATUS_MAP).find(([_, v]) => v === statusAtual)![0]) : 1;
                   return (
                     <tr key={produto.id_peca ?? index} className="hover:bg-zinc-700/30 transition-colors">
                       <td className="p-4 font-medium text-white">{produto.codigo_unico}</td>
@@ -142,15 +201,57 @@ export function Produtos() {
                       <td className="p-4">{produto.material}</td>
                       <td className="p-4 text-emerald-400 font-medium">R$ {Number(produto.preco).toFixed(2)}</td>
                       <td className="p-4">
-                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                          últimoStatus === 4 ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
-                          últimoStatus === 2 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                          últimoStatus === 3 ? 'bg-zinc-600/30 text-zinc-400 border border-zinc-500/20' :
-                          'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                        }`}>
-                          {getStatusLabel(últimoStatus)}
+                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${statusAtual.color}`}>
+                          {statusAtual.label}
                         </span>
                       </td>
+<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+          <div className="flex justify-end gap-2">
+            
+            {/* SE ESTIVER EM MANUTENÇÃO (Status 3) */}
+            {statusNumerico === 3 && (
+              <button
+                type="button"
+                onClick={() => handleVoltarManutencao(produto.id_peca!)}
+                className="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white text-xs px-2.5 py-1.5 rounded-lg transition-colors font-semibold"
+              >
+                Voltar p/ Estoque
+              </button>
+            )}
+
+            {/* SE ESTIVER DISPONÍVEL (Status 1) */}
+            {statusNumerico === 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => handleMandarManutencao(produto.id_peca!)}
+                  className="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white text-xs px-2.5 py-1.5 rounded-lg transition-colors font-semibold"
+                >
+                  Manutenção
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={() => handleMudarStatusManual(produto.id_peca!, 4)}
+                  className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs px-2.5 py-1.5 rounded-lg transition-colors font-semibold border border-zinc-700"
+                >
+                  Vender
+                </button>
+              </>
+            )}
+
+            {/* Se estiver Alugado (2) ou Reservado (5) */}
+            {(statusNumerico === 2 || statusNumerico === 5) && (
+              <span className="text-xs text-zinc-500 italic px-2 py-1">Em Contrato</span>
+            )}
+
+            {/* Se já foi vendido (4) */}
+            {statusNumerico === 4 && (
+              <span className="text-xs text-zinc-600 italic px-2 py-1">Item Vendido</span>
+            )}
+
+          </div>
+        </td>
                     </tr>
                   );
                 })

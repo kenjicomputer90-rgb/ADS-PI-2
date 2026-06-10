@@ -27,6 +27,7 @@ export const criarLocacaoController = async (
       id_funcionario,
       id_peca,
       data_evento,
+      preco_aluguel
     } = req.body
 
     const locacao = await criarLocacao({
@@ -35,6 +36,7 @@ export const criarLocacaoController = async (
       id_funcionario: Number(id_funcionario),
       id_peca: Number(id_peca),
       data_evento,
+      preco_aluguel
     })
 
     res.status(201).json(locacao)

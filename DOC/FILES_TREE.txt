@@ -1,4 +1,4 @@
-last updated: 06/06/26
+last updated: 07/06/26
 .
 ├── banco
 │   ├── dev.db
@@ -13,7 +13,6 @@ last updated: 06/06/26
 │   ├── kenjiBruno
 │   │   └── PI2.zip
 │   ├── laerteBruno
-│   ├── PI2.zip
 │   └── takeshiBruno
 ├── DOC
 │   ├── admin-test-results-20260605.txt
@@ -46,6 +45,7 @@ last updated: 06/06/26
 │   │   ├── main.tsx
 │   │   ├── pages
 │   │   │   ├── clientes.tsx
+│   │   │   ├── financeiro.tsx
 │   │   │   ├── funcionarios.tsx
 │   │   │   ├── locacoes.tsx
 │   │   │   ├── logistica.tsx
@@ -63,8 +63,7 @@ last updated: 06/06/26
 ├── package-lock.json
 ├── prisma
 │   ├── banco
-│   │   ├── dev-backup.db
-│   │   └── dev.db
+│   │   └── dev-backup.db
 │   ├── migrations
 │   │   ├── 20260508181459_migracao_cliente_funcionario
 │   │   │   └── migration.sql
@@ -117,14 +116,14 @@ last updated: 06/06/26
 │   │   │   ├── produtoService.test.ts
 │   │   │   ├── produtosRouter.ts
 │   │   │   └── produtosService.ts
-│   │   ├── teste
-│   │   │   ├── teste-orm-del.ts
-│   │   │   └── teste-orm-ins.ts
 │   │   └── utils
 │   ├── routes.ts
 │   ├── server.ts
 │   └── teste-orm-del.ts
-├── test-admin-routes.sh
+├── testes
+│   ├── test-admin-routes.sh
+│   ├── teste-orm-del.ts
+│   └── teste-orm-ins.ts
 └── tsconfig.json
 
-36 directories, 91 files
+36 directories, 90 files

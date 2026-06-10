@@ -1,183 +1,496 @@
-//resumo do projeto escrito pelo Chatgpt
+# Resumo do Projeto ADS PI2
 
-🧠 Visão geral da arquitetura
+**Atualizado em: 07/06/2026**
 
-Seu projeto segue um padrão bem comum:
+# 🧠 Visão Geral da Arquitetura
 
-👉 Separação por módulos + camadas (Controller → Service → Router → DB)
+O projeto ADS PI2 é um sistema para gerenciamento de locação de trajes, desenvolvido utilizando:
 
-Ou seja:
+* Node.js
+* TypeScript
+* Express
+* Prisma ORM
+* SQLite
+* React + Vite (Frontend)
 
-Cada “assunto” do sistema (cliente, teste, etc.) fica isolado
-Dentro de cada módulo, cada arquivo tem uma responsabilidade específica
-📁 Raiz: src/
+A arquitetura segue o padrão:
 
-Aqui está todo o código principal da aplicação.
+```txt
+Router
+  ↓
+Controller
+  ↓
+Service
+  ↓
+Prisma ORM
+  ↓
+Banco de Dados
+```
 
-⚙️ generated/prisma/
+Além disso, o sistema é organizado por módulos, facilitando manutenção, escalabilidade e reutilização de código.
 
-Essa pasta é gerada automaticamente pelo Prisma (ORM).
+---
 
-👉 Você NÃO escreve código aqui.
+# 📁 Estrutura Geral do Projeto
 
-Ela contém:
+```txt
+.
+├── banco/
+├── Bruno/
+├── DOC/
+├── locacao-trajes-front/
+├── prisma/
+├── src/
+├── testes/
+└── arquivos de configuração
+```
 
-client.ts → cliente do banco (o que você usa pra fazer queries)
-models.ts → tipos dos modelos
-enums.ts → enums do banco
-browser.ts, internal/ → funcionamento interno do Prisma
+---
 
-💡 Resumindo:
+# ⚙️ banco/
 
-Isso aqui é a “ponte automática” entre seu código e o banco de dados.
+Contém os arquivos relacionados ao banco de dados.
 
-🧩 modulos/
+Exemplos:
 
-Essa é a parte mais importante do seu sistema.
+* dev.db
+* Diagramas DER e EER
+* Scripts SQL
+* Arquivos do MySQL Workbench
 
-👉 Cada pasta aqui representa um domínio do sistema (uma feature).
+Função:
+
+* Armazenar a modelagem do banco
+* Manter documentação visual da estrutura de dados
+* Disponibilizar scripts de criação do banco
+
+---
+
+# 🧪 Bruno/
+
+Coleções de testes da API.
+
+Estrutura:
+
+```txt
+Bruno/
+├── kenjiBruno/
+├── laerteBruno/
+└── takeshiBruno/
+```
+
+Utilizado para:
+
+* Testar endpoints da API
+* Validar respostas HTTP
+* Simular operações do sistema
+* Auxiliar nos testes Alpha e Beta
+
+O Bruno funciona de forma semelhante ao Postman, permitindo criar coleções de requisições para validação da aplicação.
+
+---
+
+# 📚 DOC/
+
+Pasta destinada à documentação do projeto.
+
+Contém:
+
+* Guias para desenvolvedores
+* Documentação das rotas
+* Resultados de testes
+* Resumos técnicos
+* Estruturas do projeto
+
+Seu objetivo é facilitar a manutenção e o entendimento do sistema por novos integrantes da equipe.
+
+---
+
+# 🎨 locacao-trajes-front/
+
+Frontend desenvolvido em React + Vite.
+
+Estrutura principal:
+
+```txt
+src/
+├── components/
+├── pages/
+├── services/
+├── assets/
+└── main.tsx
+```
+
+## Pages
+
+Atualmente existem páginas para:
+
+* Clientes
+* Funcionários
+* Produtos
+* Locações
+* Financeiro
+* Logística
+* Processos
+
+## Services
+
+A pasta services contém a comunicação com a API backend.
 
 Exemplo:
 
-cliente → tudo relacionado a cliente
-teste → módulo de teste
-produtos, funcionario, etc.
-📦 Estrutura interna de um módulo (ex: cliente)
+```ts
+api.ts
+```
+
+Responsável por configurar as chamadas HTTP para o servidor.
+
+---
+
+# 🗄️ prisma/
+
+Responsável pela camada de persistência de dados.
+
+Estrutura:
+
+```txt
+prisma/
+├── migrations/
+├── banco/
+├── schema.prisma
+└── seed.ts
+```
+
+## schema.prisma
+
+Define:
+
+* Tabelas
+* Relacionamentos
+* Tipos de dados
+* Restrições
+
+É a representação do banco de dados utilizada pelo Prisma.
+
+## migrations/
+
+Armazena o histórico de alterações da estrutura do banco.
+
+Cada migration registra uma mudança realizada durante o desenvolvimento.
+
+## seed.ts
+
+Arquivo utilizado para popular o banco com dados iniciais.
+
+---
+
+# ⚙️ src/
+
+Contém todo o código-fonte principal da aplicação backend.
+
+Estrutura:
+
+```txt
+src/
+├── generated/
+├── modulos/
+├── routes.ts
+├── server.ts
+└── arquivos auxiliares
+```
+
+---
+
+# 🔧 generated/
+
+Pasta gerada automaticamente pelo Prisma.
+
+Não deve ser editada manualmente.
+
+Contém:
+
+* Cliente Prisma
+* Tipagens automáticas
+* Modelos do banco
+* Arquivos internos do ORM
+
+Função:
+
+Servir como ponte entre a aplicação e o banco de dados.
+
+---
+
+# 🧩 modulos/
+
+Contém todos os domínios do sistema.
+
+Estrutura atual:
+
+```txt
+modulos/
+├── admin/
+├── cliente/
+├── financeiro/
+├── funcionario/
+├── locacoes/
+├── logistica/
+├── processos/
+└── produtos/
+```
+
+Cada módulo possui sua própria separação de responsabilidades.
+
+Exemplo:
+
+```txt
 cliente/
 ├── clienteController.ts
 ├── clienteRouter.ts
 └── clienteService.ts
-🔹 clienteController.ts
+```
 
-👉 Camada de entrada (HTTP)
+---
 
-Responsável por:
-
-Receber requisições (req)
-Chamar o service
-Retornar resposta (res)
-
-💡 É tipo o “garçom”:
-
-recebe o pedido e entrega o prato
-
-🔹 clienteService.ts
-
-👉 Regra de negócio
-
-Responsável por:
-
-Processar dados
-Aplicar lógica
-Acessar o banco (via Prisma)
-
-💡 É o “cozinheiro”:
-
-decide como preparar o pedido
-
-🔹 clienteRouter.ts
-
-👉 Define as rotas
+# 📥 Controller
 
 Exemplo:
 
-POST /cliente
-GET /cliente
-
-💡 É o “cardápio”:
-
-diz quais endpoints existem
-
-🧪 Módulo teste
-
-Tem um extra:
-
-testeInterface.ts
-
-👉 Define tipos/interfaces (TypeScript)
-
-💡 Serve para:
-
-Garantir tipagem
-Padronizar dados
-🗄️ database/
-database/
-├── databaseConfig.ts
-└── schema.prisma
-🔹 schema.prisma
-
-👉 Define o banco de dados
-
-Exemplo:
-
-tabelas
-relações
-tipos
-
-💡 É o “projeto do banco”
-
-🔹 databaseConfig.ts
-
-👉 Configuração da conexão
-
-🧰 utils/
-
-👉 Funções auxiliares reutilizáveis
-
-Exemplo:
-
-validações
-helpers
-formatação
-🌐 routes.ts
-
-👉 Arquivo central de rotas
+```txt
+clienteController.ts
+```
 
 Responsável por:
 
-juntar todos os routers dos módulos
+* Receber requisições HTTP
+* Validar parâmetros básicos
+* Chamar os serviços
+* Retornar respostas ao cliente
 
-Exemplo mental:
+Pode ser comparado ao "atendente" do sistema.
 
-app.use("/cliente", clienteRouter)
-app.use("/teste", testeRouter)
+---
 
-💡 É o “hub” das rotas
+# ⚙️ Service
 
-🚀 server.ts
+Exemplo:
 
-👉 Ponto de entrada da aplicação
+```txt
+clienteService.ts
+```
 
 Responsável por:
 
-criar o servidor (Express)
-configurar middlewares
-importar routes.ts
-iniciar na porta (ex: 3000)
+* Regras de negócio
+* Processamento de dados
+* Operações no banco
+* Integração com outras partes do sistema
 
-💡 É o “coração rodando” da aplicação
+Pode ser comparado ao "motor" da aplicação.
 
-🔁 Fluxo completo de uma requisição
+---
 
-Quando você faz:
+# 🌐 Router
 
-POST /cliente
+Exemplo:
 
-Acontece isso:
+```txt
+clienteRouter.ts
+```
 
-server.ts recebe
-vai para routes.ts
-vai para clienteRouter.ts
-chama clienteController.ts
-chama clienteService.ts
-acessa o banco via Prisma
-volta tudo até responder
-🧠 Resumo final (bem direto)
-generated/ → código automático do Prisma
-modulos/ → funcionalidades separadas por domínio
-controller → recebe requisição
-service → lógica de negócio
-router → define rotas
-database/ → banco e configuração
-routes.ts → junta tudo
-server.ts → inicia o sistema
+Responsável por:
+
+* Definir endpoints
+* Associar rotas aos controllers
+
+Exemplo:
+
+```ts
+router.post("/", criarCliente)
+router.get("/", listarClientes)
+```
+
+Pode ser comparado ao "mapa" da aplicação.
+
+---
+
+# 👑 Módulo Admin
+
+Responsável por funcionalidades administrativas.
+
+Arquivos:
+
+```txt
+admin/
+├── adminAuth.ts
+├── adminController.ts
+├── adminRouter.ts
+└── adminService.ts
+```
+
+Possui uma camada adicional de autenticação para controle de acesso.
+
+---
+
+# 🧰 utils/
+
+Pasta destinada a funções reutilizáveis.
+
+Pode conter:
+
+* Helpers
+* Validadores
+* Funções de formatação
+* Utilitários compartilhados
+
+Objetivo:
+
+Evitar repetição de código.
+
+---
+
+# 🌐 routes.ts
+
+Arquivo centralizador das rotas.
+
+Responsável por registrar todos os módulos.
+
+Exemplo:
+
+```ts
+app.use("/clientes", clienteRouter)
+app.use("/funcionarios", funcionarioRouter)
+app.use("/produtos", produtoRouter)
+```
+
+Toda requisição passa por este arquivo antes de chegar ao módulo correspondente.
+
+---
+
+# 🚀 server.ts
+
+Ponto de entrada da aplicação.
+
+Responsável por:
+
+* Criar o servidor Express
+* Configurar middlewares
+* Configurar CORS
+* Carregar as rotas
+* Inicializar o sistema
+
+Exemplo:
+
+```ts
+app.listen(3000)
+```
+
+É o primeiro arquivo executado quando o backend é iniciado.
+
+---
+
+# 🧪 Testes
+
+O projeto possui diferentes formas de teste.
+
+## Testes Unitários
+
+Utilizando Jest.
+
+Exemplo:
+
+```txt
+produtoService.test.ts
+```
+
+Objetivo:
+
+Validar regras de negócio isoladamente.
+
+---
+
+## Testes de API
+
+Utilizando Bruno.
+
+Objetivo:
+
+Validar endpoints REST.
+
+Exemplos:
+
+* Cadastro de cliente
+* Cadastro de funcionário
+* Controle de produtos
+* Locações
+
+---
+
+## Scripts de Teste
+
+Pasta:
+
+```txt
+testes/
+```
+
+Contém:
+
+```txt
+test-admin-routes.sh
+teste-orm-ins.ts
+teste-orm-del.ts
+```
+
+Utilizados para validar operações específicas do sistema.
+
+---
+
+# 🔁 Fluxo Completo de uma Requisição
+
+Quando um usuário realiza uma requisição:
+
+```http
+POST /clientes
+```
+
+O fluxo acontece da seguinte forma:
+
+```txt
+Frontend React
+      ↓
+API Express
+      ↓
+routes.ts
+      ↓
+clienteRouter.ts
+      ↓
+clienteController.ts
+      ↓
+clienteService.ts
+      ↓
+Prisma ORM
+      ↓
+SQLite
+      ↓
+Retorno da resposta
+```
+
+---
+
+# 🧠 Resumo Final
+
+* banco/ → modelagem e arquivos do banco de dados
+* Bruno/ → coleções de testes da API
+* DOC/ → documentação do projeto
+* locacao-trajes-front/ → frontend React + Vite
+* prisma/ → ORM e migrações
+* generated/ → código gerado automaticamente pelo Prisma
+* modulos/ → funcionalidades organizadas por domínio
+* controller → recebe requisições
+* service → regras de negócio
+* router → define endpoints
+* routes.ts → centraliza rotas
+* server.ts → inicia a aplicação
+* testes/ → scripts e validações automatizadas
+
+O projeto atualmente possui backend, frontend, persistência de dados, documentação e testes organizados em uma arquitetura modular baseada em Express + Prisma ORM.

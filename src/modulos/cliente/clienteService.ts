@@ -26,6 +26,7 @@ export async function addCliente(nome:string, cpf:string,telefone: string,
   if (clienteExistente) {
     throw new Error("CPF já cadastrado")
   }
+  
   // Prisma + SQLite (better-sqlite3) espera string "YYYY-MM-DD", nao objeto Date
   const dataNascFormatada = data_nascimento ? new Date(data_nascimento.split('T')[0] + 'T12:00:00.000Z').toISOString() : null;
 
@@ -41,6 +42,7 @@ export async function addCliente(nome:string, cpf:string,telefone: string,
   })
   return newCliente
 }
+
 export async function removeCliente(id:number){
   const cliente = await prisma.cliente.findUnique({
     where: {

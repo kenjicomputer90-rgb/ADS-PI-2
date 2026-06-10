@@ -22,7 +22,7 @@ export async function returnFinanceiroController(req: Request, res: Response) {
    
         return res.status(200).json({
       metricas_receita: {
-        total_locações_realizadas: relatorioFaturamento.quantidadeLocacoes,
+        total_locacoes_realizadas: relatorioFaturamento.quantidadeLocacoes,
         arrecadacao_base_trajes: relatorioFaturamento.faturamentoBaseLocacoes,
         arrecadacao_multas_atraso: relatorioFaturamento.faturamentoPorMultas,
         faturamento_bruto: relatorioFaturamento.faturamentoBrutoTotal
