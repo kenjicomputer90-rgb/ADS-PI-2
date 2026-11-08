@@ -1,7 +1,10 @@
 import { Router } from "express"
-import { listFuncionariosController, addFuncionarioController, changeFuncionarioController, removeFuncionarioController, returnFuncionarioController } from "./funcionarioController.js"
+import { addFuncionarioController, changeFuncionarioController, removeFuncionarioController, returnFuncionarioController } from "./funcionarioController.js"
 
 const funcionarioRouter = Router()
+
+// Listar todos os funcionários (ADICIONADO!)
+funcionarioRouter.get("/", listFuncionarioController)
 
 funcionarioRouter.get("/", listFuncionariosController)      // ← listagem que o front chama
 funcionarioRouter.post("/", addFuncionarioController)
